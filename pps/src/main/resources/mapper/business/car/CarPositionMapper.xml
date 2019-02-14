@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.linghang.mapper.car.CarPositionMapper">
+    <resultMap id="BaseResultMap" type="com.linghang.model.car.CarPositionModel">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="carnum" jdbcType="VARCHAR" property="carnum"/>
+        <result column="address" jdbcType="VARCHAR" property="address"/>
+        <result column="xlabe" jdbcType="DECIMAL" property="xlabe"/>
+        <result column="ylabe" jdbcType="DECIMAL" property="ylabe"/>
+        <result column="speed" jdbcType="DECIMAL" property="speed"/>
+        <result column="locationTime" jdbcType="VARCHAR" property="locationTime"/>
+        <result column="direction" jdbcType="INTEGER" property="direction"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+      id,carnum, address, xlabe, ylabe, speed, locationTime, direction
+    </sql>
+
+    <select id="selectById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select * 
+        from imp_car_position
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <insert id="insert" keyProperty="id" parameterType="com.linghang.model.car.CarPositionModel">
+        insert into [dbo].[${tableName}] (
+        <include refid="Base_Column_List"/>
+        )
+        values (#{id,jdbcType=BIGINT},
+        #{carnum,jdbcType=VARCHAR},
+        #{address,jdbcType=VARCHAR},
+        #{xlabe,jdbcType=DECIMAL},
+        #{ylabe,jdbcType=DECIMAL},
+        #{speed,jdbcType=DECIMAL},
+        #{locationTime,jdbcType=VARCHAR},
+        #{direction,jdbcType=INTEGER}
+        )
+    </insert>
+
+    <select id="selectByModel" parameterType="com.linghang.model.car.CarPositionModel" resultMap="BaseResultMap">
+        select * from imp_car_position where 1 = 1
+        <if test="carnum != null">
+            and carnum = #{carnum,jdbcType=VARCHAR}
+        </if>
+        <if test="address != null">
+            and address = #{address,jdbcType=VARCHAR}
+        </if>
+        <if test="xlabe != null">
+            and xlabe = #{xlabe,jdbcType=DECIMAL}
+        </if>
+        <if test="ylabe != null">
+            and ylabe = #{ylabe,jdbcType=DECIMAL}
+        </if>
+        <if test="speed != null">
+            and speed = #{speed,jdbcType=DECIMAL}
+        </if>
+        <if test="locationTime != null">
+            and locationTime = #{locationTime,jdbcType=VARCHAR}
+        </if>
+        <if test="direction != null">
+            and direction = #{direction,jdbcType=INTEGER}
+        </if>
+    </select>
+
+    <resultMap id="carStarusAndAlam" type="com.linghang.model.car.CarPositionModel">
+        <collection property="carAlarmModels" column="{positionId=id}"
+                    ofType="com.linghang.model.car.CarAlarmModel"
+                    select="com.linghang.mapper.car.CarAlarmMapper.selectBypositionId">
+        </collection>
+        <collection property="carStatusModels" column="{positionId=id}"
+                    ofType="com.linghang.model.car.CarStatusModel"
+                    select="com.linghang.mapper.car.CarStatusMapper.selectBypositionId">
+        </collection>
+    </resultMap>
+    <select id="selectMaxTimeGroupCarnum" resultMap="carStarusAndAlam" parameterType="java.util.Map">
+        IF EXISTS (select * from dbo.sysobjects where xtype='U' and Name = #{tableName,jdbcType=VARCHAR})
+        BEGIN
+        select top 1 * from [dbo].[${tableName}] where locationTime = (select MAX(locationTime) from
+        [dbo].[${tableName}] where carnum = #{carnum,jdbcType=VARCHAR})
+        END
+</select>
+
+    <resultMap id="carStarusAndAlamAndFenceRecord" type="com.linghang.model.car.CarPositionModel" extends="carStarusAndAlam">
+        <association property="carFenceRecordModel" column="{carNumber=carNum,locationTime=locationTime}" javaType ="com.linghang.model.car.CarFenceRecordModel"
+                    select="com.linghang.mapper.car.CarFenceRecordMapper.selectFenceRecord">
+        </association>
+    </resultMap>
+
+    <select id="selectCarPositionHistory" resultType="com.linghang.model.car.CarPositionModel">
+        IF EXISTS (select * from dbo.sysobjects where xtype='U' and Name = #{tableName,jdbcType=VARCHAR})
+        BEGIN
+        select id,carnum,xlabe, ylabe, speed, locationTime, direction,
+        (select MAX(speed)
+        from [dbo].[${tableName}] where 1=1
+        and carnum=#{carNumber,jdbcType=VARCHAR}
+        and locationTime BETWEEN #{startTime,jdbcType=VARCHAR} and #{endTime,jdbcType=VARCHAR}) as maxSpeed
+        from [dbo].[${tableName}] where 1=1
+        <if test="carNumber!=null">
+            and carnum=#{carNumber,jdbcType=VARCHAR}
+        </if>
+        <if test="startTime!=null and endTime!=null">
+            and locationTime BETWEEN #{startTime,jdbcType=VARCHAR} and #{endTime,jdbcType=VARCHAR}
+        </if>
+        END
+    </select>
+    <!--校验当前月份的表是否存在，不存在则创建表-->
+    <update id="checkNowMonthTableIsExist" parameterType="java.lang.String">
+        IF NOT EXISTS (select * from dbo.sysobjects where xtype='U' and Name = #{tableName,jdbcType=VARCHAR})
+        BEGIN
+          CREATE TABLE [dbo].[${tableName}] (
+                [carnum] varchar(255) NULL ,
+                [address] varchar(255) NULL ,
+                [xlabe] decimal(38,18) NULL ,
+                [ylabe] decimal(38,18) NULL ,
+                [speed] decimal(18,2) NULL ,
+                [locationTime] varchar(255) NULL ,
+                [direction] int NULL ,
+                [id] bigint NOT NULL PRIMARY KEY
+            )
+        END
+    </update>
+
+    <select id="selectnewTrack" resultMap="BaseResultMap">
+       IF EXISTS (select * from dbo.sysobjects where xtype='U' and Name = #{tableName,jdbcType=VARCHAR})
+        BEGIN
+        select top 1 * from [dbo].[${tableName}] where locationTime = (select MAX(locationTime) from
+        [dbo].[${tableName}] where carnum = #{carNumber,jdbcType=VARCHAR})
+        END
+    </select>
+
+    <select id="selectCarTop10PositionLocus" resultMap="carStarusAndAlam">
+        IF EXISTS (select * from dbo.sysobjects where xtype='U' and Name = #{tableName,jdbcType=VARCHAR})
+        BEGIN
+        select top 10 * from [dbo].[${tableName}]  where carnum = #{carNumber,jdbcType=VARCHAR} ORDER BY locationTime DESC
+        END
+    </select>
+
+    <!--查询实时位置-->
+    <select id="selectNowPositionByCarId" resultMap="carStarusAndAlam">
+         IF EXISTS (select * from dbo.sysobjects where xtype='U' and Name = #{tableName,jdbcType=VARCHAR})
+        BEGIN
+        select top 1 * from [dbo].[${tableName}] where locationTime =
+        (select MAX(locationTime) from [dbo].[${tableName}]
+         where carnum = (select top 1 carNumber from imp_car_vehicleManagement where id=#{carId,jdbcType=BIGINT})
+         )
+        END
+    </select>
+
+    <select id="selectNowPositionByGpsCardNumber" resultType="com.linghang.model.car.CarPositionModel">
+        IF EXISTS (select * from dbo.sysobjects where xtype='U' and Name = #{tableName,jdbcType=VARCHAR})
+        BEGIN
+        select top 1 * from [dbo].[${tableName}] where locationTime =
+        (select MAX(locationTime) from [dbo].[${tableName}]
+         where carnum = (select top 1 carNumber from imp_car_vehicleManagement where gpsCardNumber=#{gpsCardNumber,jdbcType=VARCHAR})
+         )
+        END
+    </select>
+</mapper>

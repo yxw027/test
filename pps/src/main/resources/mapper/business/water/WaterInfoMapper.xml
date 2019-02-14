@@ -1,0 +1,388 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.linghang.mapper.business.water.WaterInfoMapper">
+    <resultMap id="BaseResultMap" type="com.linghang.model.business.water.WaterInfoModel">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="contact" jdbcType="VARCHAR" property="contact"/>
+        <result column="phone" jdbcType="VARCHAR" property="phone"/>
+        <result column="installTime" jdbcType="TIMESTAMP" property="installTime"/>
+        <result column="address" jdbcType="VARCHAR" property="address"/>
+        <result column="coordinate" jdbcType="VARCHAR" property="coordinate"/>
+        <result column="aggregateNum" jdbcType="INTEGER" property="aggregateNum"/>
+        <result column="aggregateName" jdbcType="VARCHAR" property="aggregateName"/>
+        <result column="updateTime" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="updateUser" jdbcType="BIGINT" property="updateUser"/>
+        <result column="remarks" jdbcType="VARCHAR" property="remarks"/>
+        <result column="orgId" jdbcType="BIGINT" property="orgId"/>
+        <result column="type" jdbcType="VARCHAR" property="type"/>
+        <result column="planCount" jdbcType="DECIMAL" property="planCount"/>
+        <result column="isOpen" jdbcType="INTEGER" property="isOpen"/>
+        <result column="warningPhone" jdbcType="VARCHAR" property="warningPhone"/>
+        <result column="cardMark" jdbcType="VARCHAR" property="cardMark"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,name, contact, phone, installTime, address, coordinate, aggregateNum, aggregateName,
+        updateTime, updateUser, remarks, orgId, type, planCount,isOpen,warningPhone,cardMark
+    </sql>
+
+    <select id="selectById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select *
+        from imp_water_info
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <delete id="deleteById" parameterType="java.lang.Long">
+        delete from imp_water_info
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+
+    <delete id="deleteByIds" parameterType="java.util.List">
+        delete from imp_water_info
+        where id in
+        <foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
+            #{item}
+        </foreach>
+    </delete>
+
+    <insert id="insert" keyProperty="id" parameterType="com.linghang.model.business.water.WaterInfoModel">
+        insert into imp_water_info (
+        <include refid="Base_Column_List"/>
+        )
+        values (
+        #{id,jdbcType=BIGINT},
+        #{name,jdbcType=VARCHAR},
+        #{contact,jdbcType=VARCHAR},
+        #{phone,jdbcType=VARCHAR},
+        #{installTime,jdbcType=TIMESTAMP},
+        #{address,jdbcType=VARCHAR},
+        #{coordinate,jdbcType=VARCHAR},
+        #{aggregateNum,jdbcType=INTEGER},
+        #{aggregateName,jdbcType=VARCHAR},
+        #{updateTime,jdbcType=TIMESTAMP},
+        #{updateUser,jdbcType=BIGINT},
+        #{remarks,jdbcType=VARCHAR},
+        #{orgId,jdbcType=BIGINT},
+        #{type,jdbcType=VARCHAR},
+        #{planCount,jdbcType=DECIMAL},
+        #{isOpen,jdbcType=INTEGER},
+        #{warningPhone,jdbcType=VARCHAR},
+        #{cardMark,jdbcType=VARCHAR}
+
+        )
+    </insert>
+
+    <insert id="insertList" parameterType="java.util.List">
+        <foreach collection="list" index="index" item="item" separator=";">
+            insert into imp_water_info (
+            <include refid="Base_Column_List"/>
+            )
+            values (#{item.name,jdbcType=VARCHAR},
+            #{item.contact,jdbcType=VARCHAR},
+            #{item.phone,jdbcType=VARCHAR},
+            #{item.installTime,jdbcType=TIMESTAMP},
+            #{item.address,jdbcType=VARCHAR},
+            #{item.coordinate,jdbcType=VARCHAR},
+            #{item.aggregateNum,jdbcType=INTEGER},
+            #{item.aggregateName,jdbcType=VARCHAR},
+            #{item.updateTime,jdbcType=TIMESTAMP},
+            #{item.updateUser,jdbcType=BIGINT},
+            #{item.remarks,jdbcType=VARCHAR},
+            #{item.orgId,jdbcType=BIGINT},
+            #{item.type,jdbcType=VARCHAR},
+            #{item.planCount,jdbcType=DECIMAL},
+            #{item.isOpen,jdbcType=INTEGER},
+            #{item.warningPhone,jdbcType=VARCHAR},
+            #{item.cardMark,jdbcType=VARCHAR}
+            )
+        </foreach>
+    </insert>
+
+    <select id="selectByModel" parameterType="com.linghang.model.business.water.WaterInfoModel"
+            resultMap="BaseResultMap">
+        select * from imp_water_info where 1 = 1
+        <if test="id != null">
+            and id = #{id}
+        </if>
+        <if test="name != null">
+            and name = #{name,jdbcType=VARCHAR}
+        </if>
+        <if test="contact != null">
+            and contact = #{contact,jdbcType=VARCHAR}
+        </if>
+        <if test="phone != null">
+            and phone = #{phone,jdbcType=VARCHAR}
+        </if>
+        <if test="installTime != null">
+            and installTime = #{installTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="address != null">
+            and address = #{address,jdbcType=VARCHAR}
+        </if>
+        <if test="coordinate != null">
+            and coordinate = #{coordinate,jdbcType=VARCHAR}
+        </if>
+        <if test="aggregateNum != null">
+            and aggregateNum = #{aggregateNum,jdbcType=INTEGER}
+        </if>
+        <if test="aggregateName != null">
+            and aggregateName = #{aggregateName,jdbcType=VARCHAR}
+        </if>
+        <if test="updateTime != null">
+            and updateTime = #{updateTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="updateUser != null">
+            and updateUser = #{updateUser,jdbcType=BIGINT}
+        </if>
+        <if test="remarks != null">
+            and remarks = #{remarks,jdbcType=VARCHAR}
+        </if>
+        <if test="orgId != null">
+            and orgId = #{orgId,jdbcType=BIGINT}
+        </if>
+        <if test="type != null">
+            and type = #{type,jdbcType=VARCHAR}
+        </if>
+        <if test="planCount != null">
+            and planCount = #{planCount,jdbcType=DECIMAL},
+        </if>
+        <if test="cardMark != null">
+            and cardMark = #{cardMark,jdbcType=VARCHAR}
+        </if>
+    </select>
+
+    <select id="selectByFormulaId" resultMap="BaseResultMap">
+        select i.* from imp_water_info i
+        left join imp_water_formula f on i.id = f.stationId
+        where f.id= #{formulaId,jdbcType=BIGINT}
+    </select>
+
+    <insert id="insertSelective" keyProperty="id" parameterType="com.linghang.model.business.water.WaterInfoModel">
+        insert into imp_water_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null">
+                name,
+            </if>
+            <if test="contact != null">
+                contact,
+            </if>
+            <if test="phone != null">
+                phone,
+            </if>
+            <if test="installTime != null">
+                installTime,
+            </if>
+            <if test="address != null">
+                address,
+            </if>
+            <if test="coordinate != null">
+                coordinate,
+            </if>
+            <if test="aggregateNum != null">
+                aggregateNum,
+            </if>
+            <if test="aggregateName != null">
+                aggregateName,
+            </if>
+            <if test="updateTime != null">
+                updateTime,
+            </if>
+            <if test="updateUser != null">
+                updateUser,
+            </if>
+            <if test="remarks != null">
+                remarks,
+            </if>
+            <if test="orgId != null">
+                orgId,
+            </if>
+            <if test="type != null">
+                type,
+            </if>
+            <if test="planCount != null">
+                planCount,
+            </if>
+            <if test="cardMark != null and cardMark != ''">
+                cardMark,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="contact != null">
+                #{contact,jdbcType=VARCHAR},
+            </if>
+            <if test="phone != null">
+                #{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="installTime != null">
+                #{installTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="address != null">
+                #{address,jdbcType=VARCHAR},
+            </if>
+            <if test="coordinate != null">
+                #{coordinate,jdbcType=VARCHAR},
+            </if>
+            <if test="aggregateNum != null">
+                #{aggregateNum,jdbcType=INTEGER},
+            </if>
+            <if test="aggregateName != null">
+                #{aggregateName,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateUser != null">
+                #{updateUser,jdbcType=BIGINT},
+            </if>
+            <if test="remarks != null">
+                #{remarks,jdbcType=VARCHAR},
+            </if>
+            <if test="orgId != null">
+                #{orgId,jdbcType=BIGINT},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=VARCHAR},
+            </if>
+            <if test="planCount != null">
+                #{planCount,jdbcType=DECIMAL},
+            </if>
+            <if test="cardMark != null and cardMark != ''">
+                #{cardMark,jdbcType=VARCHAR}
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByIdSelective" parameterType="com.linghang.model.business.water.WaterInfoModel">
+        update imp_water_info
+        <set>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="contact != null">
+                contact = #{contact,jdbcType=VARCHAR},
+            </if>
+            <if test="phone != null">
+                phone = #{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="installTime != null">
+                installTime = #{installTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="address != null">
+                address = #{address,jdbcType=VARCHAR},
+            </if>
+            <if test="coordinate != null">
+                coordinate = #{coordinate,jdbcType=VARCHAR},
+            </if>
+            <if test="aggregateNum != null">
+                aggregateNum = #{aggregateNum,jdbcType=INTEGER},
+            </if>
+            <if test="aggregateName != null">
+                aggregateName = #{aggregateName,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null">
+                updateTime = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateUser != null">
+                updateUser = #{updateUser,jdbcType=BIGINT},
+            </if>
+            <if test="remarks != null">
+                remarks = #{remarks,jdbcType=VARCHAR},
+            </if>
+            <if test="orgId != null">
+                orgId = #{orgId,jdbcType=BIGINT},
+            </if>
+            <if test="type != null">
+                type = #{type,jdbcType=VARCHAR},
+            </if>
+            <if test="planCount != null">
+                planCount = #{planCount,jdbcType=DECIMAL},
+            </if>
+            <if test="isOpen != null">
+                isOpen = #{isOpen,jdbcType=INTEGER},
+            </if>
+            <if test="warningPhone != null">
+                warningPhone = #{warningPhone,jdbcType=VARCHAR},
+            </if>
+            <if test="cardMark != null">
+                cardMark = #{cardMark,jdbcType=VARCHAR}
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <update id="updateById" parameterType="com.linghang.model.business.water.WaterInfoModel">
+        update imp_water_info
+        set name = #{name,jdbcType=VARCHAR},
+            contact = #{contact,jdbcType=VARCHAR},
+            phone = #{phone,jdbcType=VARCHAR},
+            installTime = #{installTime,jdbcType=TIMESTAMP},
+            address = #{address,jdbcType=VARCHAR},
+            coordinate = #{coordinate,jdbcType=VARCHAR},
+            aggregateNum = #{aggregateNum,jdbcType=INTEGER},
+            aggregateName = #{aggregateName,jdbcType=VARCHAR},
+            updateTime = #{updateTime,jdbcType=TIMESTAMP},
+            updateUser = #{updateUser,jdbcType=BIGINT},
+            remarks = #{remarks,jdbcType=VARCHAR},
+            orgId = #{orgId,jdbcType=BIGINT},
+            type = #{type,jdbcType=VARCHAR},
+            planCount = #{planCount,jdbcType=DECIMAL},
+            isOpen = #{isOpen,jdbcType=INTEGER},
+            warningPhone = #{warningPhone,jdbcType=VARCHAR},
+            cardMark = #{cardMark,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <select id="getWaterList" resultType="com.linghang.model.business.water.WaterInfoModel">
+        select temp.*,
+               case when temp.planProduction is null or temp.planProduction = 0 then 0 else Round(temp.actualProduction/temp.planProduction*100,2) end AS productionSchedule,
+               case when temp.passWeight is null or temp.actualProduction = 0 then 0 else cast(temp.passWeight*1.0 /temp.actualProduction*100 AS FLOAT(2)) end AS yield
+        from (
+                 select AI.* ,
+                        (select max(time) from imp_water_metadata where stationId = AI.id) AS lastProductionTime,
+                        (select sum(planOutput) from imp_water_formula where stationId = AI.id and isVisible = 0) AS planProduction,
+                        (select sum(weight) from imp_water_metadata where stationId = AI.id ) AS actualProduction,
+                        (select sum(weight) from imp_water_metadata where stationId = AI.id and isPass = 0) AS passWeight,
+                        (select COUNT(id) from imp_water_metadata where stationId = AI.id and formulaId is not null) AS actualNumber,
+                        (select COUNT(id) from imp_water_metadata where stationId = AI.id and formulaId is not null and isPass = 0) AS normalNumber
+                 from imp_water_info AI where AI.orgId = #{orgId,jdbcType=BIGINT}) temp
+    </select>
+    <select id="getCardOnly" resultMap="BaseResultMap">
+       select top 1 * from imp_water_info where cardMark = #{cardMark,jdbcType=VARCHAR}
+    </select>
+
+    <select id="geStatisticsSend" resultType="com.linghang.model.business.water.WaterStaticReportModel">
+      select
+     AI.id AS asphaltId,
+     AI.name AS asphaltName,
+     AI.aggregateName AS aggregateName,
+     AI.orgId AS orgId,
+     AI.warningPhone AS phone,
+     (select count(id) from imp_water_metadata where stationId = AI.id and formulaId is not null and DATEDIFF(d,time,getdate())=0) AS productionBatch,
+     (select sum(weight) from imp_water_metadata where stationId = AI.id and formulaId is not null and DATEDIFF(d,time,getdate())=0) AS productionWeight,
+     (select sum(weight) from imp_water_metadata where stationId = AI.id and formulaId is not null and DATEDIFF(d,time,getdate())=0 and isPass = 1) AS unqualifiedWeight,
+     (select count(id) from imp_water_metadata where stationId = AI.id and formulaId is not null and DATEDIFF(d,time,getdate())=0 and isPass = 1) AS unqualifiedBatch,
+     (select count(id) from imp_water_warning_message where stationId = AI.id and DATEDIFF(d,dataTime,getdate())=0 and cementResult>0) AS cementExceed,
+     (select count(id) from imp_water_warning_message where stationId = AI.id and DATEDIFF(d,dataTime,getdate())=0  and sieveResult>0) AS sieveExceed,
+     (select count(id) from imp_water_warning_message where stationId = AI.id and DATEDIFF(d,dataTime,getdate())=0  and waterResult>0) AS waterExceed,
+     (select count(id) from imp_water_warning_message where stationId = AI.id and DATEDIFF(d,dataTime,getdate())=0  and aggregateResult>0) AS aggregateExceed,
+     (select count(id) from imp_water_metadata_aggregate where stationId = AI.id and DATEDIFF(d,time,getdate())=0  and g1State>0) AS g1Batch,
+     (select count(id) from imp_water_metadata_aggregate where stationId = AI.id and DATEDIFF(d,time,getdate())=0  and g2State>0) AS g2Batch,
+     (select count(id) from imp_water_metadata_aggregate where stationId = AI.id and DATEDIFF(d,time,getdate())=0  and g3State>0) AS g3Batch,
+     (select count(id) from imp_water_metadata_aggregate where stationId = AI.id and DATEDIFF(d,time,getdate())=0  and g4State>0) AS g4Batch,
+     (select count(id) from imp_water_metadata_aggregate where stationId = AI.id and DATEDIFF(d,time,getdate())=0  and g5State>0) AS g5Batch,
+     (select count(id) from imp_water_metadata_aggregate where stationId = AI.id and DATEDIFF(d,time,getdate())=0  and g6State>0) AS g6Batch,
+     (select count(id) from imp_water_metadata_aggregate where stationId = AI.id and DATEDIFF(d,time,getdate())=0  and g7State>0) AS g7Batch,
+     (select count(id) from imp_water_metadata_aggregate where stationId = AI.id and DATEDIFF(d,time,getdate())=0  and g8State>0) AS g8Batch,
+     (select count(id) from imp_water_metadata_aggregate where stationId = AI.id and DATEDIFF(d,time,getdate())=0  and g9State>0) AS g9Batch,
+     (select count(id) from imp_water_metadata_aggregate where stationId = AI.id and DATEDIFF(d,time,getdate())=0  and g10State>0) AS g10Batch
+    from imp_water_info AI where isOpen = 1
+    </select>
+
+    <select id="selectByCardMark" resultMap="BaseResultMap">
+        select * from imp_water_info where cardMark=#{cardMark,jdbcType=VARCHAR}
+    </select>
+</mapper>

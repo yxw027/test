@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.linghang.mapper.base.AlarmDealMapper">
+    <resultMap id="BaseResultMap" type="com.linghang.model.base.AlarmDealModel">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="msgId" jdbcType="BIGINT" property="msgId"/>
+        <result column="suggestion" jdbcType="VARCHAR" property="suggestion"/>
+        <result column="remark" jdbcType="VARCHAR" property="remark"/>
+        <result column="dealTime" jdbcType="TIMESTAMP" property="dealTime"/>
+        <result column="dealPerson" jdbcType="VARCHAR" property="dealPerson"/>
+        <result column="status" jdbcType="INTEGER" property="status"/>
+        <result column="annexIds" jdbcType="VARCHAR" property="annexIds"/>
+        <result column="sendFlag" jdbcType="INTEGER" property="sendFlag"/>
+        <result column="retuanKey" jdbcType="VARCHAR" property="retuanKey"/>
+        <result column="dataId" jdbcType="BIGINT" property="dataId"/>
+        <result column="msgType" jdbcType="INTEGER" property="msgType"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,msgId, suggestion, remark, dealTime, dealPerson, status, annexIds, sendFlag, retuanKey,
+        dataId, msgType
+    </sql>
+
+
+    <select id="selectById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select * 
+        from imp_alarm_deal
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <delete id="deleteById" parameterType="java.lang.Long">
+        delete from imp_alarm_deal
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+
+    <delete id="deleteByIds" parameterType="java.util.List">
+        delete from imp_alarm_deal
+        where id in
+        <foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
+            #{item}
+        </foreach>
+    </delete>
+
+    <insert id="insert" keyProperty="id" parameterType="com.linghang.model.base.AlarmDealModel">
+        insert into imp_alarm_deal (
+        <include refid="Base_Column_List"/>
+        )
+        values (
+        #{id,jdbcType=BIGINT},
+        #{msgId,jdbcType=BIGINT},
+        #{suggestion,jdbcType=VARCHAR},
+        #{remark,jdbcType=VARCHAR},
+        #{dealTime,jdbcType=TIMESTAMP},
+        #{dealPerson,jdbcType=VARCHAR},
+        #{status,jdbcType=INTEGER},
+        #{annexIds,jdbcType=VARCHAR},
+        #{sendFlag,jdbcType=INTEGER},
+        #{retuanKey,jdbcType=VARCHAR},
+        #{dataId,jdbcType=BIGINT},
+        #{msgType,jdbcType=INTEGER}
+        )
+    </insert>
+
+    <insert id="insertList" parameterType="java.util.List">
+        <foreach collection="list" index="index" item="item" separator=";">
+            insert into imp_alarm_deal (
+            <include refid="Base_Column_List"/>
+            )
+            values (
+            #{item.Id,jdbcType=BIGINT},
+            #{item.msgId,jdbcType=BIGINT},
+            #{item.suggestion,jdbcType=VARCHAR},
+            #{item.remark,jdbcType=VARCHAR},
+            #{item.dealTime,jdbcType=TIMESTAMP},
+            #{item.dealPerson,jdbcType=VARCHAR},
+            #{item.status,jdbcType=INTEGER},
+            #{item.annexIds,jdbcType=VARCHAR},
+            #{item.sendFlag,jdbcType=INTEGER},
+            #{item.retuanKey,jdbcType=VARCHAR},
+            #{item.dataId,jdbcType=BIGINT},
+            #{item.msgType,jdbcType=INTEGER}
+            )
+        </foreach>
+    </insert>
+
+    <select id="selectByModel" parameterType="com.linghang.model.base.AlarmDealModel"
+            resultMap="BaseResultMap">
+        select * from imp_alarm_deal where 1 = 1
+        <if test="msgId != null">
+            and msgId = #{msgId,jdbcType=BIGINT}
+        </if>
+        <if test="suggestion != null">
+            and suggestion = #{suggestion,jdbcType=VARCHAR}
+        </if>
+        <if test="remark != null">
+            and remark = #{remark,jdbcType=VARCHAR}
+        </if>
+        <if test="dealTime != null">
+            and dealTime = #{dealTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="dealPerson != null">
+            and dealPerson = #{dealPerson,jdbcType=VARCHAR}
+        </if>
+        <if test="status != null">
+            and status = #{status,jdbcType=INTEGER}
+        </if>
+        <if test="annexIds != null">
+            and annexIds = #{annexIds,jdbcType=VARCHAR}
+        </if>
+        <if test="sendFlag != null">
+            and sendFlag = #{sendFlag,jdbcType=INTEGER}
+        </if>
+        <if test="retuanKey != null">
+            and retuanKey = #{retuanKey,jdbcType=VARCHAR}
+        </if>
+        <if test="dataId != null">
+            and dataId = #{dataId,jdbcType=BIGINT}
+        </if>
+        <if test="msgType != null">
+            and msgType = #{msgType,jdbcType=INTEGER}
+        </if>
+        order by dealTime ASC
+    </select>
+
+    <insert id="insertSelective" keyProperty="id" parameterType="com.linghang.model.base.AlarmDealModel">
+        insert into imp_alarm_deal
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="msgId != null">
+                msgId,
+            </if>
+            <if test="suggestion != null">
+                suggestion,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+            <if test="dealTime != null">
+                dealTime,
+            </if>
+            <if test="dealPerson != null">
+                dealPerson,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="annexIds != null">
+                annexIds,
+            </if>
+            <if test="sendFlag != null">
+                sendFlag,
+            </if>
+            <if test="retuanKey != null">
+                retuanKey,
+            </if>
+            <if test="dataId != null">
+                dataId,
+            </if>
+            <if test="msgType != null">
+                msgType,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="msgId != null">
+                #{msgId,jdbcType=BIGINT},
+            </if>
+            <if test="suggestion != null">
+                #{suggestion,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null">
+                #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="dealTime != null">
+                #{dealTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="dealPerson != null">
+                #{dealPerson,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=INTEGER},
+            </if>
+            <if test="annexIds != null">
+                #{annexIds,jdbcType=VARCHAR},
+            </if>
+            <if test="sendFlag != null">
+                #{sendFlag,jdbcType=INTEGER},
+            </if>
+            <if test="retuanKey != null">
+                #{retuanKey,jdbcType=VARCHAR},
+            </if>
+            <if test="dataId != null">
+                #{dataId,jdbcType=BIGINT},
+            </if>
+            <if test="msgType != null">
+                #{msgType,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByIdSelective" parameterType="com.linghang.model.base.AlarmDealModel">
+        update imp_alarm_deal
+        <set>
+            <if test="msgId != null">
+                msgId = #{msgId,jdbcType=BIGINT},
+            </if>
+            <if test="suggestion != null">
+                suggestion = #{suggestion,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null">
+                remark = #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="dealTime != null">
+                dealTime = #{dealTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="dealPerson != null">
+                dealPerson = #{dealPerson,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="annexIds != null">
+                annexIds = #{annexIds,jdbcType=VARCHAR},
+            </if>
+            <if test="sendFlag != null">
+                sendFlag = #{sendFlag,jdbcType=INTEGER},
+            </if>
+            <if test="retuanKey != null">
+                retuanKey = #{retuanKey,jdbcType=VARCHAR},
+            </if>
+            <if test="dataId != null">
+                dataId = #{dataId,jdbcType=BIGINT},
+            </if>
+            <if test="msgType != null">
+                msgType = #{msgType,jdbcType=INTEGER},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <update id="updateById" parameterType="com.linghang.model.base.AlarmDealModel">
+        update imp_alarm_deal
+        set msgId = #{msgId,jdbcType=BIGINT},
+            suggestion = #{suggestion,jdbcType=VARCHAR},
+            remark = #{remark,jdbcType=VARCHAR},
+            dealTime = #{dealTime,jdbcType=TIMESTAMP},
+            dealPerson = #{dealPerson,jdbcType=VARCHAR},
+            status = #{status,jdbcType=INTEGER},
+            annexIds = #{annexIds,jdbcType=VARCHAR},
+            sendFlag = #{sendFlag,jdbcType=INTEGER},
+            retuanKey = #{retuanKey,jdbcType=VARCHAR},
+            dataId = #{dataId,jdbcType=BIGINT},
+            msgType = #{msgType,jdbcType=INTEGER}
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+</mapper>

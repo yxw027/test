@@ -1,0 +1,348 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.linghang.mapper.business.water.WaterWarningMessageMapper">
+    <resultMap id="BaseResultMapList" type="com.linghang.model.business.water.WaterWarningMessageModel">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="dataId" jdbcType="BIGINT" property="dataId"/>
+        <result column="createTime" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="content" jdbcType="VARCHAR" property="content"/>
+        <result column="type" jdbcType="VARCHAR" property="type"/>
+        <result column="cement" jdbcType="DECIMAL" property="cement"/>
+        <result column="totalWeight" jdbcType="DECIMAL" property="totalWeight"/>
+        <result column="stationId" jdbcType="BIGINT" property="stationId"/>
+        <result column="water" jdbcType="DECIMAL" property="water"/>
+        <result column="cementResult" jdbcType="INTEGER" property="cementResult"/>
+        <result column="cementMsg" jdbcType="VARCHAR" property="cementMsg"/>
+        <result column="waterResult" jdbcType="INTEGER" property="waterResult"/>
+        <result column="waterMsg" jdbcType="VARCHAR" property="waterMsg"/>
+        <result column="formulaId" jdbcType="BIGINT" property="formulaId"/>
+        <result column="formulaName" jdbcType="VARCHAR" property="formulaName"/>
+        <result column="aggregateResult" jdbcType="INTEGER" property="aggregateResult"/>
+        <result column="sieveResult" jdbcType="INTEGER" property="sieveResult"/>
+        <result column="dataTime" jdbcType="TIMESTAMP" property="dataTime"/>
+        <result column="version" jdbcType="INTEGER" property="version"/>
+        <result column="dealStatus" jdbcType="INTEGER" property="dealStatus"/>
+        <result column="sendFlag" jdbcType="INTEGER" property="sendFlag"/>
+        <result column="returnKey" jdbcType="VARCHAR" property="returnKey"/>
+        <association property="aggregateDetail" column="dataId"
+                     select="com.linghang.mapper.business.water.WaterMetaDataMapper.selectMsgDetail">
+        </association>
+        <association property="stationDetail" column="stationId"
+                     select="com.linghang.mapper.business.water.WaterInfoMapper.selectById">
+        </association>
+        <collection property="configDetail" column="{formulaId=formulaId,version=version}"
+                    ofType="com.linghang.model.business.water.WaterWarningConfigModel"
+                    select="com.linghang.mapper.business.water.WaterWarningConfigMapper.selectByFormulaIdVersion">
+        </collection>
+    </resultMap>
+
+    <resultMap id="BaseResultMap" type="com.linghang.model.business.water.WaterWarningMessageModel">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="dataId" jdbcType="BIGINT" property="dataId"/>
+        <result column="createTime" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="content" jdbcType="VARCHAR" property="content"/>
+        <result column="type" jdbcType="VARCHAR" property="type"/>
+        <result column="cement" jdbcType="DECIMAL" property="cement"/>
+        <result column="totalWeight" jdbcType="DECIMAL" property="totalWeight"/>
+        <result column="stationId" jdbcType="BIGINT" property="stationId"/>
+        <result column="water" jdbcType="DECIMAL" property="water"/>
+        <result column="cementResult" jdbcType="INTEGER" property="cementResult"/>
+        <result column="cementMsg" jdbcType="VARCHAR" property="cementMsg"/>
+        <result column="waterResult" jdbcType="INTEGER" property="waterResult"/>
+        <result column="waterMsg" jdbcType="VARCHAR" property="waterMsg"/>
+        <result column="formulaId" jdbcType="BIGINT" property="formulaId"/>
+        <result column="formulaName" jdbcType="VARCHAR" property="formulaName"/>
+        <result column="aggregateResult" jdbcType="INTEGER" property="aggregateResult"/>
+        <result column="sieveResult" jdbcType="INTEGER" property="sieveResult"/>
+        <result column="dataTime" jdbcType="TIMESTAMP" property="dataTime"/>
+        <association property="aggregateDetail" column="dataId"
+                     select="com.linghang.mapper.business.water.WaterMetaDataMapper.selectMsgDetail">
+        </association>
+        <association property="stationDetail" column="stationId"
+                     select="com.linghang.mapper.business.water.WaterInfoMapper.selectById">
+        </association>
+        <collection property="configDetail" column="{formulaId=formulaId}"
+                    ofType="com.linghang.model.business.water.WaterWarningConfigModel"
+                    select="com.linghang.mapper.business.water.WaterWarningConfigMapper.selectByFormulaId">
+        </collection>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, dataId, createTime, content, type, cement, totalWeight, stationId,water,cementResult,
+        cementMsg,waterResult,waterMsg,formulaId,formulaName,aggregateResult,sieveResult,dataTime
+    </sql>
+    <select id="selectById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select * 
+        from imp_water_warning_message
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <delete id="deleteById" parameterType="java.lang.Long">
+        delete from imp_water_warning_message
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+
+    <delete id="deleteByIds" parameterType="java.util.List">
+        delete from imp_water_warning_message
+        where id in
+        <foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
+            #{item}
+        </foreach>
+    </delete>
+
+    <insert id="insert" keyProperty="id" parameterType="com.linghang.model.business.water.WaterWarningMessageModel">
+        insert into imp_water_warning_message (
+        <include refid="Base_Column_List"/>
+        )
+        values (
+        #{id,jdbcType=BIGINT},
+        #{dataId,jdbcType=BIGINT},
+        #{createTime,jdbcType=TIMESTAMP},
+        #{content,jdbcType=VARCHAR},
+        #{type,jdbcType=VARCHAR},
+        #{cement,jdbcType=DECIMAL},
+        #{totalWeight,jdbcType=DECIMAL},
+        #{stationId,jdbcType=BIGINT},
+        #{water,jdbcType=DECIMAL},
+        #{cementResult,jdbcType=INTEGER},
+        #{cementMsg,jdbcType=VARCHAR},
+        #{waterResult,jdbcType=INTEGER},
+        #{waterMsg,jdbcType=VARCHAR},
+        #{formulaId,jdbcType=BIGINT},
+        #{formulaName,jdbcType=VARCHAR},
+        #{aggregateResult,jdbcType=INTEGER},
+        #{sieveResult,jdbcType=INTEGER},
+        #{dataTime,jdbcType=TIMESTAMP}
+        )
+    </insert>
+
+    <insert id="insertList" parameterType="java.util.List">
+        <foreach collection="list" index="index" item="item" separator=";">
+            insert into imp_water_warning_message (
+            <include refid="Base_Column_List"/>
+            )
+            values (
+            #{item.id,jdbcType=BIGINT},
+            #{item.dataId,jdbcType=BIGINT},
+            #{item.createTime,jdbcType=TIMESTAMP},
+            #{item.content,jdbcType=VARCHAR},
+            #{item.type,jdbcType=VARCHAR},
+            #{item.cement,jdbcType=DECIMAL},
+            #{item.totalWeight,jdbcType=DECIMAL},
+            #{item.stationId,jdbcType=BIGINT}
+            )
+        </foreach>
+    </insert>
+
+    <select id="selectByModel" parameterType="com.linghang.model.business.water.WaterWarningMessageModel"
+            resultMap="BaseResultMap">
+        select * from imp_water_warning_message where 1 = 1
+        <if test="dataId != null">
+            and dataId = #{dataId,jdbcType=BIGINT}
+        </if>
+        <if test="createTime != null">
+            and createTime = #{createTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="startTime != null">
+            and createTime BETWEEN #{startTime,jdbcType=VARCHAR} and #{endTime,jdbcType=VARCHAR}
+        </if>
+        <if test="content != null">
+            and content = #{content,jdbcType=VARCHAR}
+        </if>
+        <if test="type != null">
+            and type = #{type,jdbcType=VARCHAR}
+        </if>
+        <if test="cement != null">
+            and cement = #{cement,jdbcType=DECIMAL}
+        </if>
+        <if test="totalWeight != null">
+            and totalWeight = #{totalWeight,jdbcType=DECIMAL}
+        </if>
+        <if test="stationId != null">
+            and stationId = #{stationId,jdbcType=BIGINT}
+        </if>
+    </select>
+
+    <insert id="insertSelective" keyProperty="id"
+            parameterType="com.linghang.model.business.water.WaterWarningMessageModel">
+        insert into imp_water_warning_message
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="dataId != null">
+                dataId,
+            </if>
+            <if test="createTime != null">
+                createTime,
+            </if>
+            <if test="content != null">
+                content,
+            </if>
+            <if test="type != null">
+                type,
+            </if>
+            <if test="cement != null">
+                cement,
+            </if>
+            <if test="totalWeight != null">
+                totalWeight,
+            </if>
+            <if test="stationId != null">
+                stationId,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="dataId != null">
+                #{dataId,jdbcType=BIGINT},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="content != null">
+                #{content,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=VARCHAR},
+            </if>
+            <if test="cement != null">
+                #{cement,jdbcType=DECIMAL},
+            </if>
+            <if test="totalWeight != null">
+                #{totalWeight,jdbcType=DECIMAL},
+            </if>
+            <if test="stationId != null">
+                #{stationId,jdbcType=BIGINT},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByIdSelective" parameterType="com.linghang.model.business.water.WaterWarningMessageModel">
+        update imp_water_warning_message
+        <set>
+            <if test="dataId != null">
+                dataId = #{dataId,jdbcType=BIGINT},
+            </if>
+            <if test="createTime != null">
+                createTime = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="content != null">
+                content = #{content,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null">
+                type = #{type,jdbcType=VARCHAR},
+            </if>
+            <if test="cement != null">
+                cement = #{cement,jdbcType=DECIMAL},
+            </if>
+            <if test="totalWeight != null">
+                totalWeight = #{totalWeight,jdbcType=DECIMAL},
+            </if>
+            <if test="stationId != null">
+                stationId = #{stationId,jdbcType=BIGINT},
+            </if>
+            <if test="dealStatus != null">
+                dealStatus = #{dealStatus,jdbcType=INTEGER},
+            </if>
+            <if test="sendFlag != null">
+                sendFlag = #{sendFlag,jdbcType=INTEGER},
+            </if>
+            <if test="returnKey != null">
+                returnKey = #{returnKey,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <update id="updateById" parameterType="com.linghang.model.business.water.WaterWarningMessageModel">
+        update imp_water_warning_message
+        set dataId = #{dataId,jdbcType=BIGINT},
+            createTime = #{createTime,jdbcType=TIMESTAMP},
+            content = #{content,jdbcType=VARCHAR},
+            type = #{type,jdbcType=VARCHAR},
+            cement = #{cement,jdbcType=DECIMAL},
+            totalWeight = #{totalWeight,jdbcType=DECIMAL},
+            stationId = #{stationId,jdbcType=BIGINT},
+            dealStatus = #{dealStatus,jdbcType=INTEGER},
+            sendFlag = #{sendFlag,jdbcType=INTEGER},
+            returnKey = #{returnKey,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <select id="getWarningData" resultMap="BaseResultMapList">
+        select temps.* ,
+        (select dataVersion from imp_water_metadata where id = temps.dataId) AS version
+        from (SELECT*,(select Max(excessLevel) from (values
+        (waterResult),(cementResult),(sieveResult),(aggregateResult)) as temp(excessLevel)) as excessLevel from
+        imp_water_warning_message where 1=1
+        <if test="dealStatus == 0">
+            and dealStatus is null
+        </if>
+        <if test="dealStatus == 1">
+            and dealStatus = 1
+        </if>
+        <if test="dealStatus == 2">
+            and dealStatus = 2
+        </if>
+        <if test="dealStatus == 3">
+            and dealStatus =3
+        </if>
+        ) as temps WHERE temps.stationId = #{stationId,jdbcType=BIGINT}
+        <if test="startTime != null and endTime != null">
+            and temps.dataTime BETWEEN #{startTime,jdbcType=VARCHAR} AND #{endTime,jdbcType=VARCHAR}
+        </if>
+        <if test="warningType == 1">
+            and temps.excessLevel = 1
+        </if>
+        <if test="warningType == 2">
+            and temps.excessLevel = 2
+        </if>
+        <if test="warningType == 3">
+            and temps.excessLevel = 3
+        </if>
+        <if test="options.filters != null">
+            <foreach collection="options.filters" item="item">
+                and temps.${item.field}
+                <choose>
+                    <when test="item.operator == 'eq'">
+                        = #{item.value}
+                    </when>
+                    <when test="item.operator == 'neq'">
+                        != #{item.value}
+                    </when>
+                    <when test="item.operator == 'gt'">
+                        &gt; #{item.value}
+                    </when>
+                    <when test="item.operator == 'lt'">
+                        &lt; #{item.value}
+                    </when>
+                    <when test="item.operator == 'isnull'">
+                        #{item.value} is null
+                    </when>
+                    <when test="item.operator == 'isnotnull'">
+                        #{item.value} is not null
+                    </when>
+                    <when test="item.operator == 'contains'">
+                        like '%'+#{item.value}+'%'
+                    </when>
+                </choose>
+            </foreach>
+        </if>
+        order by
+        <if test="options.sort != null">
+            <foreach collection="options.sort" item="item">
+                temps.${item.field} ${item.dir}
+            </foreach>
+        </if>
+        <if test="options.sort == null">
+            temps.dataTime desc
+        </if>
+    </select>
+
+    <select id="getSearchTimeMark" resultType="java.lang.String">
+        select DISTINCT CONVERT(varchar(100), dataTime, 23) as markTime from imp_water_warning_message
+        where stationId = #{stationId,jdbcType=BIGINT}
+    </select>
+
+    <select id="selectByDataId" resultMap="BaseResultMap">
+      select top 1 * from imp_water_warning_message where dataId = #{dataId,jdbcType=BIGINT}
+    </select>
+
+</mapper>

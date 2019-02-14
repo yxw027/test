@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.linghang.mapper.GpsDataMapper">
+    <resultMap id="BaseResultMap" type="com.linghang.model.GpsDataModel">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="sid" jdbcType="VARCHAR" property="sid"/>
+        <result column="carId" jdbcType="BIGINT" property="carId"/>
+        <result column="lon" jdbcType="DOUBLE" property="lon"/>
+        <result column="lat" jdbcType="DOUBLE" property="lat"/>
+        <result column="hi" jdbcType="DOUBLE" property="hi"/>
+        <result column="drct" jdbcType="DOUBLE" property="drct"/>
+        <result column="speed" jdbcType="DOUBLE" property="speed"/>
+        <result column="temperature" jdbcType="INTEGER" property="temperature"/>
+        <result column="mile" jdbcType="INTEGER" property="mile"/>
+        <result column="dmod" jdbcType="INTEGER" property="dmod"/>
+        <result column="gps_time" jdbcType="TIMESTAMP" property="gpsTime"/>
+        <result column="vibrate_type" jdbcType="INTEGER" property="vibrateType"/>
+        <result column="groupId" jdbcType="BIGINT" property="groupId"/>
+        <result column="workAreaId" jdbcType="BIGINT" property="workAreaId"/>
+        <result column="distance" jdbcType="DOUBLE" property="distance"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, sid, lon, lat, hi, drct, speed, temperature, mile, dmod, gps_time, vibrate_type,
+        groupId, layer, crafts, carId, workAreaId, distance
+    </sql>
+
+    <select id="selectById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select * 
+        from tbl_gps_data
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <delete id="deleteById" parameterType="java.lang.Long">
+        delete from tbl_gps_data
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+
+    <delete id="deleteByIds" parameterType="java.util.List">
+        delete from tbl_gps_data
+        where id in
+        <foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
+            #{item}
+        </foreach>
+    </delete>
+
+    <insert id="insert" keyProperty="id" parameterType="com.linghang.model.GpsDataModel">
+        insert into tbl_gps_data (
+        <include refid="Base_Column_List"/>
+        )
+        values (
+        #{id,jdbcType=BIGINT},
+        #{sid,jdbcType=VARCHAR},
+        #{lon,jdbcType=DOUBLE},
+        #{lat,jdbcType=DOUBLE},
+        #{hi,jdbcType=DOUBLE},
+        #{drct,jdbcType=DOUBLE},
+        #{speed,jdbcType=DOUBLE},
+        #{temperature,jdbcType=INTEGER},
+        #{mile,jdbcType=INTEGER},
+        #{dmod,jdbcType=INTEGER},
+        #{gpsTime,jdbcType=TIMESTAMP},
+        #{vibrateType,jdbcType=INTEGER},
+        #{groupId,jdbcType=BIGINT},
+        #{layer,jdbcType=INTEGER},
+        #{crafts,jdbcType=INTEGER},
+        #{carId,jdbcType=BIGINT},
+        #{workAreaId,jdbcType=BIGINT},
+        #{distance,jdbcType=DOUBLE}
+        )
+    </insert>
+
+    <insert id="insertList" parameterType="java.util.List" keyProperty="id">
+        <foreach collection="list" index="index" item="item" separator=";">
+            insert into tbl_gps_data (
+            <include refid="Base_Column_List"/>
+            )
+            values (
+            #{item.id,jdbcType=BIGINT},
+            #{item.sid,jdbcType=VARCHAR},
+            #{item.lon,jdbcType=DOUBLE},
+            #{item.lat,jdbcType=DOUBLE},
+            #{item.hi,jdbcType=DOUBLE},
+            #{item.drct,jdbcType=DOUBLE},
+            #{item.speed,jdbcType=DOUBLE},
+            #{item.temperature,jdbcType=INTEGER},
+            #{item.mile,jdbcType=INTEGER},
+            #{item.dmod,jdbcType=INTEGER},
+            #{item.gpsTime,jdbcType=TIMESTAMP},
+            #{item.vibrateType,jdbcType=INTEGER},
+            #{item.groupId,jdbcType=BIGINT},
+            #{item.layer,jdbcType=INTEGER},
+            #{item.crafts,jdbcType=INTEGER},
+            #{item.carId,jdbcType=BIGINT},
+            #{item.workAreaId,jdbcType=BIGINT},
+            #{item.distance,jdbcType=DOUBLE}
+            )
+        </foreach>
+    </insert>
+
+    <update id="updateById" parameterType="com.linghang.model.GpsDataModel">
+        update tbl_gps_data
+        set sid = #{sid,jdbcType=VARCHAR},
+            lon = #{lon,jdbcType=DOUBLE},
+            lat = #{lat,jdbcType=DOUBLE},
+            hi = #{hi,jdbcType=DOUBLE},
+            drct = #{drct,jdbcType=DOUBLE},
+            speed = #{speed,jdbcType=DOUBLE},
+            temperature = #{temperature,jdbcType=INTEGER},
+            mile = #{mile,jdbcType=INTEGER},
+            dmod = #{dmod,jdbcType=INTEGER},
+            gps_time = #{gpsTime,jdbcType=TIMESTAMP},
+            vibrate_type = #{vibrateType,jdbcType=INTEGER},
+            groupId = #{groupId,jdbcType=BIGINT},
+            layer = #{layer,jdbcType=INTEGER},
+            crafts = #{crafts,jdbcType=INTEGER},
+            carId = #{carId,jdbcType=BIGINT},
+            workAreaId = #{workAreaId,jdbcType=BIGINT},
+            distance = #{distance,jdbcType=DOUBLE}
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <select id="selectByModel" parameterType="com.linghang.model.GpsDataModel" resultMap="BaseResultMap">
+        select * from tbl_gps_data where 1 = 1
+        <if test="sid != null">
+            and sid = #{sid,jdbcType=VARCHAR}
+        </if>
+        <if test="carId != null">
+            and carId = #{carId,jdbcType=BIGINT}
+        </if>
+        <if test="lon != null">
+            and lon = #{lon,jdbcType=DOUBLE}
+        </if>
+        <if test="lat != null">
+            and lat = #{lat,jdbcType=DOUBLE}
+        </if>
+        <if test="hi != null">
+            and hi = #{hi,jdbcType=DOUBLE}
+        </if>
+        <if test="drct != null">
+            and drct = #{drct,jdbcType=DOUBLE}
+        </if>
+        <if test="speed != null">
+            and speed = #{speed,jdbcType=DOUBLE}
+        </if>
+        <if test="temperature != null">
+            and temperature = #{temperature,jdbcType=INTEGER}
+        </if>
+        <if test="mile != null">
+            and mile = #{mile,jdbcType=INTEGER}
+        </if>
+        <if test="dmod != null">
+            and dmod = #{dmod,jdbcType=INTEGER}
+        </if>
+        <if test="startTime != null">
+            and gps_time >= #{startTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="endTime != null">
+            and gps_time &lt; #{endTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="gpsTime != null">
+            and gps_time = #{gpsTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="vibrateType != null">
+            and vibrate_type = #{vibrateType,jdbcType=INTEGER}
+        </if>
+        <if test="groupId != null">
+            and groupId = #{groupId,jdbcType=BIGINT}
+        </if>
+        <if test="layer != null">
+            and layer = #{layer,jdbcType=INTEGER}
+        </if>
+        <if test="crafts != null">
+            and crafts = #{crafts,jdbcType=INTEGER}
+        </if>
+        <if test="carId != null">
+            and carId = #{carId,jdbcType=BIGINT}
+        </if>
+        <if test="workAreaId != null">
+            and workAreaId = #{workAreaId,jdbcType=BIGINT}
+        </if>
+        ORDER BY gps_time asc
+    </select>
+
+
+    <select id="selectCount" parameterType="map" resultType="java.lang.Integer">
+        select count(0) from tbl_gps_data where 1 = 1
+        <if test="startTime != null">
+            and gps_time >= #{startTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="endTime != null">
+            and gps_time &lt;= #{endTime,jdbcType=TIMESTAMP}
+        </if>
+
+    </select>
+
+    <select id="selectByMap" parameterType="map" resultMap="BaseResultMap">
+        select * from tbl_gps_data where 1 = 1
+        <if test="startTime != null">
+            and gps_time >= #{startTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="endTime != null">
+            and gps_time &lt;= #{endTime,jdbcType=TIMESTAMP}
+        </if>
+        ORDER BY id asc
+        <if test="start != null and end != null ">
+            OFFSET #{start,jdbcType=INTEGER} ROWS
+            FETCH NEXT #{end,jdbcType=INTEGER} ROWS ONLY
+        </if>
+
+    </select>
+
+    <select id="selectCurrent" parameterType="map" resultMap="BaseResultMap">
+        select * from tbl_gps_data where
+        id > #{lastId,jdbcType=INTEGER}
+        and gps_time >= #{startTime,jdbcType=TIMESTAMP}
+        and gps_time &lt; #{endTime,jdbcType=TIMESTAMP}
+        and workAreaId = #{workAreaId,jdbcType=BIGINT}
+        ORDER BY id asc
+        OFFSET 0 ROWS
+        FETCH NEXT 5000 ROWS ONLY
+    </select>
+
+    <select id="selectByTime" resultMap="BaseResultMap">
+        select * from tbl_gps_data where
+        gps_time >= #{startTime,jdbcType=TIMESTAMP}
+        and gps_time &lt; #{endTime,jdbcType=TIMESTAMP}
+        <if test="carId != null">
+            and carId = #{carId,jdbcType=BIGINT}
+        </if>
+        <if test="workAreaId != null">
+            and workAreaId = #{workAreaId,jdbcType=BIGINT}
+        </if>
+        ORDER BY id asc
+    </select>
+
+    <select id="selectCurrentByMap" parameterType="map" resultMap="BaseResultMap">
+        select * from tbl_gps_data where
+        id > #{lastId,jdbcType=INTEGER}
+        and gps_time >= #{startTime,jdbcType=TIMESTAMP}
+        ORDER BY id asc
+        OFFSET 0 ROWS
+        FETCH NEXT 10 ROWS ONLY
+    </select>
+
+    <select id="selectCurrentByEndTime" parameterType="date" resultMap="BaseResultMap">
+        select * from tbl_gps_data where
+        gps_time &lt;= #{endTime,jdbcType=TIMESTAMP}
+        ORDER BY id asc
+    </select>
+
+    <select id="selectLastByCarId" parameterType="long" resultMap="BaseResultMap">
+        select top 1 * from tbl_gps_data where
+         carId = #{carId,jdbcType=BIGINT}
+         ORDER BY gps_time desc
+    </select>
+
+    <select id="selectByCarId" parameterType="long" resultMap="BaseResultMap">
+        select * from tbl_gps_data where
+         carId = #{carId,jdbcType=BIGINT}
+         ORDER BY gps_time desc
+    </select>
+
+    <select id="selectBySid" parameterType="string" resultMap="BaseResultMap">
+        select * from tbl_gps_data where
+         sid = #{sid,jdbcType=VARCHAR}
+         ORDER BY gps_time desc
+    </select>
+
+    <select id="selectTest" parameterType="long" resultMap="BaseResultMap">
+    select top 100 * from tbl_gps_data where groupId = '18911440958' and carId = '10CEA99633F9' order by gps_time
+    </select>
+
+
+</mapper>

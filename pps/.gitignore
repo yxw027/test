@@ -1,0 +1,8 @@
+.idea/
+target/
+out/
+/*.iml
+**/*.log
+**/*.log.*.gz
+**/*.DS_Store
+**/*Thumbs.db

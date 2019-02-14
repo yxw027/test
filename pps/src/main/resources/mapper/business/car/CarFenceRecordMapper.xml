@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.linghang.mapper.car.CarFenceRecordMapper">
+    <resultMap id="BaseResultMap" type="com.linghang.model.car.CarFenceRecordModel">
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="electricFenceId" jdbcType="BIGINT" property="electricFenceId" />
+        <result column="fancePosition" jdbcType="NVARCHAR" property="fancePosition" />
+        <result column="wsg84" jdbcType="NVARCHAR" property="wsg84" />
+        <result column="pointCenter" jdbcType="VARCHAR" property="pointCenter" />
+        <result column="startTime" jdbcType="TIMESTAMP" property="startTime" />
+        <result column="endTime" jdbcType="TIMESTAMP" property="endTime" />
+        <result column="carMessage" jdbcType="NVARCHAR" property="carMessage"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+       id,electricFenceId, fancePosition, wsg84, pointCenter, startTime, endTime,carMessage
+    </sql>
+
+    <select id="selectById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select *
+        from imp_car_fenceRecord
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <delete id="deleteById" parameterType="java.lang.Long">
+        delete from imp_car_fenceRecord
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+
+    <delete id="deleteByIds" parameterType="java.util.List">
+        delete from imp_car_fenceRecord
+        where id in 
+        <foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
+            #{item}
+        </foreach>
+    </delete>
+
+    <insert id="insert" keyProperty="id" parameterType="com.linghang.model.car.CarFenceRecordModel">
+        insert into imp_car_fenceRecord (
+        <include refid="Base_Column_List" />
+        )
+        values (#{id,jdbcType=BIGINT},
+            #{electricFenceId,jdbcType=BIGINT},
+            #{fancePosition,jdbcType=NVARCHAR}, 
+            #{wsg84,jdbcType=NVARCHAR}, 
+            #{pointCenter,jdbcType=VARCHAR}, 
+            #{startTime,jdbcType=TIMESTAMP},
+        #{endTime,jdbcType=TIMESTAMP},
+        #{carMessage,jdbcType=NVARCHAR}
+            )
+    </insert>
+
+    <insert id="insertList" parameterType="java.util.List">
+        <foreach collection="list" index="index" item="item" separator=";">
+            insert into imp_car_fenceRecord (
+            <include refid="Base_Column_List" />
+            )
+            values (#{item.electricFenceId,jdbcType=BIGINT}, 
+                #{item.fancePosition,jdbcType=NVARCHAR}, 
+                #{item.wsg84,jdbcType=NVARCHAR}, 
+                #{item.pointCenter,jdbcType=VARCHAR}, 
+                #{item.startTime,jdbcType=TIMESTAMP},
+            #{item.endTime,jdbcType=TIMESTAMP},
+            #{item.carMessage,jdbcType=NVARCHAR}
+                )
+        </foreach>
+    </insert>
+
+    <select id="selectByModel" parameterType="com.linghang.model.car.CarFenceRecordModel" resultMap="BaseResultMap">
+        select * from imp_car_fenceRecord where 1 = 1
+        <if test="electricFenceId != null">
+            and electricFenceId = #{electricFenceId,jdbcType=BIGINT}
+        </if>
+        <if test="fancePosition != null">
+            and fancePosition = #{fancePosition,jdbcType=NVARCHAR}
+        </if>
+        <if test="wsg84 != null">
+            and wsg84 = #{wsg84,jdbcType=NVARCHAR}
+        </if>
+        <if test="pointCenter != null">
+            and pointCenter = #{pointCenter,jdbcType=VARCHAR}
+        </if>
+        <if test="startTime != null">
+            and startTime = #{startTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="endTime != null">
+            and endTime = #{endTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="carMessage != null">
+            and carMessage= #{carMessage,jdbcType=NVARCHAR}
+        </if>
+    </select>
+
+    <insert id="insertSelective" keyProperty="id" parameterType="com.linghang.model.car.CarFenceRecordModel">
+        insert into imp_car_fenceRecord
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="electricFenceId != null">
+                electricFenceId,
+            </if>
+            <if test="fancePosition != null">
+                fancePosition,
+            </if>
+            <if test="wsg84 != null">
+                wsg84,
+            </if>
+            <if test="pointCenter != null">
+                pointCenter,
+            </if>
+            <if test="startTime != null">
+                startTime,
+            </if>
+            <if test="endTime != null">
+                endTime,
+            </if>
+            <if test="carMessage!=null">
+                carMessage,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="electricFenceId != null">
+                #{electricFenceId,jdbcType=BIGINT},
+            </if>
+            <if test="fancePosition != null">
+                #{fancePosition,jdbcType=NVARCHAR},
+            </if>
+            <if test="wsg84 != null">
+                #{wsg84,jdbcType=NVARCHAR},
+            </if>
+            <if test="pointCenter != null">
+                #{pointCenter,jdbcType=VARCHAR},
+            </if>
+            <if test="startTime != null">
+                #{startTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="endTime != null">
+                #{endTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="carMessage!=null">
+                #{carMessage,jdbcType=NVARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByIdSelective" parameterType="com.linghang.model.car.CarFenceRecordModel">
+        update imp_car_fenceRecord
+        <set>
+            <if test="electricFenceId != null">
+                electricFenceId = #{electricFenceId,jdbcType=BIGINT},
+            </if>
+            <if test="fancePosition != null">
+                fancePosition = #{fancePosition,jdbcType=NVARCHAR},
+            </if>
+            <if test="wsg84 != null">
+                wsg84 = #{wsg84,jdbcType=NVARCHAR},
+            </if>
+            <if test="pointCenter != null">
+                pointCenter = #{pointCenter,jdbcType=VARCHAR},
+            </if>
+            <if test="startTime != null">
+                startTime = #{startTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="endTime != null">
+                endTime = #{endTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="carMessage!=null">
+                carMessage= #{carMessage,jdbcType=NVARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <update id="updateById" parameterType="com.linghang.model.car.CarFenceRecordModel">
+        update imp_car_fenceRecord
+        set electricFenceId = #{electricFenceId,jdbcType=BIGINT},
+            fancePosition = #{fancePosition,jdbcType=NVARCHAR},
+            wsg84 = #{wsg84,jdbcType=NVARCHAR},
+            pointCenter = #{pointCenter,jdbcType=VARCHAR},
+            startTime = #{startTime,jdbcType=TIMESTAMP},
+            endTime = #{endTime,jdbcType=TIMESTAMP},
+            carMessage = #{carMessage,jdbcType=NVARCHAR}
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <select id="selctNewFenceRecord" resultType="com.linghang.model.car.CarFenceRecordModel">
+   SELECT * from  imp_car_fenceRecord where startTime = (select MAX(startTime) from imp_car_fenceRecord where  electricFenceId = #{electricFenceId,jdbcType=BIGINT})
+    </select>
+    <select id="selectFenceRecord" resultType="com.linghang.model.car.CarFenceRecordModel">
+   select * from imp_car_fenceRecord where electricFenceId =(
+
+
+    SELECT
+		id
+	FROM
+		imp_car_electricFence where  (
+			SELECT
+				id
+			FROM
+				imp_car_vehicleManagement
+			WHERE
+				carNumber = #{carNumber,jdbcType=VARCHAR})
+		 IN (
+			SELECT
+				*
+			FROM
+				dbo.Fun_String2ToStringArray (carMessage, ',')
+		)) and  #{locationTime,jdbcType=VARCHAR}  BETWEEN startTime and endTime
+    </select>
+
+
+    <select id="selectByTimeAndcarId" resultMap="BaseResultMap">
+        select top 1 * from imp_car_fenceRecord where
+			#{carId,jdbcType=BIGINT}
+		 IN (
+			SELECT
+				*
+			FROM
+				dbo.Fun_String2ToStringArray (carMessage, ',')
+		)  and  CONVERT(varchar(100), #{selectTime,jdbcType=VARCHAR}, 21) BETWEEN startTime and endTime
+		ORDER BY startTime desc
+    </select>
+
+</mapper>

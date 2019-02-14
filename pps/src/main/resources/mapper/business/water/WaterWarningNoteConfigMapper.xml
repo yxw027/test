@@ -1,0 +1,332 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.linghang.mapper.business.water.WaterWarningNoteConfigMapper">
+    <resultMap id="BaseResultMap" type="com.linghang.model.business.water.WaterWarningNoteConfigModel">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="projectId" jdbcType="BIGINT" property="projectId"/>
+        <result column="orgId" jdbcType="VARCHAR" property="orgId"/>
+        <result column="stationId" jdbcType="VARCHAR" property="stationId"/>
+        <result column="userId" jdbcType="BIGINT" property="userId"/>
+        <result column="userName" jdbcType="VARCHAR" property="userName"/>
+        <result column="phone" jdbcType="VARCHAR" property="phone"/>
+        <result column="level1" jdbcType="INTEGER" property="level1"/>
+        <result column="level2" jdbcType="INTEGER" property="level2"/>
+        <result column="level3" jdbcType="INTEGER" property="level3"/>
+        <result column="isOpen" jdbcType="INTEGER" property="isOpen"/>
+        <result column="type" jdbcType="INTEGER" property="type"/>
+        <result column="remark" jdbcType="VARCHAR" property="remark"/>
+        <result column="stationNames" jdbcType="VARCHAR" property="stationNames"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,projectId, orgId, stationId, userId, userName, phone, level1, level2, level3, isOpen,
+        type, remark, stationNames
+    </sql>
+
+    <select id="selectById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select * 
+        from imp_water_warning_note_config
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <delete id="deleteById" parameterType="java.lang.Long">
+        delete from imp_water_warning_note_config
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+
+    <delete id="deleteByIds" parameterType="java.util.List">
+        delete from imp_water_warning_note_config
+        where id in
+        <foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
+            #{item}
+        </foreach>
+    </delete>
+
+    <insert id="insert" keyProperty="id" parameterType="com.linghang.model.business.water.WaterWarningNoteConfigModel">
+        insert into imp_water_warning_note_config (
+        <include refid="Base_Column_List"/>
+        )
+        values (
+        #{id,jdbcType=BIGINT},
+        #{projectId,jdbcType=BIGINT},
+        #{orgId,jdbcType=VARCHAR},
+        #{stationId,jdbcType=VARCHAR},
+        #{userId,jdbcType=BIGINT},
+        #{userName,jdbcType=VARCHAR},
+        #{phone,jdbcType=VARCHAR},
+        #{level1,jdbcType=INTEGER},
+        #{level2,jdbcType=INTEGER},
+        #{level3,jdbcType=INTEGER},
+        #{isOpen,jdbcType=INTEGER},
+        #{type,jdbcType=INTEGER},
+        #{remark,jdbcType=VARCHAR},
+        #{stationNames,jdbcType=VARCHAR}
+        )
+    </insert>
+
+    <insert id="insertList" parameterType="java.util.List">
+        <foreach collection="list" index="index" item="item" separator=";">
+            insert into imp_water_warning_note_config (
+            <include refid="Base_Column_List"/>
+            )
+            values (#{item.projectId,jdbcType=BIGINT},
+            #{item.orgId,jdbcType=VARCHAR},
+            #{item.stationId,jdbcType=VARCHAR},
+            #{item.userId,jdbcType=BIGINT},
+            #{item.userName,jdbcType=VARCHAR},
+            #{item.phone,jdbcType=VARCHAR},
+            #{item.level1,jdbcType=INTEGER},
+            #{item.level2,jdbcType=INTEGER},
+            #{item.level3,jdbcType=INTEGER},
+            #{item.isOpen,jdbcType=INTEGER},
+            #{item.type,jdbcType=INTEGER},
+            #{item.remark,jdbcType=VARCHAR},
+            #{item.stationNames,jdbcType=VARCHAR}
+            )
+        </foreach>
+    </insert>
+
+    <select id="selectByOptions" resultMap="BaseResultMap">
+        select * from imp_water_warning_note_config
+        where projectId = #{projectId,jdbcType=BIGINT}
+        <if test="options.filters != null">
+            <foreach collection="options.filters" item="item">
+                AND #{item.field}
+                <if test="item.operator == 'eq'">
+                    = #{item.value}
+                </if>
+                <if test="item.operator == 'contains'">
+                    like '%'+#{item.value}+'%'
+                </if>
+            </foreach>
+        </if>
+        order by
+        <if test="options.sort != null">
+            <foreach collection="options.sort" item="item">
+                ${item.field} ${item.dir}
+            </foreach>
+        </if>
+        <if test="options.sort == null">
+            id asc
+        </if>
+    </select>
+
+
+    <select id="selectByModel" parameterType="com.linghang.model.business.water.WaterWarningNoteConfigModel"
+            resultMap="BaseResultMap">
+        select * from imp_water_warning_note_config where 1 = 1
+        <if test="projectId != null">
+            and projectId = #{projectId,jdbcType=BIGINT}
+        </if>
+        <if test="orgId != null">
+            and orgId = #{orgId,jdbcType=VARCHAR}
+        </if>
+        <if test="stationId != null">
+            and stationId = #{stationId,jdbcType=VARCHAR}
+        </if>
+        <if test="userId != null">
+            and userId = #{userId,jdbcType=BIGINT}
+        </if>
+        <if test="userName != null">
+            and userName = #{userName,jdbcType=VARCHAR}
+        </if>
+        <if test="phone != null">
+            and phone = #{phone,jdbcType=VARCHAR}
+        </if>
+        <if test="level1 != null">
+            and level1 = #{level1,jdbcType=INTEGER}
+        </if>
+        <if test="level2 != null">
+            and level2 = #{level2,jdbcType=INTEGER}
+        </if>
+        <if test="level3 != null">
+            and level3 = #{level3,jdbcType=INTEGER}
+        </if>
+        <if test="isOpen != null">
+            and isOpen = #{isOpen,jdbcType=INTEGER}
+        </if>
+        <if test="type != null">
+            and type = #{type,jdbcType=INTEGER}
+        </if>
+        <if test="remark != null">
+            and remark = #{remark,jdbcType=VARCHAR}
+        </if>
+        <if test="stationNames != null">
+            and stationNames = #{stationNames,jdbcType=VARCHAR}
+        </if>
+    </select>
+
+    <insert id="insertSelective" keyProperty="id"
+            parameterType="com.linghang.model.business.water.WaterWarningNoteConfigModel">
+        insert into imp_water_warning_note_config
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="projectId != null">
+                projectId,
+            </if>
+            <if test="orgId != null">
+                orgId,
+            </if>
+            <if test="stationId != null">
+                stationId,
+            </if>
+            <if test="userId != null">
+                userId,
+            </if>
+            <if test="userName != null">
+                userName,
+            </if>
+            <if test="phone != null">
+                phone,
+            </if>
+            <if test="level1 != null">
+                level1,
+            </if>
+            <if test="level2 != null">
+                level2,
+            </if>
+            <if test="level3 != null">
+                level3,
+            </if>
+            <if test="isOpen != null">
+                isOpen,
+            </if>
+            <if test="type != null">
+                type,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+            <if test="stationNames != null">
+                stationNames,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="projectId != null">
+                #{projectId,jdbcType=BIGINT},
+            </if>
+            <if test="orgId != null">
+                #{orgId,jdbcType=VARCHAR},
+            </if>
+            <if test="stationId != null">
+                #{stationId,jdbcType=VARCHAR},
+            </if>
+            <if test="userId != null">
+                #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="userName != null">
+                #{userName,jdbcType=VARCHAR},
+            </if>
+            <if test="phone != null">
+                #{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="level1 != null">
+                #{level1,jdbcType=INTEGER},
+            </if>
+            <if test="level2 != null">
+                #{level2,jdbcType=INTEGER},
+            </if>
+            <if test="level3 != null">
+                #{level3,jdbcType=INTEGER},
+            </if>
+            <if test="isOpen != null">
+                #{isOpen,jdbcType=INTEGER},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=INTEGER},
+            </if>
+            <if test="remark != null">
+                #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="stationNames != null">
+                #{stationNames,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByIdSelective" parameterType="com.linghang.model.business.water.WaterWarningNoteConfigModel">
+        update imp_water_warning_note_config
+        <set>
+            <if test="projectId != null">
+                projectId = #{projectId,jdbcType=BIGINT},
+            </if>
+            <if test="orgId != null">
+                orgId = #{orgId,jdbcType=VARCHAR},
+            </if>
+            <if test="stationId != null">
+                stationId = #{stationId,jdbcType=VARCHAR},
+            </if>
+            <if test="userId != null">
+                userId = #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="userName != null">
+                userName = #{userName,jdbcType=VARCHAR},
+            </if>
+            <if test="phone != null">
+                phone = #{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="level1 != null">
+                level1 = #{level1,jdbcType=INTEGER},
+            </if>
+            <if test="level2 != null">
+                level2 = #{level2,jdbcType=INTEGER},
+            </if>
+            <if test="level3 != null">
+                level3 = #{level3,jdbcType=INTEGER},
+            </if>
+            <if test="isOpen != null">
+                isOpen = #{isOpen,jdbcType=INTEGER},
+            </if>
+            <if test="type != null">
+                type = #{type,jdbcType=INTEGER},
+            </if>
+            <if test="remark != null">
+                remark = #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="stationNames != null">
+                stationNames = #{stationNames,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <update id="updateById" parameterType="com.linghang.model.business.water.WaterWarningNoteConfigModel">
+        update imp_water_warning_note_config
+        set projectId = #{projectId,jdbcType=BIGINT},
+            orgId = #{orgId,jdbcType=VARCHAR},
+            stationId = #{stationId,jdbcType=VARCHAR},
+            userId = #{userId,jdbcType=BIGINT},
+            userName = #{userName,jdbcType=VARCHAR},
+            phone = #{phone,jdbcType=VARCHAR},
+            level1 = #{level1,jdbcType=INTEGER},
+            level2 = #{level2,jdbcType=INTEGER},
+            level3 = #{level3,jdbcType=INTEGER},
+            isOpen = #{isOpen,jdbcType=INTEGER},
+            type = #{type,jdbcType=INTEGER},
+            remark = #{remark,jdbcType=VARCHAR},
+            stationNames = #{stationNames,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <select id="getPhone" resultMap="BaseResultMap">
+        select * from imp_water_warning_note_config where
+        (
+        stationId = #{stationId,jdbcType=VARCHAR}
+        or stationId like ('%,'+#{stationId,jdbcType=VARCHAR}+',%') or stationId like
+        (#{stationId,jdbcType=VARCHAR}+',%')
+        or stationId like ('%,'+#{stationId,jdbcType=VARCHAR})
+        )
+        <if test="level == 1">
+            AND level1 = 1
+        </if>
+        <if test="level == 2">
+            AND level2 = 1
+        </if>
+        <if test="level == 3">
+            AND level3 = 1
+        </if>
+    </select>
+
+    <select id="getWarningPhone" resultMap="BaseResultMap">
+        select top 1 * from imp_water_warning_note_config where projectId = #{projectId,jdbcType=BIGINT} and phone = #{phone,jdbcType=VARCHAR}
+    </select>
+</mapper>

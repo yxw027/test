@@ -1,0 +1,373 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.linghang.mapper.base.UserMapper">
+
+    <resultMap id="BaseResultMap" type="com.linghang.model.base.UserModel">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="sex" jdbcType="INTEGER" property="sex"/>
+        <result column="loginName" jdbcType="VARCHAR" property="loginName"/>
+        <result column="userNo" jdbcType="VARCHAR" property="userNo"/>
+        <result column="keyword" jdbcType="VARCHAR" property="keyword"/>
+        <result column="orgId" jdbcType="BIGINT" property="orgId"/>
+        <result column="station" jdbcType="VARCHAR" property="station"/>
+        <result column="mobileNo" jdbcType="VARCHAR" property="mobileNo"/>
+        <result column="workPhone" jdbcType="VARCHAR" property="workPhone"/>
+        <result column="email" jdbcType="VARCHAR" property="email"/>
+        <result column="qq" jdbcType="VARCHAR" property="qq"/>
+        <result column="weChat" jdbcType="VARCHAR" property="weChat"/>
+        <result column="status" jdbcType="INTEGER" property="status"/>
+        <result column="createUserId" jdbcType="BIGINT" property="createUserId"/>
+        <result column="createTime" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="remark" jdbcType="VARCHAR" property="remark"/>
+        <result column="cardNumber" jdbcType="VARCHAR" property="cardNumber"/>
+        <result column="password" jdbcType="VARCHAR" property="password"/>
+        <result column="softDog" jdbcType="VARCHAR" property="softDog"/>
+        <result column="createUserName" jdbcType="VARCHAR" property="createUserName"/>
+        <result column="orgName" jdbcType="VARCHAR" property="orgName"/>
+        <result column="orgType" jdbcType="INTEGER" property="orgType"/>
+        <result column="roles" jdbcType="VARCHAR" property="roles"/>
+        <result column="isAdmin" jdbcType="BIT" property="isAdmin"/>
+    </resultMap>
+
+    <resultMap id="ResultMapWithLinkOrg" extends="BaseResultMap" type="com.linghang.model.base.UserModel">
+        <association property="userOrgLinkList" column="id"
+                     select="com.linghang.mapper.base.UserOrgLinkMapper.selectByUserId"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, name, sex, loginName, userNo, keyword, orgId, station, mobileNo, workPhone,
+        email, qq, weChat, status, createUserId, createTime, remark, cardNumber, password,
+        softDog
+    </sql>
+
+    <select id="selectById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select *
+        from imp_user
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <delete id="deleteById" parameterType="java.lang.Long">
+        delete from imp_user
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+
+    <insert id="insert" keyProperty="id" parameterType="com.linghang.model.base.UserModel">
+        insert into imp_user (
+        <include refid="Base_Column_List"/>
+        )
+        values (
+        #{id,jdbcType=BIGINT},
+        #{name,jdbcType=VARCHAR},
+        #{sex,jdbcType=INTEGER},
+        #{loginName,jdbcType=VARCHAR},
+        #{userNo,jdbcType=VARCHAR},
+        #{keyword,jdbcType=VARCHAR},
+        #{orgId,jdbcType=BIGINT},
+        #{station,jdbcType=VARCHAR},
+        #{mobileNo,jdbcType=VARCHAR},
+        #{workPhone,jdbcType=VARCHAR},
+        #{email,jdbcType=VARCHAR},
+        #{qq,jdbcType=VARCHAR},
+        #{weChat,jdbcType=VARCHAR},
+        #{status,jdbcType=INTEGER},
+        #{createUserId,jdbcType=BIGINT},
+        #{createTime,jdbcType=TIMESTAMP},
+        #{remark,jdbcType=VARCHAR},
+        #{cardNumber,jdbcType=VARCHAR},
+        #{password,jdbcType=VARCHAR},
+        #{softDog,jdbcType=VARCHAR}
+        )
+    </insert>
+
+    <insert id="insertList" keyProperty="id" parameterType="java.util.List">
+        <foreach collection="list" index="index" item="item" separator=";">
+            insert into imp_user (
+            <include refid="Base_Column_List"/>
+            )
+            values (
+            #{item.id,jdbcType=BIGINT},
+            #{item.name,jdbcType=VARCHAR},
+            #{item.sex,jdbcType=INTEGER},
+            #{item.loginName,jdbcType=VARCHAR},
+            #{item.userNo,jdbcType=VARCHAR},
+            #{item.keyword,jdbcType=VARCHAR},
+            #{item.orgId,jdbcType=BIGINT},
+            #{item.station,jdbcType=VARCHAR},
+            #{item.mobileNo,jdbcType=VARCHAR},
+            #{item.workPhone,jdbcType=VARCHAR},
+            #{item.email,jdbcType=VARCHAR},
+            #{item.qq,jdbcType=VARCHAR},
+            #{item.weChat,jdbcType=VARCHAR},
+            #{item.status,jdbcType=INTEGER},
+            #{item.createUserId,jdbcType=BIGINT},
+            #{item.createTime,jdbcType=TIMESTAMP},
+            #{item.remark,jdbcType=VARCHAR},
+            #{item.cardNumber,jdbcType=VARCHAR},
+            #{item.password,jdbcType=VARCHAR},
+            #{item.softDog,jdbcType=VARCHAR}
+            )
+        </foreach>
+    </insert>
+
+    <select id="selectByModel" parameterType="com.linghang.model.base.UserModel" resultMap="BaseResultMap">
+        select u.*,u2.name AS createUserName,
+        o.name AS orgName,o.type AS orgType,roleLink.roles
+        from imp_user u
+        LEFT JOIN imp_user u2 ON u.createUserId = u2.id
+        LEFT JOIN imp_organization o ON u.orgId = o.id
+        LEFT JOIN (
+        SELECT
+        userId,
+        (
+        STUFF((
+        SELECT
+        ',' + r.name
+        FROM
+        imp_role r,imp_user_role_link l
+        WHERE
+        l.roleId = r.id AND
+        l.userId = link.userId
+        ORDER BY
+        roleId FOR XML PATH ( '' )),1,1,'')
+        ) AS roles
+        FROM
+        imp_user_role_link AS link
+        GROUP BY
+        userId
+        ) roleLink ON u.id = roleLink.userId
+        where 1 = 1
+        <if test="name != null">
+            and u.name = #{name,jdbcType=VARCHAR}
+        </if>
+        <if test="sex != null">
+            and u.sex = #{sex,jdbcType=INTEGER}
+        </if>
+        <if test="loginName != null">
+            and u.loginName = #{loginName,jdbcType=VARCHAR}
+        </if>
+        <if test="userNo != null">
+            and u.userNo = #{userNo,jdbcType=VARCHAR}
+        </if>
+        <if test="keyword != null">
+            and u.keyword = #{keyword,jdbcType=VARCHAR}
+        </if>
+        <if test="orgId != null">
+            and u.orgId = #{orgId,jdbcType=BIGINT}
+        </if>
+        <if test="station != null">
+            and u.station = #{station,jdbcType=VARCHAR}
+        </if>
+        <if test="mobileNo != null">
+            and u.mobileNo = #{mobileNo,jdbcType=VARCHAR}
+        </if>
+        <if test="workPhone != null">
+            and u.workPhone = #{workPhone,jdbcType=VARCHAR}
+        </if>
+        <if test="email != null">
+            and u.email = #{email,jdbcType=VARCHAR}
+        </if>
+        <if test="qq != null">
+            and u.qq = #{qq,jdbcType=VARCHAR}
+        </if>
+        <if test="weChat != null">
+            and u.weChat = #{weChat,jdbcType=VARCHAR}
+        </if>
+        <if test="status != null">
+            and u.status = #{status,jdbcType=INTEGER}
+        </if>
+        <if test="createUserId != null">
+            and u.createUserId = #{createUserId,jdbcType=BIGINT}
+        </if>
+        <if test="createTime != null">
+            and u.createTime = #{createTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="remark != null">
+            and u.remark = #{remark,jdbcType=VARCHAR}
+        </if>
+        <if test="cardNumber != null">
+            and u.cardNumber = #{cardNumber,jdbcType=VARCHAR}
+        </if>
+        <if test="password != null">
+            and u.password = #{password,jdbcType=VARCHAR}
+        </if>
+        <if test="softDog != null">
+            and u.softDog = #{softDog,jdbcType=VARCHAR}
+        </if>
+    </select>
+
+    <select id="selectByRoleId" resultType="com.linghang.model.base.UserModel">
+        select u.*, o.name orgName,l.id userRoleLinkId from imp_user u
+        INNER JOIN imp_user_role_link l
+        ON l.roleId = #{roleId,jdbcType=BIGINT} and u.id = l.userId
+        LEFT JOIN imp_organization o on u.orgId = o.id
+        where u.orgId is not null
+          and u.isAdmin is null
+    </select>
+
+    <select id="selectCountByOptions" resultType="java.lang.Long">
+        select count(0) from imp_user where orgId = ${orgId}
+        <if test="options.filters != null">
+            <foreach collection="options.filters" item="item">
+                and ${item.field}
+                <choose>
+                    <when test="item.operator == 'eq'">
+                        = #{item.value}
+                    </when>
+                    <when test="item.operator == 'neq'">
+                        != #{item.value}
+                    </when>
+                    <when test="item.operator == 'gt'">
+                        &gt; #{item.value}
+                    </when>
+                    <when test="item.operator == 'lt'">
+                        &lt; #{item.value}
+                    </when>
+                    <when test="item.operator == 'isnull'">
+                        #{item.value} is null
+                    </when>
+                    <when test="item.operator == 'isnotnull'">
+                        #{item.value} is not null
+                    </when>
+                    <when test="item.operator == 'contains'">
+                        like '%'+#{item.value}+'%'
+                    </when>
+                </choose>
+            </foreach>
+        </if>
+    </select>
+
+    <select id="selectDetailByOptions" resultMap="ResultMapWithLinkOrg">
+        select
+        u.*,u2.name AS createUserName,
+        o.name AS orgName,o.type AS orgType,roleLink.roles
+        from imp_user u
+        LEFT JOIN imp_user u2 ON u.createUserId = u2.id
+        LEFT JOIN imp_organization o ON u.orgId = o.id
+        LEFT JOIN (
+        SELECT
+        userId,
+        (
+        STUFF((
+        SELECT
+        ',' + r.name
+        FROM
+        imp_role r,imp_user_role_link l
+        WHERE
+        l.roleId = r.id AND
+        l.userId = link.userId
+        ORDER BY
+        roleId FOR XML PATH ( '' )),1,1,'')
+        ) AS roles
+        FROM
+        imp_user_role_link AS link
+        GROUP BY
+        userId
+        ) roleLink ON u.id = roleLink.userId
+        where u.orgId = ${orgId}
+        <if test="options.filters != null">
+            <foreach collection="options.filters" item="item">
+                and u.${item.field}
+                <choose>
+                    <when test="item.operator == 'eq'">
+                        = #{item.value}
+                    </when>
+                    <when test="item.operator == 'neq'">
+                        != #{item.value}
+                    </when>
+                    <when test="item.operator == 'gt'">
+                        &gt; #{item.value}
+                    </when>
+                    <when test="item.operator == 'lt'">
+                        &lt; #{item.value}
+                    </when>
+                    <when test="item.operator == 'isnull'">
+                        #{item.value} is null
+                    </when>
+                    <when test="item.operator == 'isnotnull'">
+                        #{item.value} is not null
+                    </when>
+                    <when test="item.operator == 'contains'">
+                        like '%'+#{item.value}+'%'
+                    </when>
+                </choose>
+            </foreach>
+        </if>
+        order by
+        <if test="options.sort != null">
+            <foreach collection="options.sort" item="item">
+                u.${item.field} ${item.dir}
+            </foreach>
+        </if>
+        <if test="options.sort == null">
+            u.id
+        </if>
+    </select>
+
+    <update id="updateById" parameterType="com.linghang.model.base.UserModel">
+        update imp_user
+        set name = #{name,jdbcType=VARCHAR},
+        sex = #{sex,jdbcType=INTEGER},
+        loginName = #{loginName,jdbcType=VARCHAR},
+        userNo = #{userNo,jdbcType=VARCHAR},
+        keyword = #{keyword,jdbcType=VARCHAR},
+        orgId = #{orgId,jdbcType=BIGINT},
+        station = #{station,jdbcType=VARCHAR},
+        mobileNo = #{mobileNo,jdbcType=VARCHAR},
+        workPhone = #{workPhone,jdbcType=VARCHAR},
+        email = #{email,jdbcType=VARCHAR},
+        qq = #{qq,jdbcType=VARCHAR},
+        weChat = #{weChat,jdbcType=VARCHAR},
+        status = #{status,jdbcType=INTEGER},
+        createUserId = #{createUserId,jdbcType=BIGINT},
+        createTime = #{createTime,jdbcType=TIMESTAMP},
+        remark = #{remark,jdbcType=VARCHAR},
+        cardNumber = #{cardNumber,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <update id="updatePasswordById" parameterType="com.linghang.model.base.UserModel">
+        update imp_user
+        set
+        password = #{password,jdbcType=VARCHAR},
+        softDog = #{softDog,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <select id="selectByOrgIdAndRoleId" resultMap="BaseResultMap">
+        SELECT
+        u.*
+        FROM
+        imp_user u,
+        imp_user_role_link l
+        WHERE
+        u.id = l.userId
+        <if test="orgId != null">
+            AND u.orgId = #{orgId,jdbcType=BIGINT}
+        </if>
+        AND l.roleId = #{roleId,jdbcType=BIGINT}
+    </select>
+
+    <select id="selectByOrgIdAndNotRoleId" resultMap="BaseResultMap">
+        SELECT
+        u.*
+        FROM
+        imp_user u
+        <if test="orgId != null">
+            where orgId = #{orgId,jdbcType=BIGINT}
+        </if>
+        EXCEPT
+        SELECT
+        u.*
+        FROM
+        imp_user u,
+        imp_user_role_link l
+        WHERE
+        u.id = l.userId
+        AND l.roleId = #{roleId,jdbcType=BIGINT}
+    </select>
+
+    <select id="selectByUserName" resultMap="BaseResultMap">
+        select * from imp_user where loginName = #{loginName,jdbcType=VARCHAR}
+    </select>
+</mapper>

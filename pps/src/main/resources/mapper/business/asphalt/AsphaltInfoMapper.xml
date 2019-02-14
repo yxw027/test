@@ -1,0 +1,613 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.linghang.mapper.business.asphalt.AsphaltInfoMapper">
+    <resultMap id="BaseResultMap" type="com.linghang.model.business.asphalt.AsphaltInfoModel">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="contact" jdbcType="VARCHAR" property="contact"/>
+        <result column="phone" jdbcType="VARCHAR" property="phone"/>
+        <result column="installTime" jdbcType="TIMESTAMP" property="installTime"/>
+        <result column="address" jdbcType="VARCHAR" property="address"/>
+        <result column="coordinate" jdbcType="VARCHAR" property="coordinate"/>
+        <result column="type" jdbcType="VARCHAR" property="type"/>
+        <result column="aggregateNum" jdbcType="INTEGER" property="aggregateNum"/>
+        <result column="powderNum" jdbcType="INTEGER" property="powderNum"/>
+        <result column="aggregateName" jdbcType="VARCHAR" property="aggregateName"/>
+        <result column="updateTime" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="updateUser" jdbcType="BIGINT" property="updateUser"/>
+        <result column="remarks" jdbcType="VARCHAR" property="remarks"/>
+        <result column="orgId" jdbcType="BIGINT" property="orgId"/>
+        <result column="isOpen" jdbcType="INTEGER" property="isOpen"/>
+        <result column="warningPhone" jdbcType="VARCHAR" property="warningPhone"/>
+        <result column="outMouthTemp" jdbcType="INTEGER" property="outMouthTemp"/>
+        <result column="asphaltTemp" jdbcType="INTEGER" property="asphaltTemp"/>
+        <result column="stoneTemp" jdbcType="INTEGER" property="stoneTemp"/>
+        <result column="cardMark" jdbcType="VARCHAR" property="cardMark"/>
+        <result column="mixingTemp" javaType="INTEGER" property="mixingTemp"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, name, contact, phone, installTime, address, coordinate, type, aggregateNum, powderNum, 
+        aggregateName, updateTime, updateUser, remarks,orgId,isOpen,warningPhone, outMouthTemp, asphaltTemp,
+        stoneTemp,cardMark,mixingTemp
+    </sql>
+
+    <select id="selectById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select * 
+        from imp_asphalt_info
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <delete id="deleteById" parameterType="java.lang.Long">
+        delete from imp_asphalt_info
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+
+    <delete id="deleteByIds" parameterType="java.util.List">
+        delete from imp_asphalt_info
+        where id in
+        <foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
+            #{item}
+        </foreach>
+    </delete>
+
+    <insert id="insert" keyProperty="id" parameterType="com.linghang.model.business.asphalt.AsphaltInfoModel">
+        insert into imp_asphalt_info (
+        <include refid="Base_Column_List"/>
+        )
+        values (#{id,jdbcType=BIGINT},
+        #{name,jdbcType=VARCHAR},
+        #{contact,jdbcType=VARCHAR},
+        #{phone,jdbcType=VARCHAR},
+        #{installTime,jdbcType=TIMESTAMP},
+        #{address,jdbcType=VARCHAR},
+        #{coordinate,jdbcType=VARCHAR},
+        #{type,jdbcType=VARCHAR},
+        #{aggregateNum,jdbcType=INTEGER},
+        #{powderNum,jdbcType=INTEGER},
+        #{aggregateName,jdbcType=VARCHAR},
+        #{updateTime,jdbcType=TIMESTAMP},
+        #{updateUser,jdbcType=BIGINT},
+        #{remarks,jdbcType=VARCHAR},
+        #{orgId,jdbcType=BIGINT},
+        #{isOpen,jdbcType=INTEGER},
+        #{warningPhone,jdbcType=VARCHAR},
+        #{outMouthTemp,jdbcType=INTEGER},
+        #{asphaltTemp,jdbcType=INTEGER},
+        #{stoneTemp,jdbcType=INTEGER},
+        #{cardMark,jdbcType=VARCHAR},
+        #{mixingTemp,jdbcType=INTEGER}
+        )
+    </insert>
+
+    <insert id="insertList" keyProperty="id" parameterType="java.util.List">
+        <foreach collection="list" index="index" item="item" separator=";">
+            insert into imp_asphalt_info (
+            <include refid="Base_Column_List"/>
+            )
+            values (#{item.id,jdbcType=BIGINT},
+            #{item.name,jdbcType=VARCHAR},
+            #{item.contact,jdbcType=VARCHAR},
+            #{item.phone,jdbcType=VARCHAR},
+            #{item.installTime,jdbcType=TIMESTAMP},
+            #{item.address,jdbcType=VARCHAR},
+            #{item.coordinate,jdbcType=VARCHAR},
+            #{item.type,jdbcType=VARCHAR},
+            #{item.aggregateNum,jdbcType=INTEGER},
+            #{item.powderNum,jdbcType=INTEGER},
+            #{item.aggregateName,jdbcType=VARCHAR},
+            #{item.updateTime,jdbcType=TIMESTAMP},
+            #{item.updateUser,jdbcType=BIGINT},
+            #{item.remarks,jdbcType=VARCHAR},
+            #{item.orgId,jdbcType=BIGINT},
+            #{item.isOpen,jdbcType=INTEGER},
+            #{item.warningPhone,jdbcType=VARCHAR},
+            #{item.outMouthTemp,jdbcType=INTEGER},
+            #{item.asphaltTemp,jdbcType=INTEGER},
+            #{item.stoneTemp,jdbcType=INTEGER},
+            #{item.cardMark,jdbcType=VARCHAR},
+            #{item.mixingTemp,jdbcType=INTEGER}
+            )
+
+        </foreach>
+    </insert>
+
+    <select id="selectByModel" parameterType="com.linghang.model.business.asphalt.AsphaltInfoModel"
+            resultMap="BaseResultMap">
+        select * from imp_asphalt_info where 1 = 1
+        <if test="name != null">
+            and name = #{name,jdbcType=VARCHAR}
+        </if>
+        <if test="contact != null">
+            and contact = #{contact,jdbcType=VARCHAR}
+        </if>
+        <if test="phone != null">
+            and phone = #{phone,jdbcType=VARCHAR}
+        </if>
+        <if test="installTime != null">
+            and installTime = #{installTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="address != null">
+            and address = #{address,jdbcType=VARCHAR}
+        </if>
+        <if test="coordinate != null">
+            and coordinate = #{coordinate,jdbcType=VARCHAR}
+        </if>
+        <if test="type != null">
+            and type = #{type,jdbcType=VARCHAR}
+        </if>
+        <if test="aggregateNum != null">
+            and aggregateNum = #{aggregateNum,jdbcType=INTEGER}
+        </if>
+        <if test="powderNum != null">
+            and powderNum = #{powderNum,jdbcType=INTEGER}
+        </if>
+        <if test="aggregateName != null">
+            and aggregateName = #{aggregateName,jdbcType=VARCHAR}
+        </if>
+        <if test="updateTime != null">
+            and updateTime = #{updateTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="updateUser != null">
+            and updateUser = #{updateUser,jdbcType=BIGINT}
+        </if>
+        <if test="remarks != null">
+            and remarks = #{remarks,jdbcType=VARCHAR}
+        </if>
+        <if test="orgId != null">
+            and orgId = #{orgId,jdbcType=BIGINT}
+        </if>
+        <if test="isOpen != null">
+            and isOpen = #{isOpen,jdbcType=INTEGER}
+        </if>
+        <if test="warningPhone != null">
+            and warningPhone = #{warningPhone,jdbcType=VARCHAR}
+        </if>
+        <if test="outMouthTemp != null">
+            and outMouthTemp = #{outMouthTemp,jdbcType=INTEGER}
+        </if>
+        <if test="asphaltTemp != null">
+            and asphaltTemp = #{asphaltTemp,jdbcType=INTEGER}
+        </if>
+        <if test="stoneTemp != null">
+            and stoneTemp = #{stoneTemp,jdbcType=INTEGER}
+        </if>
+        <if test="cardMark != null">
+            and cardMark = #{cardMark,jdbcType=VARCHAR}
+        </if>
+        <if test="mixingTemp !=null">
+            and mixingTemp = #{mixingTemp,jdbcType=INTEGER}
+        </if>
+    </select>
+
+    <select id="selectByOptions" resultMap="BaseResultMap">
+        select * from imp_asphalt_info where 1 = 1
+        <if test="options.filters != null">
+            <foreach collection="options.filters" item="item">
+                and ${item.field}
+                <if test="item.operator == 'eq'">
+                    = #{item.value}
+                </if>
+                <if test="item.operator == 'contains'">
+                    like '%'+#{item.value}+'%'
+                </if>
+            </foreach>
+        </if>
+        order by
+        <if test="options.sort != null">
+            <foreach collection="options.sort" item="item">
+                ${item.field} ${item.dir}
+            </foreach>
+        </if>
+        <if test="options.sort == null">
+            id
+        </if>
+    </select>
+
+    <insert id="insertSelective" keyProperty="id" parameterType="com.linghang.model.business.asphalt.AsphaltInfoModel">
+        insert into imp_asphalt_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null and id != ''">
+                id,
+            </if>
+            <if test="name != null and name != ''">
+                name,
+            </if>
+            <if test="contact != null and contact != ''">
+                contact,
+            </if>
+            <if test="phone != null and phone != ''">
+                phone,
+            </if>
+            <if test="installTime != null and installTime != ''">
+                installTime,
+            </if>
+            <if test="address != null and address != ''">
+                address,
+            </if>
+            <if test="coordinate != null and coordinate != ''">
+                coordinate,
+            </if>
+            <if test="type != null and type != ''">
+                type,
+            </if>
+            <if test="aggregateNum != null and aggregateNum != ''">
+                aggregateNum,
+            </if>
+            <if test="powderNum != null and powderNum != ''">
+                powderNum,
+            </if>
+            <if test="aggregateName != null and aggregateName != ''">
+                aggregateName,
+            </if>
+            <if test="updateTime != null and updateTime != ''">
+                updateTime,
+            </if>
+            <if test="updateUser != null and updateUser != ''">
+                updateUser,
+            </if>
+            <if test="remarks != null and remarks != ''">
+                remarks,
+            </if>
+            <if test="orgId != null and orgId != ''">
+                orgId,
+            </if>
+            <if test="isOpen != null and isOpen != ''">
+                isOpen,
+            </if>
+            <if test="warningPhone != null and warningPhone != ''">
+                warningPhone,
+            </if>
+            <if test="outMouthTemp != null and outMouthTemp != ''">
+                outMouthTemp,
+            </if>
+            <if test="asphaltTemp != null and asphaltTemp != ''">
+                asphaltTemp,
+            </if>
+            <if test="stoneTemp != null and stoneTemp != ''">
+                stoneTemp,
+            </if>
+            <if test="cardMark != null and cardMark != ''">
+                cardMark,
+            </if>
+            <if test="mixingTemp != null and mixingTemp != ''">
+                mixingTemp,
+            </if>
+
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null and id != ''">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="name != null and name != ''">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="contact != null and contact != ''">
+                #{contact,jdbcType=VARCHAR},
+            </if>
+            <if test="phone != null and phone != ''">
+                #{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="installTime != null and installTime != ''">
+                #{installTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="address != null and address != ''">
+                #{address,jdbcType=VARCHAR},
+            </if>
+            <if test="coordinate != null and coordinate != ''">
+                #{coordinate,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null and type != ''">
+                #{type,jdbcType=VARCHAR},
+            </if>
+            <if test="aggregateNum != null and aggregateNum != ''">
+                #{aggregateNum,jdbcType=INTEGER},
+            </if>
+            <if test="powderNum != null and powderNum != ''">
+                #{powderNum,jdbcType=INTEGER},
+            </if>
+            <if test="aggregateName != null and aggregateName != ''">
+                #{aggregateName,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null and updateTime != ''">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateUser != null and updateUser != ''">
+                #{updateUser,jdbcType=BIGINT},
+            </if>
+            <if test="remarks != null and remarks != ''">
+                #{remarks,jdbcType=VARCHAR},
+            </if>
+            <if test="orgId != null and orgId != ''">
+                #{orgId,jdbcType=BIGINT},
+            </if>
+            <if test="isOpen != null and isOpen != ''">
+                #{isOpen,jdbcType=INTEGER},
+            </if>
+            <if test="warningPhone != null and warningPhone != ''">
+                #{warningPhone,jdbcType=VARCHAR},
+            </if>
+            <if test="outMouthTemp != null and outMouthTemp != ''">
+                #{outMouthTemp,jdbcType=INTEGER},
+            </if>
+            <if test="asphaltTemp != null and asphaltTemp != ''">
+                #{asphaltTemp,jdbcType=INTEGER},
+            </if>
+            <if test="stoneTemp != null and stoneTemp != ''">
+                #{stoneTemp,jdbcType=INTEGER},
+            </if>
+            <if test="cardMark != null and cardMark != ''">
+                #{cardMark,jdbcType=VARCHAR},
+            </if>
+            <if test="mixingTemp != null and mixingTemp != ''">
+                #{mixingTemp,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByIdSelective" parameterType="com.linghang.model.business.asphalt.AsphaltInfoModel">
+        update imp_asphalt_info
+        <set>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="contact != null">
+                contact = #{contact,jdbcType=VARCHAR},
+            </if>
+            <if test="phone != null">
+                phone = #{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="installTime != null">
+                installTime = #{installTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="address != null">
+                address = #{address,jdbcType=VARCHAR},
+            </if>
+            <if test="coordinate != null">
+                coordinate = #{coordinate,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null">
+                type = #{type,jdbcType=VARCHAR},
+            </if>
+            <if test="aggregateNum != null">
+                aggregateNum = #{aggregateNum,jdbcType=INTEGER},
+            </if>
+            <if test="powderNum != null">
+                powderNum = #{powderNum,jdbcType=INTEGER},
+            </if>
+            <if test="aggregateName != null">
+                aggregateName = #{aggregateName,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null">
+                updateTime = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateUser != null">
+                updateUser = #{updateUser,jdbcType=BIGINT},
+            </if>
+            <if test="remarks != null">
+                remarks = #{remarks,jdbcType=VARCHAR},
+            </if>
+            <if test="orgId != null">
+                orgId = #{orgId,jdbcType=BIGINT},
+            </if>
+            <if test="isOpen != null">
+                isOpen = #{isOpen,jdbcType=INTEGER},
+            </if>
+            <if test="warningPhone != null">
+                warningPhone = #{warningPhone,jdbcType=VARCHAR},
+            </if>
+            <if test="outMouthTemp != null">
+                outMouthTemp = #{outMouthTemp,jdbcType=INTEGER},
+            </if>
+            <if test="asphaltTemp != null">
+                asphaltTemp = #{asphaltTemp,jdbcType=INTEGER},
+            </if>
+            <if test="stoneTemp != null">
+                stoneTemp = #{stoneTemp,jdbcType=INTEGER},
+            </if>
+            <if test="cardMark != null">
+                cardMark = #{cardMark,jdbcType=VARCHAR}
+            </if>
+            <if test="mixingTemp != null">
+                mixingTemp = #{mixingTemp,jdbcType=INTEGER}
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <update id="updateById" parameterType="com.linghang.model.business.asphalt.AsphaltInfoModel">
+        update imp_asphalt_info
+        set name = #{name,jdbcType=VARCHAR},
+            contact = #{contact,jdbcType=VARCHAR},
+            phone = #{phone,jdbcType=VARCHAR},
+            installTime = #{installTime,jdbcType=TIMESTAMP},
+            address = #{address,jdbcType=VARCHAR},
+            coordinate = #{coordinate,jdbcType=VARCHAR},
+            type = #{type,jdbcType=VARCHAR},
+            aggregateNum = #{aggregateNum,jdbcType=INTEGER},
+            powderNum = #{powderNum,jdbcType=INTEGER},
+            aggregateName = #{aggregateName,jdbcType=VARCHAR},
+            updateTime = #{updateTime,jdbcType=TIMESTAMP},
+            updateUser = #{updateUser,jdbcType=BIGINT},
+            remarks = #{remarks,jdbcType=VARCHAR},
+            orgId = #{orgId,jdbcType=BIGINT},
+            isOpen = #{isOpen,jdbcType=INTEGER},
+            warningPhone = #{warningPhone,jdbcType=VARCHAR},
+            outMouthTemp = #{outMouthTemp,jdbcType=INTEGER},
+            asphaltTemp = #{asphaltTemp,jdbcType=INTEGER},
+            stoneTemp = #{stoneTemp,jdbcType=INTEGER},
+            cardMark = #{cardMark,jdbcType=VARCHAR},
+            mixingTemp = #{mixingTemp,jdbcType=INTEGER}
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <select id="getAsphaltDetail" resultType="com.linghang.model.business.asphalt.AsphaltDetailModel">
+        select * , (select count(id) from imp_asphalt_metadata where asphaltId = #{asphaltId,jdbcType=BIGINT}) AS productionBatch,
+        (select sum(weight) from imp_asphalt_metadata where asphaltId = #{asphaltId,jdbcType=BIGINT}) AS productionWeight,
+        (select max(time) from imp_asphalt_metadata where asphaltId = #{asphaltId,jdbcType=BIGINT}) AS lastProductionTime
+        from imp_asphalt_info
+    </select>
+
+    <select id="getAsphaltFormulaStatistical" resultType="com.linghang.model.business.asphalt.AsphaltStatisticsModel">
+        select temp.* from (
+        select
+        AF.asphaltId ,
+        AF.name As formulaName,
+        AF.id As formulaId,
+        (select count(id) from imp_asphalt_metadata where formulaId = AF.id) AS productionBatch,
+        (select sum(weight) from imp_asphalt_metadata where formulaId = AF.id) AS productionWeight,
+        (select sum(weight) from imp_asphalt_metadata where formulaId = AF.id and (tempLevel > 0 or gradationLevel > 0 or oilStoneLevel>0)) AS unqualifiedWeight,
+        (select count(id) from imp_asphalt_metadata where formulaId = AF.id and (tempLevel > 0 or gradationLevel > 0 or oilStoneLevel>0 )) AS unqualifiedBatch,
+        (select count(id) from imp_asphalt_metadata where formulaId = AF.id and oilStoneLevel>0 ) AS oilStoneExceed,
+        (select count(id) from imp_asphalt_metadata where formulaId = AF.id and gradationLevel > 0) AS gradationExceed,
+        (select count(id) from imp_asphalt_metadata where formulaId = AF.id and tempLevel > 0) AS temperatureExceed
+         from imp_asphalt_formula AF where AF.asphaltId = #{asphaltId,jdbcType=BIGINT}
+        UNION
+        select
+        NULL AS asphaltId,
+        '合计' AS formulaName,
+        NULL AS formulaId,
+        count(id) AS productionBatch,
+        sum(weight) AS productionWeight,
+        (select sum(weight) from imp_asphalt_metadata where asphaltId = #{asphaltId,jdbcType=BIGINT} and (tempLevel > 0 or gradationLevel > 0 or oilStoneLevel>0)) AS unqualifiedWeight,
+        (select count(id) from imp_asphalt_metadata where asphaltId = #{asphaltId,jdbcType=BIGINT} and (tempLevel > 0 or gradationLevel > 0 or oilStoneLevel>0 )) AS unqualifiedBatch,
+        (select count(id) from imp_asphalt_metadata where asphaltId = #{asphaltId,jdbcType=BIGINT} and oilStoneLevel>0 ) AS oilStoneExceed,
+        (select count(id) from imp_asphalt_metadata where asphaltId = #{asphaltId,jdbcType=BIGINT} and gradationLevel > 0) AS gradationExceed,
+        (select count(id) from imp_asphalt_metadata where asphaltId = #{asphaltId,jdbcType=BIGINT} and tempLevel > 0) AS temperatureExceed
+        from imp_asphalt_metadata AF where AF.asphaltId = #{asphaltId,jdbcType=BIGINT}) temp
+        ORDER BY temp.formulaId desc
+    </select>
+
+    <select id="selectByFormulaId" resultMap="BaseResultMap">
+        select i.* from imp_asphalt_info i
+        left join imp_asphalt_formula f on i.id = f.asphaltId
+        where f.id= #{formulaId,jdbcType=BIGINT}
+    </select>
+
+    <select id="getAsphaltList" resultType="com.linghang.model.business.asphalt.param.AsphaltInfoPlanModel">
+        select temp.*,
+        case when temp.planProduction is null or temp.planProduction = 0 then 0 else Round(temp.actualProduction/temp.planProduction*100,2) end AS productionSchedule,
+        case when temp.actualProduction is null or temp.passWeight = 0 then 0 else cast(temp.passWeight*1.0 /temp.actualProduction*100 AS FLOAT(2)) end AS yield
+        from (
+        select AI.* ,
+            (select max(time) from imp_asphalt_metadata where asphaltId = AI.id) AS lastProductionTime,
+            (select sum(planOutput) from imp_asphalt_formula where asphaltId = AI.id and isVisible = 0) AS planProduction,
+            (select sum(weight) from imp_asphalt_metadata where asphaltId = AI.id ) AS actualProduction,
+            (select sum(weight) from imp_asphalt_metadata where asphaltId = AI.id and isPass = 0) AS passWeight,
+            (select COUNT(id) from imp_asphalt_metadata_result where asphaltId = AI.id) AS actualNumber,
+            (select COUNT(id) from imp_asphalt_metadata_result where asphaltId = AI.id and isPass = 0) AS normalNumber
+         from imp_asphalt_info AI where AI.orgId = #{orgId,jdbcType=BIGINT}) temp
+         order by temp.id
+    </select>
+
+    <select id="geStatisticsSend" resultType="com.linghang.model.business.asphalt.AsphaltStatisticsReportModel">
+     select
+     AI.id AS asphaltId,
+     AI.name AS asphaltName,
+     AI.orgId AS orgId,
+     AI.warningPhone AS phone,
+     (select count(id) from imp_asphalt_metadata_result where asphaltId = AI.id and formulaId is not null and DATEDIFF(d,time,getdate())=0) AS productionBatch,
+     (select sum(weight) from imp_asphalt_metadata_result where asphaltId = AI.id and formulaId is not null and DATEDIFF(d,time,getdate())=0) AS productionWeight,
+     (select sum(weight) from imp_asphalt_metadata_result where asphaltId = AI.id and formulaId is not null and DATEDIFF(d,time,getdate())=0 and isPass = 1) AS unqualifiedWeight,
+     (select count(id) from imp_asphalt_metadata_result where asphaltId = AI.id and formulaId is not null and DATEDIFF(d,time,getdate())=0 and isPass = 1) AS unqualifiedBatch,
+     (select count(id) from imp_asphalt_metadata_result where asphaltId = AI.id and formulaId is not null and DATEDIFF(d,time,getdate())=0 and isPass = 1 and oilStoneLevel>0) AS oilStoneExceed,
+     (select count(id) from imp_asphalt_metadata_result where asphaltId = AI.id and formulaId is not null and DATEDIFF(d,time,getdate())=0 and isPass = 1  and gradationLevel>0) AS gradationExceed,
+     (select count(id) from imp_asphalt_metadata_result where asphaltId = AI.id and formulaId is not null and DATEDIFF(d,time,getdate())=0 and isPass = 1 and asphaltTempLevel>0) AS temperatureExceed
+    from imp_asphalt_info AI where isOpen = 1
+    </select>
+
+    <select id="getCardOnly" resultMap="BaseResultMap">
+       select top 1 * from imp_asphalt_info where cardMark = #{cardMark,jdbcType=VARCHAR}
+    </select>
+
+    <select id="selectByCardMark" resultMap="BaseResultMap">
+        select * from imp_asphalt_info where cardMark=#{cardMark,jdbcType=VARCHAR}
+    </select>
+
+    <select id="getByOrgId" resultMap="BaseResultMap">
+        select * from imp_asphalt_info where orgId=#{orgId,jdbcType=BIGINT}
+    </select>
+
+    <select id="selectAsphaltAndWaterBidByOrgId" resultType="java.util.HashMap">
+        select 'asphalt' as type,id,name,orgId,coordinate,
+        (select name from imp_organization where id=a.orgId)orgName ,
+        (select (case when sum(m.weight) is null then 0 else sum(m.weight) end) from imp_asphalt_metadata m where a.id
+        =m.asphaltId ) allWeight,
+        (select (case when sum(m.weight) is null then 0 else sum(m.weight) end) from imp_asphalt_metadata m where a.id
+        =m.asphaltId and isPass=0) allPassWeight,
+        (select (case when sum(m.weight) is null then 0 else sum(m.weight) end) from imp_asphalt_metadata m where a.id
+        =m.asphaltId and CONVERT(varchar(100), time, 23)=CONVERT(varchar(100), GETDATE(),
+        23)) todayWeight,
+        (select (case when sum(m.weight) is null then 0 else sum(m.weight) end) from imp_asphalt_metadata m where a.id
+        =m.asphaltId and CONVERT(varchar(100), time, 23)=CONVERT(varchar(100), GETDATE(),
+        23) and isPass=1) noPassWeight,
+        (select (case when sum(m.weight) is null then 0 else sum(m.weight) end) from imp_asphalt_metadata m where a.id
+        =m.asphaltId and CONVERT(varchar(100), time, 23)=CONVERT(varchar(100), GETDATE(),
+        23) and isPass=0) passWeight,
+        (select max(time) from imp_asphalt_metadata m where a.id =m.asphaltId ) lastTime
+        from imp_asphalt_info a where orgId in
+        <foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
+            #{item.id}
+        </foreach>
+        UNION ALL
+        select 'water' as type,id,name,orgId,coordinate,
+        (select name from imp_organization where id=a.orgId)orgName ,
+        (select (case when sum(m.weight) is null then 0 else sum(m.weight) end) from imp_water_metadata m where a.id
+        =m.stationId ) allWeight,
+        (select (case when sum(m.weight) is null then 0 else sum(m.weight) end) from imp_water_metadata m where a.id
+        =m.stationId and isPass=0) allPassWeight,
+        (select (case when sum(m.weight) is null then 0 else sum(m.weight) end) from imp_water_metadata m where a.id
+        =m.stationId and CONVERT(varchar(100), time, 23)=CONVERT(varchar(100), GETDATE(),
+        23)) todayWeight,
+        (select (case when sum(m.weight) is null then 0 else sum(m.weight) end) from imp_water_metadata m where a.id
+        =m.stationId and CONVERT(varchar(100), time, 23)=CONVERT(varchar(100), GETDATE(),
+        23) and isPass=1) noPassWeight,
+        (select (case when sum(m.weight) is null then 0 else sum(m.weight) end) from imp_water_metadata m where a.id
+        =m.stationId and CONVERT(varchar(100), time, 23)=CONVERT(varchar(100), GETDATE(),
+        23) and isPass=0) passWeight,
+        (select max(time) from imp_water_metadata m where a.id =m.stationId ) lastTime
+        from imp_water_info a where orgId in
+        <foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
+            #{item.id}
+        </foreach>
+        order by type,id
+    </select>
+
+    <!--查询配方统计信息-->
+    <select id="selectAllFormulaStatistic" resultType="java.util.HashMap">
+        select 'asphalt' as type,f.id,f.asphaltNo as formulaCode,f.name,f.pavingLevel,f.asphaltId as stationId,
+        (select (case when sum(m.weight) is null then 0 else sum(m.weight) end) from imp_asphalt_metadata m where f.id
+        =m.formulaId and m.isPass=1) noPassWeight,
+        (select (case when sum(m.weight) is null then 0 else sum(m.weight) end) from imp_asphalt_metadata m where f.id
+        =m.formulaId and m.isPass=0) passWeight
+        from imp_asphalt_formula f
+        where isVisible=0 and f.asphaltId in
+        <foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
+            <if test="item.type == 'asphalt'">
+                #{item.id}
+            </if>
+            /*规避空值*/
+            <if test="item.type != 'asphalt'">
+                -1
+            </if>
+        </foreach>
+        UNION ALL
+        select 'water' as type,f.id,f.number as formulaCode,f.name,f.pavingLevel,f.stationId,
+        (select (case when sum(m.weight) is null then 0 else sum(m.weight) end) from imp_water_metadata m where f.id
+        =m.formulaId and m.isPass=1) noPassWeight,
+        (select (case when sum(m.weight) is null then 0 else sum(m.weight) end) from imp_water_metadata m where f.id
+        =m.formulaId and m.isPass=0) passWeight
+        from imp_water_formula f
+        where isVisible=0 and f.stationId in
+        <foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
+            <if test="item.type == 'water'">
+                #{item.id}
+            </if>
+            /*规避空值*/
+            <if test="item.type != 'water'">
+                -1
+            </if>
+        </foreach>
+        order by type,id
+    </select>
+</mapper>

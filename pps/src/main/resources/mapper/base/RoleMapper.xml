@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.linghang.mapper.base.RoleMapper">
+    <resultMap id="BaseResultMap" type="com.linghang.model.base.RoleModel">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="remark" jdbcType="VARCHAR" property="remark"/>
+        <result column="status" jdbcType="INTEGER" property="status"/>
+        <result column="groupId" jdbcType="BIGINT" property="groupId"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, name, remark, status, groupId
+    </sql>
+
+    <select id="selectById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select *
+        from imp_role
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <delete id="deleteById" parameterType="java.lang.Long">
+        delete from imp_role
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+
+    <delete id="deleteByIds" parameterType="java.util.List">
+        delete from imp_role
+        where id in
+        <foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
+            #{item}
+        </foreach>
+    </delete>
+
+    <insert id="insert" keyProperty="id" parameterType="com.linghang.model.base.RoleModel">
+        insert into imp_role (
+        <include refid="Base_Column_List"/>
+        )
+        values (
+        #{id,jdbcType=BIGINT},
+        #{name,jdbcType=VARCHAR},
+        #{remark,jdbcType=VARCHAR},
+        #{status,jdbcType=INTEGER},
+        #{groupId,jdbcType=BIGINT}
+        )
+    </insert>
+
+    <insert id="insertList" keyProperty="id" parameterType="java.util.List">
+        <foreach collection="list" index="index" item="item" separator=";">
+            insert into imp_role (
+            <include refid="Base_Column_List"/>
+            )
+            values (
+            #{id,jdbcType=BIGINT},
+            #{item.name,jdbcType=VARCHAR},
+            #{item.remark,jdbcType=VARCHAR},
+            #{item.status,jdbcType=INTEGER},
+            #{item.groupId,jdbcType=BIGINT}
+            )
+        </foreach>
+    </insert>
+
+    <select id="selectByModel" parameterType="com.linghang.model.base.RoleModel" resultMap="BaseResultMap">
+        select * from imp_role where 1 = 1
+        <if test="name != null">
+            and name = #{name,jdbcType=VARCHAR}
+        </if>
+        <if test="remark != null">
+            and remark = #{remark,jdbcType=VARCHAR}
+        </if>
+        <if test="status != null">
+            and status = #{status,jdbcType=INTEGER}
+        </if>
+        <if test="groupId != null">
+            and groupId = #{groupId,jdbcType=BIGINT}
+        </if>
+    </select>
+
+    <update id="updateById" parameterType="com.linghang.model.base.RoleModel">
+        update imp_role
+        set name = #{name,jdbcType=VARCHAR},
+        remark = #{remark,jdbcType=VARCHAR},
+        status = #{status,jdbcType=INTEGER},
+        groupId = #{groupId,jdbcType=BIGINT}
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <select id="selectByGroupId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select * from imp_role where groupId = #{groupId,jdbcType=BIGINT}
+    </select>
+
+</mapper>

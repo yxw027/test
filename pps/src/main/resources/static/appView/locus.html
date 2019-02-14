@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <title>轨迹回放</title>
+    <link rel="icon" type="image/x-icon" href="/img/lhLogo.png">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/app.css" rel="stylesheet" type="text/css"/>
+    <link href="../css/main.css" type="text/css" rel="stylesheet">
+    <script src="../libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="../libs/twitter-bootstrap/4.1.3/js/bootstrap.min.js"></script>
+    <link href="../libs/toastr/css/toastr.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../libs/layui/css/layui.css" media="all">
+    <script src="../libs/toastr/js/toastr.min.js"></script>
+    <script type="text/javascript" src="../js/baidu/baidu.js"></script>
+    <script type="text/javascript" src="../js/baidu/baiduMap_apikey.js"></script>
+    <script type="text/javascript" src="../js/baidu/LuShu_min.js"></script>
+    <script type="text/javascript" src="../js/baidu/gps.js"></script>
+    <script type="text/javascript" src="../js/business/car/baidutoWGS84.js"></script>
+    <script src="../libs/kendo/js/kendo.all.min.js"></script>
+    <script src="../libs/laydate/laydate.js"></script>
+    <script src="../libs/kendo/js/messages/kendo.messages.zh-CN.min.js"></script>
+    <script src="../libs/kendo/js/cultures/kendo.culture.zh-CN.min.js"></script>
+</head>
+<style>
+    #allmap {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+    }
+
+    .timeArea {
+        position: fixed;
+        top: 1%;
+        z-index: 9999;
+        left: 5%;
+        width: 100%;
+    }
+
+    .timeArea input {
+        width: 47%;
+        height: 30px;
+    }
+
+    .timeArea span {
+        position: fixed;
+        left: 60%;
+        background: #1f001f;
+        height: 17px;
+        top: 2%;
+        color: #fff;
+        opacity: 0.7;
+    }
+
+    .operation {
+        position: fixed;
+        bottom: 1%;
+        left: 5%;
+    }
+
+    .operation button {
+        width: 25%;
+        min-width: 80px;
+        margin-bottom: 1px;
+    }
+</style>
+<body>
+<div class="timeArea">
+    <input class="form-control" type="text" id="date" placeholder="请选择日期" readonly/>
+    <span id="time">00:00:00</span>
+    <span id="speed" style="left: 80%;">0 km/h</span>
+</div>
+<div id="allmap"></div>
+<div class="operation" style="display: none">
+    <button id="run" class="btn btn-primary">开始</button>
+    <button id="pause" class="btn btn-primary">暂停</button>
+    <button id="stop" class="btn btn-primary">停止</button>
+</div>
+</body>
+</html>
+<script>
+    var carNumber;
+    var arrPois = [];
+    var carLocalTime = [];
+    var carLocalSpeed = [];
+    var asphaltStation;
+    var waterStation;
+    var marker3;
+    var subscript = null;
+    var map = new BMap.Map("allmap", {enableMapClick: false});
+    var point = new BMap.Point(108.95309828, 34.2777999);
+    map.centerAndZoom(point, 17);
+    map.enableScrollWheelZoom();
+    map.addControl(new BMap.NavigationControl({
+        type: BMAP_NAVIGATION_CONTROL_ZOOM,
+        anchor: BMAP_ANCHOR_BOTTOM_RIGHT,
+        offset: new BMap.Size(1, 1)
+    }));
+    var carId = GetQueryString("carId");
+    var FencePoint;
+    var FenceData;
+    $(function () {
+        laydate.render({
+            elem: '#date'
+            , trigger: 'click'
+            , value: currDate()
+            , max: currDate()
+            , done: function (value, date) {
+                map.clearOverlays();
+                getFence(FenceData);
+                getMixingStation(FenceData.orgId);
+                selectCarLocus(carId, value);
+            }
+        });
+        if (!carId) {
+            toastr.warning("车辆信息错误。", "警告");
+        } else {
+            map.clearOverlays();
+            getLinkList(carId);
+            selectCarLocus(carId, currDate());
+        }
+
+    })
+
+    function addMixingStation() {
+        var asphaltIcon = new BMap.Icon("../img/asphaltStation.png", new BMap.Size(60, 40));
+        var waterIcon = new BMap.Icon("../img/waterStation.png", new BMap.Size(60, 40));
+        if (asphaltStation && asphaltStation.length > 0) {
+            for (var i = 0; i < asphaltStation.length; i++) {
+                if (asphaltStation[i].coordinate != null && asphaltStation[i].coordinate.length > 0) {
+                    var locations = asphaltStation[i].coordinate.split(",");
+                    var point = new BMap.Point(locations[0], locations[1]);
+                    var marker = new BMap.Marker(point, {icon: asphaltIcon});  // 创建标注
+                    var label = new BMap.Label(asphaltStation[i].name, {offset: new BMap.Size(-15, -20)});
+                    marker.setLabel(label);
+                    map.addOverlay(marker);
+                }
+            }
+        }
+
+        if (waterStation && waterStation.length > 0) {
+            for (var i = 0; i < waterStation.length; i++) {
+                if (waterStation[i].coordinate != null && waterStation[i].coordinate.length > 0) {
+                    var locations = waterStation[i].coordinate.split(",");
+                    var point = new BMap.Point(locations[0], locations[1]);
+                    var marker = new BMap.Marker(point, {icon: waterIcon});  // 创建标注
+                    var label = new BMap.Label(waterStation[i].name, {offset: new BMap.Size(-5, -20)});
+                    marker.setLabel(label);
+                    map.addOverlay(marker);
+                }
+            }
+        }
+    }
+    /**
+     * 获取请求路径附带参数
+     * @param name
+     * @returns {*}
+     * @constructor
+     */
+    function GetQueryString(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return unescape(r[2]);
+        return null;
+    }
+
+    /**
+     * 查询轨迹信息位置
+     */
+    function selectCarLocus(carId, date) {
+        $.ajax({
+            type: 'post',
+            dataType: 'json',
+            data: {carId: carId, startTime: date + ' 00:00:00', endTime: date + '23:59:59'},
+            url: '/carPosition/carPositionHistory',
+            async: false,
+            success: function (res) {
+                normalPoint = []
+                arrPois = [];
+                locationTime = [];
+                carLocalTime = [];
+                carLocalSpeed = [];
+                if (res.length == 0) {
+                    toastr.info("本车辆当前日期无运行轨迹。", "提示");
+                    $("#run").prop("disabled", true);
+                    $(".operation").css("display", "none");
+                } else {
+                    $(".operation").css("display", "");
+                    $("#stop").click();
+                    $("#run").prop("disabled", false);
+                    pathList = res;
+                    if (pathList.length > 0) {
+                        maxCarSpeed = pathList[0].maxSpeed;
+                        carNumber = pathList[0].carnum
+                    }
+                    for (var j = 2, n = pathList.length; j < n; j++) {
+                        //给carLocalTime写入Echarts图表需要的时间数据。
+                        var locationTime = pathList[j].locationTime;
+                        var index = locationTime.indexOf(" ");
+                        locationTime = locationTime.substring(index);
+                        carLocalTime.push(locationTime);
+                        //给carLocalTime写入Echarts图表需要的速度数据。
+                        carLocalSpeed.push(pathList[j].speed);
+
+                        var lat = pathList[j].xlabe;
+                        var lon = pathList[j].ylabe;
+                        // var item = formatLatLng(pathList[j]);
+                        // if (item){
+                        //     lat = item.xlabe;
+                        //     lon = item.ylabe;
+                        //     //坐标转换
+                        //     var wgs84togcj02 = coordtransform.wgs84togcj02(lon, lat);
+                        //     var gcj02tobd09 = coordtransform.gcj02tobd09(wgs84togcj02[0], wgs84togcj02[1]);
+                        //     arrPois.push(new BMap.Point(gcj02tobd09[0], gcj02tobd09[1]));
+                        // }
+                        var wgs84togcj02 = coordtransform.wgs84togcj02(lon, lat);
+                        var gcj02tobd09 = coordtransform.gcj02tobd09(wgs84togcj02[0], wgs84togcj02[1]);
+                        arrPois.push(new BMap.Point(gcj02tobd09[0], gcj02tobd09[1]));
+                    }
+                    drawPath();
+                }
+            }
+        });
+    }
+
+    /**
+     * 绘制路书线路图
+     */
+    function drawPath() {
+        if (arrPois != null) {
+            //创建线路
+            var lineColor = "#0c9c0c";
+            var polyline = new BMap.Polyline(
+                arrPois,//所有的GPS坐标点
+                {
+                    strokeColor: lineColor, //线路颜色
+                    strokeWeight: 3,//线路大小
+                    //线路类型(虚线)
+                    strokeStyle: "solid"
+                });
+            //绘制线路
+            //添加行驶线路到地图中
+            map.addOverlay(polyline);
+            map.setViewport(arrPois);
+            marker = new BMap.Marker(arrPois[0], {
+                icon: new BMap.Icon('../img/truck22.png', new BMap.Size(40, 22),
+                    {
+                        offset: new BMap.Size(40, 22)
+                    })
+            });
+            BMapLib.LuShu.prototype._move = function (initPos, targetPos, effect) {
+                var me = this;
+                if (subscript == null) {
+                    me.i = this.i;
+                }
+                else {
+                    me.i = subscript;
+                }
+                //当前的帧数
+                var currentCount = 0,
+                    //步长，米/秒
+                    timer = 100,
+                    step = me._opts.speed / (1000 / timer),
+                    //初始坐标
+                    init_pos = me._projection.lngLatToPoint(initPos),
+                    //获取结束点的(x,y)坐标
+                    target_pos = me._projection.lngLatToPoint(targetPos),
+                    //总的步长
+                    count = 1;
+                me._intervalFlag = setInterval(function () {
+                    //两点之间当前帧数大于总帧数的时候，则说明已经完成移动
+                    if (currentCount >= count) {
+                        clearInterval(me._intervalFlag);
+                        //移动的点已经超过总的长度
+                        if (me.i > me._path.length) {
+                            return;
+                        }
+                        //运行下一个点
+                        me._moveNext(++me.i);
+                    }
+                    else {
+                        currentCount++;
+                        var x = effect(init_pos.x, target_pos.x, currentCount, count),
+                            y = effect(init_pos.y, target_pos.y, currentCount, count),
+                            pos = me._projection.pointToLngLat(new BMap.Pixel(x, y));
+
+                        //设置marker
+                        if (currentCount == 1) {
+                            var proPos = null;
+                            if (me.i - 1 >= 0) {
+                                proPos = me._path[me.i - 1];
+                            }
+                            if (me._opts.enableRotation == true) {
+                                me.setRotation(proPos, initPos, targetPos);
+                            }
+                            if (me._opts.autoView) {
+                                if (!me._map.getBounds().containsPoint(pos)) {
+                                    me._map.setCenter(pos);
+                                }
+                            }
+                        }
+                        //正在移动
+                        me._marker.setPosition(pos);
+                        //设置自定义overlay的位置
+                        me._setInfoWin(pos);
+                        var locationTime = pathList[me.i].locationTime;
+                        var index = locationTime.indexOf(" ");
+                        locationTime = locationTime.substring(index);
+                        info(pathList[me.i].speed, locationTime);
+                    }
+                    if (me.i > (pathList.length - 6)) {
+                        stops();
+                        map.removeOverlay(marker);
+                        map.addOverlay(marker1);
+                    }
+                    subscript = null;
+                }, timer);
+            };
+            var length = arrPois.length;
+            var startIcon = new BMap.Icon("../img/mark_s.png", new BMap.Size(28, 38));
+            var endIcon = new BMap.Icon("../img/mark_b.png", new BMap.Size(28, 38));
+            if (length > 1) {
+                var marker1 = new BMap.Marker(arrPois[0], {icon: startIcon});
+                map.addOverlay(marker1);
+                var marker2 = new BMap.Marker(arrPois[length - 1], {icon: endIcon});
+                map.addOverlay(marker2);
+            }
+            var vall = 2000;
+            lushu = new BMapLib.LuShu(map, arrPois, {
+                autoView: true,//是否开启自动视野调整，如果开启那么路书在运动过程中会根据视野自动调整
+                icon: new BMap.Icon('../img/truck22.png', new BMap.Size(40, 22), {
+                    offset: new BMap.Size(40, 22),
+                }),
+                speed: vall,
+                enableRotation: true,//是否设置marker随着道路的走向进行旋转
+                landmarkPois: [],
+                defaultContent: carNumber,
+            });
+            marker.addEventListener("click", function () {
+                marker.enableMassClear();   //设置后可以隐藏改点的覆盖物
+                marker.hide();
+                lushu.start();
+            });
+            //绑定事件
+            $("run").onclick = function () {
+                marker.enableMassClear(); //设置后可以隐藏改点的覆盖物
+                marker.hide();
+                lushu.start();
+                try {
+                    lushu.showInfoWindow();
+                } catch (e) {
+                    console.log("BMap lushu showInfoWindow error");
+                }
+
+                map.addOverlay(lushu._marker);
+                map.removeOverlay(marker3);
+            };
+            $("stop").onclick = function () {
+                if (lushu._path != null && lushu._path.length > 0) {
+                    lushu.stop();
+                }
+                stops();
+                map.removeOverlay(marker3);
+            };
+            $("pause").onclick = function () {
+                lushu.pause();
+                map.removeOverlay(marker3);
+            };
+
+            function $(element) {
+                return document.getElementById(element);
+            }
+        }
+    }
+
+    /**
+     * 时间速度赋值
+     */
+    function info(speed, time) {
+        $("#speed").html(speed + " km/h");
+        $("#time").html(time);
+    }
+
+    /**
+     * 查询电子围栏信息及车辆定位信息
+     */
+    function getLinkList(carId) {
+        $.ajax({
+            type: 'post',
+            dataType: 'json',
+            data: {carId: carId},
+            url: '/carElectricFence/selectCarFence',
+            async: false,
+            success: function (response) {
+                if (response) {
+                    FenceData = response;
+                    getFence(response);
+                    getMixingStation(response.orgId);
+                } else {
+                    toastr.warning("该标段暂未添加电子围栏。", "警告");
+                }
+            }
+        });
+    }
+
+    /**
+     * 根据车辆关联列表获取对应map围栏数据
+     * @param carObject
+     * @param center
+     */
+    function getFence(carObject) {
+        if (carObject != null) {
+            if (carObject.fancePosition) {
+                var arrPois = [];
+                var parseJSON = JSON.parse(carObject.fancePosition);
+                if (parseJSON != null && parseJSON.length > 0) {
+                    for (var i = 0; i < parseJSON.length; i++) {
+                        arrPois.push(new BMap.Point(parseJSON[i].xlabe, parseJSON[i].ylabe));
+                    }
+                }
+                if (carObject.pointCenter) {
+                    var centerPoint = JSON.parse(carObject.pointCenter);
+                    FencePoint = new BMap.Point(centerPoint[0].lng, centerPoint[0].lat);
+                } else {
+                    FencePoint = arrPois[0];
+                }
+                var polyLine = new BMap.Polygon(arrPois, {
+                    strokeColor: "#71735b",    //边线颜色。
+                    fillColor: "#f2f510",      //填充颜色。当参数为空时，圆形将没有填充效果。
+                    strokeWeight: 2,       //边线的宽度，以像素为单位。
+                    strokeOpacity: 0.8,	   //边线透明度，取值范围0 - 1。
+                    fillOpacity: 0.3,      //填充的透明度，取值范围0 - 1。
+                    strokeStyle: 'solid'
+                });// 展示围栏
+                map.addOverlay(polyLine);
+
+                map.centerAndZoom(FencePoint, 15);
+            }
+        }
+    }
+
+    /**
+     * 获取当前日期
+     * @param day
+     * @returns {string}
+     */
+    function currDate() {
+        var now = new Date();
+        var y = now.getFullYear();
+        var m = (now.getMonth() + 1 > 9) ? now.getMonth() + 1 : "0" + (now.getMonth() + 1);
+        var d = (now.getDate() > 9) ? now.getDate() : "0" + now.getDate();
+        return y + '-' + m + '-' + d;
+    }
+
+    $("#run").click(function () {
+        $("#run").css("display", "none");
+        $("#pause").css("display", "");
+        $('#stop').removeAttr("disabled");
+        $("#stop").css({"color": "black"});
+    });
+    $("#pause").click(function () {
+        $("#run").css("display", "");
+        $("#pause").css("display", "none");
+    });
+    $("#stop").click(function () {
+        $("#run").css("display", "");
+        $("#pause").css("display", "none");
+        $('#carSpeed').html('0');
+        $('#carTime').html('00:00:00');
+    });
+
+    function stops() {
+        $("#run").css("display", "");
+        $("#pause").css("display", "none");
+        $("#stop").attr({"disabled": "disabled"});
+        $("#stop").css({"color": "gray"});
+        $('#carSpeed').html('0');
+        $('#carTime').html('00:00:00');
+    }
+
+    /**
+     * 查询拌合站
+     */
+    function getMixingStation(orgId) {
+        if (orgId == undefined) {
+            return;
+        }
+        $.ajax({
+            url: '/asphaltInfo/getAsphaltList',
+            type: 'post',
+            async: false,
+            data: {orgId: orgId},
+            success: function (res) {
+                if (res != null) {
+                    asphaltStation = res;
+                }
+            }
+        });
+        $.ajax({
+            url: '/waterInfo/selectByOrgId',
+            type: 'post',
+            async: false,
+            data: {orgId: orgId},
+            success: function (res) {
+                if (res != null) {
+                    waterStation = res;
+                }
+            }
+        });
+        addMixingStation();
+    }
+    var normalPoint = [];
+
+    /**
+     * 偏移点过滤
+     */
+    function formatLatLng(item) {
+        if (normalPoint.length == 0) {
+            normalPoint.push(item);
+            return item;
+        } else {
+            var before = normalPoint[normalPoint.length - 1];
+            if (before.speed == 0 && item.speed == 0) {
+                // if (before.xlabe!=item.xlabe || before.ylabe!=item.ylabe){
+                //     item.xlabe = before.xlabe;
+                //     item.ylabe = before.ylabe;
+                // }
+                // normalPoint.push(item);
+                return;
+            } else {
+                // if (GetDistance(before.xlabe,before.ylabe,item.xlabe,item.ylabe)>150){
+                // item.xlabe = before.xlabe;
+                // item.ylabe = before.ylabe;
+                // }
+                normalPoint.push(item);
+                return item;
+            }
+        }
+    }
+
+    /**
+     * 计算坐标距离
+     * @param lat1
+     * @param lng1
+     * @param lat2
+     * @param lng2
+     * @returns {number} 米
+     * @constructor
+     */
+    function GetDistance(lat1, lng1, lat2, lng2) {
+        var radLat1 = lat1 * Math.PI / 180.0;
+        var radLat2 = lat2 * Math.PI / 180.0;
+        var a = radLat1 - radLat2;
+        var b = lng1 * Math.PI / 180.0 - lng2 * Math.PI / 180.0;
+        var s = 2 * Math.asin(Math.sqrt(Math.pow(Math.sin(a / 2), 2) +
+            Math.cos(radLat1) * Math.cos(radLat2) * Math.pow(Math.sin(b / 2), 2)));
+        s = s * 6378.137;// EARTH_RADIUS;
+        s = Math.round(s * 10000) / 10000;
+        return s * 1000;
+    }
+</script>

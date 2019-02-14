@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.linghang.mapper.GpsOriginalDataMapper">
+    <resultMap id="BaseResultMap" type="com.linghang.model.GpsDataModel">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="sid" jdbcType="VARCHAR" property="sid"/>
+        <result column="lon" jdbcType="DECIMAL" property="lon"/>
+        <result column="lat" jdbcType="DECIMAL" property="lat"/>
+        <result column="hi" jdbcType="DECIMAL" property="hi"/>
+        <result column="temperature" jdbcType="INTEGER" property="temperature"/>
+        <result column="gps_time" jdbcType="TIMESTAMP" property="gpsTime"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, sid, lon, lat, hi, temperature, gps_time
+    </sql>
+
+    <select id="selectById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select * 
+        from tbl_gps_original_data
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <delete id="deleteById" parameterType="java.lang.Long">
+        delete from tbl_gps_original_data
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+
+    <delete id="deleteByIds" parameterType="java.util.List">
+        delete from tbl_gps_original_data
+        where id in
+        <foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
+            #{item}
+        </foreach>
+    </delete>
+
+    <insert id="insert" keyProperty="id" parameterType="com.linghang.model.GpsDataModel">
+        insert into tbl_gps_original_data (
+        <include refid="Base_Column_List"/>
+        )
+        values (#{id,jdbcType=BIGINT},
+        #{sid,jdbcType=VARCHAR},
+        #{lon,jdbcType=DECIMAL},
+        #{lat,jdbcType=DECIMAL},
+        #{hi,jdbcType=DECIMAL},
+        #{temperature,jdbcType=INTEGER},
+        #{gpsTime,jdbcType=TIMESTAMP}
+        )
+    </insert>
+
+    <insert id="insertList" keyProperty="id" parameterType="java.util.List">
+        <foreach collection="list" index="index" item="item" separator=";">
+            insert into tbl_gps_original_data (
+            <include refid="Base_Column_List"/>
+            )
+            values (#{item.id,jdbcType=BIGINT},
+            #{item.sid,jdbcType=VARCHAR},
+            #{item.lon,jdbcType=DECIMAL},
+            #{item.lat,jdbcType=DECIMAL},
+            #{item.hi,jdbcType=DECIMAL},
+            #{item.temperature,jdbcType=INTEGER},
+            #{item.gpsTime,jdbcType=TIMESTAMP}
+            )
+        </foreach>
+    </insert>
+
+    <select id="selectByModel" parameterType="com.linghang.model.GpsDataModel" resultMap="BaseResultMap">
+        select * from tbl_gps_original_data where 1 = 1
+        <if test="sid != null">
+            and sid = #{sid,jdbcType=VARCHAR}
+        </if>
+        <if test="lon != null">
+            and lon = #{lon,jdbcType=DECIMAL}
+        </if>
+        <if test="lat != null">
+            and lat = #{lat,jdbcType=DECIMAL}
+        </if>
+        <if test="hi != null">
+            and hi = #{hi,jdbcType=DECIMAL}
+        </if>
+        <if test="temperature != null">
+            and temperature = #{temperature,jdbcType=INTEGER}
+        </if>
+        <if test="gpsTime != null">
+            and gps_time = #{gpsTime,jdbcType=TIMESTAMP}
+        </if>
+    </select>
+
+    <insert id="insertSelective" keyProperty="id" parameterType="com.linghang.model.GpsDataModel">
+        insert into tbl_gps_original_data
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null and id != ''">
+                id,
+            </if>
+            <if test="sid != null and sid != ''">
+                sid,
+            </if>
+            <if test="lon != null and lon != ''">
+                lon,
+            </if>
+            <if test="lat != null and lat != ''">
+                lat,
+            </if>
+            <if test="hi != null and hi != ''">
+                hi,
+            </if>
+            <if test="temperature != null and temperature != ''">
+                temperature,
+            </if>
+            <if test="gpsTime != null and gpsTime != ''">
+                gps_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null and id != ''">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="sid != null and sid != ''">
+                #{sid,jdbcType=VARCHAR},
+            </if>
+            <if test="lon != null and lon != ''">
+                #{lon,jdbcType=DECIMAL},
+            </if>
+            <if test="lat != null and lat != ''">
+                #{lat,jdbcType=DECIMAL},
+            </if>
+            <if test="hi != null and hi != ''">
+                #{hi,jdbcType=DECIMAL},
+            </if>
+            <if test="temperature != null and temperature != ''">
+                #{temperature,jdbcType=INTEGER},
+            </if>
+            <if test="gpsTime != null and gpsTime != ''">
+                #{gpsTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByIdSelective" parameterType="com.linghang.model.GpsDataModel">
+        update tbl_gps_original_data
+        <set>
+            <if test="sid != null">
+                sid = #{sid,jdbcType=VARCHAR},
+            </if>
+            <if test="lon != null">
+                lon = #{lon,jdbcType=DECIMAL},
+            </if>
+            <if test="lat != null">
+                lat = #{lat,jdbcType=DECIMAL},
+            </if>
+            <if test="hi != null">
+                hi = #{hi,jdbcType=DECIMAL},
+            </if>
+            <if test="temperature != null">
+                temperature = #{temperature,jdbcType=INTEGER},
+            </if>
+            <if test="gpsTime != null">
+                gps_time = #{gpsTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <update id="updateById" parameterType="com.linghang.model.GpsDataModel">
+        update tbl_gps_original_data
+        set sid = #{sid,jdbcType=VARCHAR},
+            lon = #{lon,jdbcType=DECIMAL},
+            lat = #{lat,jdbcType=DECIMAL},
+            hi = #{hi,jdbcType=DECIMAL},
+            temperature = #{temperature,jdbcType=INTEGER},
+            gps_time = #{gpsTime,jdbcType=TIMESTAMP}
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+</mapper>

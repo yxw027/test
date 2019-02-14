@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.linghang.mapper.business.transport.TransportInfoMapper">
+    <resultMap id="BaseResultMap" type="com.linghang.model.business.transport.TransportInfoModel">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="orgId" jdbcType="BIGINT" property="orgId"/>
+        <result column="carMark" jdbcType="BIGINT" property="carMark"/>
+        <result column="carId" jdbcType="BIGINT" property="carId"/>
+        <result column="receiveStartTime" jdbcType="TIMESTAMP" property="receiveStartTime"/>
+        <result column="receiveEndTime" jdbcType="TIMESTAMP" property="receiveEndTime"/>
+        <result column="outputStartTime" jdbcType="TIMESTAMP" property="outputStartTime"/>
+        <result column="outputEndTime" jdbcType="TIMESTAMP" property="outputEndTime"/>
+        <result column="receiveTime" jdbcType="BIGINT" property="receiveTime"/>
+        <result column="transportTime" jdbcType="BIGINT" property="transportTime"/>
+        <result column="outputTime" jdbcType="BIGINT" property="outputTime"/>
+        <result column="status" jdbcType="INTEGER" property="status"/>
+        <result column="mixingId" jdbcType="BIGINT" property="mixingId"/>
+        <result column="mixingName" jdbcType="VARCHAR" property="mixingName"/>
+        <result column="mixingType" jdbcType="INTEGER" property="mixingType"/>
+        <result column="pavingCarId" jdbcType="VARCHAR" property="pavingCarId"/>
+        <result column="pavingCarName" jdbcType="VARCHAR" property="pavingCarName"/>
+        <result column="weight" jdbcType="DECIMAL" property="weight"/>
+    </resultMap>
+
+    <resultMap id="infoAndCar" type="com.linghang.model.business.transport.TransportInfoModel" extends="BaseResultMap">
+        <association property="carVehicleManagementModel" javaType="com.linghang.model.CarVehicleManagementModel"
+                     column="carId"
+                     select="com.linghang.mapper.CarVehicleManagementMapper.selectById"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, orgId, carMark, carId, receiveStartTime, receiveEndTime, outputStartTime, outputEndTime, 
+        receiveTime, transportTime, outputTime, status,mixingId,mixingName,mixingType,pavingCarId,pavingCarName,weight
+    </sql>
+
+    <select id="selectById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select * 
+        from imp_transport_info
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <delete id="deleteById" parameterType="java.lang.Long">
+        delete from imp_transport_info
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+
+    <delete id="deleteByIds" parameterType="java.util.List">
+        delete from imp_transport_info
+        where id in
+        <foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
+            #{item}
+        </foreach>
+    </delete>
+
+    <insert id="insert" keyProperty="id" parameterType="com.linghang.model.business.transport.TransportInfoModel">
+        insert into imp_transport_info (
+        <include refid="Base_Column_List"/>
+        )
+        values (#{id,jdbcType=BIGINT},
+        #{orgId,jdbcType=BIGINT},
+        #{carMark,jdbcType=BIGINT},
+        #{carId,jdbcType=BIGINT},
+        #{receiveStartTime,jdbcType=TIMESTAMP},
+        #{receiveEndTime,jdbcType=TIMESTAMP},
+        #{outputStartTime,jdbcType=TIMESTAMP},
+        #{outputEndTime,jdbcType=TIMESTAMP},
+        #{receiveTime,jdbcType=BIGINT},
+        #{transportTime,jdbcType=BIGINT},
+        #{outputTime,jdbcType=BIGINT},
+        #{status,jdbcType=INTEGER},
+        #{mixingId,jdbcType=BIGINT},
+        #{mixingName,jdbcType=VARCHAR},
+        #{mixingType,jdbcType=INTEGER},
+        #{pavingCarId,jdbcType=VARCHAR},
+        #{pavingCarName,jdbcType=VARCHAR},
+        #{weight,jdbcType=DECIMAL}
+        )
+    </insert>
+
+    <select id="selectByModel" parameterType="com.linghang.model.business.transport.TransportInfoModel"
+            resultMap="BaseResultMap">
+        select * from imp_transport_info where 1 = 1
+        <if test="orgId != null">
+            and orgId = #{orgId,jdbcType=BIGINT}
+        </if>
+        <if test="carMark != null">
+            and carMark = #{carMark,jdbcType=BIGINT}
+        </if>
+        <if test="carId != null">
+            and carId = #{carId,jdbcType=BIGINT}
+        </if>
+        <if test="receiveStartTime != null">
+            and receiveStartTime = #{receiveStartTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="receiveEndTime != null">
+            and receiveEndTime = #{receiveEndTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="outputStartTime != null">
+            and outputStartTime = #{outputStartTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="outputEndTime != null">
+            and outputEndTime = #{outputEndTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="receiveTime != null">
+            and receiveTime = #{receiveTime,jdbcType=BIGINT}
+        </if>
+        <if test="transportTime != null">
+            and transportTime = #{transportTime,jdbcType=BIGINT}
+        </if>
+        <if test="outputTime != null">
+            and outputTime = #{outputTime,jdbcType=BIGINT}
+        </if>
+        <if test="status != null">
+            and status = #{status,jdbcType=INTEGER}
+        </if>
+        <if test="weight != null">
+            and weight = #{weight,jdbcType=DECIMAL}
+        </if>
+        <if test="mixingId != null">
+            and mixingId = #{mixingId,jdbcType=BIGINT}
+        </if>
+        <if test="mixingName != null">
+            and mixingName = #{mixingName,jdbcType=VARCHAR}
+        </if>
+        <if test="mixingType != null">
+            and mixingType = #{mixingType,jdbcType=INTEGER}
+        </if>
+        <if test="pavingCarId != null">
+            and pavingCarId = #{pavingCarId,jdbcType=VARCHAR}
+        </if>
+        <if test="pavingCarName != null">
+            and pavingCarName = #{pavingCarName,jdbcType=VARCHAR}
+        </if>
+    </select>
+
+    <select id="selectByOptions" resultMap="infoAndCar">
+        select * from imp_transport_info where 1 = 1
+        <if test="orgId != null">
+            and orgId = #{orgId,jdbcType=BIGINT}
+        </if>
+        <if test="carId !=null and carId !=0">
+            and carId = #{carId,jdbcType=BIGINT}
+        </if>
+        <if test="starTime!=null and endTime !=null">
+            and (
+            receiveStartTime BETWEEN #{starTime,jdbcType=VARCHAR} AND #{endTime,jdbcType=VARCHAR}
+            or
+            (receiveStartTime is null and outputStartTime BETWEEN #{starTime,jdbcType=VARCHAR} AND
+            #{endTime,jdbcType=VARCHAR})
+            )
+        </if>
+        <if test="options.filters != null">
+            <foreach collection="options.filters" item="item">
+                and ${item.field}
+                <if test="item.operator == 'eq'">
+                    = #{item.value}
+                </if>
+                <if test="item.operator == 'contains'">
+                    like '%'+#{item.value}+'%'
+                </if>
+            </foreach>
+        </if>
+        order by
+        <if test="options.sort != null">
+            <foreach collection="options.sort" item="item">
+                ${item.field} ${item.dir}
+            </foreach>
+        </if>
+        <if test="options.sort == null">
+            receiveStartTime DESC,status
+        </if>
+    </select>
+
+    <update id="updateById" parameterType="com.linghang.model.business.transport.TransportInfoModel">
+        update imp_transport_info
+        set orgId = #{orgId,jdbcType=BIGINT},
+            carMark = #{carMark,jdbcType=VARCHAR},
+            carId = #{carId,jdbcType=BIGINT},
+            receiveStartTime = #{receiveStartTime,jdbcType=TIMESTAMP},
+            receiveEndTime = #{receiveEndTime,jdbcType=TIMESTAMP},
+            outputStartTime = #{outputStartTime,jdbcType=TIMESTAMP},
+            outputEndTime = #{outputEndTime,jdbcType=TIMESTAMP},
+            receiveTime = #{receiveTime,jdbcType=BIGINT},
+            transportTime = #{transportTime,jdbcType=BIGINT},
+            outputTime = #{outputTime,jdbcType=BIGINT},
+            status = #{status,jdbcType=INTEGER},
+            mixingId = #{mixingId,jdbcType=BIGINT},
+            mixingName = #{mixingName,jdbcType=VARCHAR},
+            mixingType = #{mixingType,jdbcType=INTEGER},
+            pavingCarId = #{pavingCarId,jdbcType=VARCHAR},
+            pavingCarName = #{pavingCarName,jdbcType=VARCHAR},
+            weight = #{weight,jdbcType=DECIMAL}
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <select id="selectByCarIdAndTime" resultMap="BaseResultMap">
+        select * from imp_transport_info
+        where carId=#{carId,jdbcType=BIGINT}
+        and receiveStartTime &lt; #{date,jdbcType=VARCHAR}
+        and status != 4
+    </select>
+    <!--查询当前上传数据所属的信息-->
+    <select id="selectByCardMark" resultMap="BaseResultMap">
+        select * from imp_transport_info
+        where carMark=#{cardMark,jdbcType=VARCHAR}
+        and status != 4
+        and status != 5
+    </select>
+
+    <!--定时任务只扫描接料中及下料中的状态数据，其他状态数据在上传数据中更改-->
+    <select id="selectUnfinishedData" resultMap="BaseResultMap">
+         select * from imp_transport_info where status = 1 or status=3
+    </select>
+
+    <select id="getTransportMessageDate" resultType="java.lang.String">
+            select DISTINCT CONVERT(varchar(100), receiveStartTime, 23) as markTime from imp_transport_info
+        where orgId = #{orgId,jdbcType=BIGINT}
+    </select>
+
+    <select id="getCarMessageDate" resultType="java.lang.String">
+     select DISTINCT CONVERT(varchar(100), receiveStartTime, 23) as markTime from imp_transport_info
+        where carId = #{carId,jdbcType=BIGINT}
+    </select>
+
+    <!--查询当天已结束运输信息最后一条数据的信息-->
+    <select id="selectTodayDataByCardMark" resultMap="BaseResultMap">
+        select top 1 * from imp_transport_info
+        where  orgId = #{orgId,jdbcType=BIGINT}
+        and carMark=#{cardMark,jdbcType=VARCHAR}
+        and CONVERT(varchar(100), receiveStartTime, 23)=CONVERT(varchar(100), GETDATE(), 23)
+        and status=4 or status=5
+        order by receiveStartTime desc
+    </select>
+
+
+    <select id="selectErrorData" resultMap="BaseResultMap">
+        select * from imp_transport_info
+        where status = 2
+        and DATEADD(s,#{time,jdbcType=BIGINT},receiveEndTime) &lt; GETDATE()
+    </select>
+    <select id="selectTodayMinTransportTime" resultMap="BaseResultMap">
+        select min (transportTime) as transportTime
+        from imp_transport_info
+        where CONVERT(varchar(100), receiveStartTime, 23)=CONVERT(varchar(100), GETDATE(), 23)
+    </select>
+</mapper>

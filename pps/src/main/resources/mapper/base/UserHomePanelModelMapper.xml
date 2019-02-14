@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.linghang.mapper.base.UserHomePanelModelMapper">
+    <resultMap id="BaseResultMap" type="com.linghang.model.base.UserHomePanelModel">
+        <id column="userid" property="userid" jdbcType="INTEGER"/>
+        <result column="homepanelid" property="homepanelid" jdbcType="INTEGER"/>
+        <result column="isShow" property="isShow" jdbcType="INTEGER"/>
+        <result column="indexNo" property="indexNo" jdbcType="INTEGER"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="groupName" property="groupName" jdbcType="VARCHAR"/>
+        <result column="groupClassName" property="groupClassName" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base-Column-List">
+        userid,homepanelid,isShow,indexNo
+    </sql>
+
+    <select id="queryPanelIdByUserId" resultMap="BaseResultMap" parameterType="INTEGER">
+        SELECT
+        u.*, h.*
+        FROM
+        imp_user_homepanel u,
+        imp_home_panels h
+        WHERE
+        userid = #{userId}
+        AND h.id = u.homepanelid
+    </select>
+
+    <select id="queryUserId" resultType="java.lang.Integer">
+        SELECT
+        distinct userid
+        FROM
+        imp_user_homepanel
+    </select>
+
+    <update id="updatePanelSelective" parameterType="com.linghang.model.base.UserHomePanelModel">
+        update imp_user_homepanel
+        set
+        isShow = #{isShow,jdbcType=INTEGER}
+        where id = #{id,jdbcType=INTEGER}
+        AND userid = #{userid,jdbcType=INTEGER}
+    </update>
+
+    <update id="updatePanelPosition" parameterType="com.linghang.model.base.UserHomePanelModel">
+        update imp_user_homepanel
+        set indexNo = #{indexNo,jdbcType=INTEGER}
+        where id = #{id,jdbcType=INTEGER}
+        AND userid = #{userid,jdbcType=INTEGER}
+    </update>
+
+    <insert id="insert" parameterType="com.linghang.model.base.UserHomePanelModel">
+        insert into imp_user_homepanel (userid, homepanelid,isShow,indexNo)
+        values (#{userid,jdbcType=INTEGER}, #{homepanelid,jdbcType=INTEGER},
+        #{isShow,jdbcType=INTEGER},#{indexNo,jdbcType=INTEGER})
+    </insert>
+
+    <insert id="insertShowList" parameterType="java.util.Collection">
+        <foreach collection="list" item="item" index="index" separator=";">
+            insert into imp_user_homepanel (
+            <include refid="Base-Column-List"/>
+            )
+            values
+            (
+            #{item.userid},
+            #{item.homepanelid},
+            #{item.isShow},
+            #{item.indexNo}
+            )
+        </foreach>
+    </insert>
+
+    <delete id="deleteByUserId" parameterType="java.lang.Long">
+        delete from
+        imp_user_homepanel
+        where userid = #{userid,jdbcType=INTEGER}
+    </delete>
+
+</mapper>

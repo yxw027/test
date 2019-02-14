@@ -1,0 +1,200 @@
+.border-t {
+    border-top: 2px solid #ddd;
+}
+
+.k-ext-treeview {
+    z-index: 6 !important;
+    width: 240px !important;
+    height: 340px !important;
+}
+
+#adduserLayer {
+    border: 1px solid #ddd;
+    background: #fff;
+}
+
+.k-spreadsheet a {
+    color: #444;
+}
+
+.k-spreadsheet span.k-icon {
+    color: #444;
+}
+
+.k-spreadsheet .k-button-icon:hover span.k-icon {
+    color: #fff;
+}
+
+/***************登录****************/
+.loginbg {
+    /*background: url("../img/time11.jpg") no-repeat ;*/
+    background-color: #fff;
+    background-size: cover;
+}
+
+.login {
+    width: 620px;
+    margin: 0 auto;
+    padding-top: 60px;
+    line-height: 1.8em;
+}
+
+.login h1 {
+    font-size: 35px;
+    font-weight: 700;
+}
+
+.login-Cont {
+    border-radius: 30px;
+    border: 0px;
+    width: 600px;
+    /* background: url(../img/login-input.png) no-repeat 0 0; */
+    height: 348px;
+    margin: 0px auto;
+    padding: 55px 125px;
+    line-height: 30px;
+    position: relative;
+}
+
+.login-Cont .form-control {
+    /*border-radius: 30px;*/
+    line-height: 45px;
+    height: 45px;
+}
+
+.login-Cont button {
+    height: 45px;
+}
+
+.login-Cont .warning-text {
+    position: absolute;
+    top: 10px;
+    width: 350px;
+    border-radius: 15px;
+    border-color: #ffeeba;
+    color: #856404;
+    background-color: #fff3cd;
+    vertical-align: middle;
+}
+
+/************弹出层分列************/
+.k-edit-form-container .k-edit-label {
+    float: left;
+    clear: none;
+    width: 130px;
+    display: inline-block;
+    margin-right: 5px;
+}
+
+.k-edit-form-container .k-edit-field {
+    width: 240px;
+    height: 50px;
+    float: left;
+    display: inline-block;
+}
+
+.k-popup-edit-form .k-edit-form-container {
+    width: 800px;
+!important;
+}
+
+#orgIdDiv .k-dropdown {
+    width: 100%;
+}
+
+#orgIdDiv .k-ext-treeview {
+    height: 175px !important;
+    width: 240px !important;
+}
+
+.k-dropdown .k-dropdown-wrap, .k-dropdown .k-dropdown-wrap {
+    background: #f4f4f4 !important;
+    border: 1px solid #dededf !important;
+    color: #444 !important;
+}
+
+/*弹出层表格样式*/
+table.tabDetail td {
+    padding: 5px 10px;
+    line-height: 1.8em;
+    font-size: 14px;
+    border-bottom: 1px solid #f6f5f5;
+    color: #444;
+}
+
+table.tabDetail td:nth-child(odd) {
+    border-right: 1px solid #f6f5f5;
+}
+
+table.tabDetail td p {
+    margin: 0;
+    display: inline-block;
+}
+
+table.tabDetail td label {
+    font-weight: 400;
+    color: #adadad;
+    text-align: right;
+    display: block;
+
+}
+
+table.tabDetail td strong {
+    font-weight: 400;
+    width: 140px;
+    display: inline-block;
+}
+
+table.tabDetail td p label {
+    font-weight: 400;
+}
+
+table.tabDetail td strong.lefttd {
+    width: auto;
+}
+
+table.tabDetail tr.selectOrg td strong {
+    text-align: right;
+}
+
+/*弹出层表格样式end*/
+/***文本编辑弹出层样式开始***/
+.k-editor-dialog.k-editor-table-wizard-dialog.k-window-content {
+    min-width: 400px !important;
+}
+
+.k-editor-dialog.k-editor-table-wizard-dialog .k-tabstrip-wrapper .k-content {
+    height: auto !important;
+}
+
+#k-cell-properties div.k-edit-field {
+    float: right !important;
+}
+
+.k-editor-dialog .k-edit-form-container {
+    width: auto !important;
+}
+
+div.k-window-content {
+    overflow-x: hidden !important;
+}
+
+.k-header h2 {
+    line-height: 30px;
+    text-indent: 8px;
+    font-size: 14px;
+}
+
+.k-grid table {
+    border-collapse: collapse;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+tbody tr:last-child {
+    border-bottom: 1px solid #ececec;
+}
+
+/************结束********/

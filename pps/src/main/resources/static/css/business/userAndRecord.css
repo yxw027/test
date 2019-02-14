@@ -1,0 +1,87 @@
+.ibox-title {
+    padding: 5px 0px 5px 5px;
+    text-align: right;
+    border-bottom: solid 1px #e3e4e4;
+    height: 44px;
+}
+
+.all-type-title {
+    padding: 5px;
+    border: none;
+    text-align: right;
+    height: 39px;
+}
+
+.customer-photo {
+    display: inline-block;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-size: 32px 35px;
+    background-position: center center;
+    vertical-align: middle;
+    line-height: 32px;
+    box-shadow: inset 0 0 1px #999, inset 0 0 10px rgba(0, 0, 0, .2);
+    margin-left: 5px;
+}
+
+.customer-name {
+    display: inline-block;
+    vertical-align: middle;
+    line-height: 32px;
+    padding-left: 3px;
+}
+
+img.img-responsive.img-circle {
+    width: 100%;
+    height: 100%;
+}
+
+.k-tooltip {
+    color: #ffffff;
+    background-color: #465976;
+    border-radius: 0.25rem;
+}
+
+label.required {
+    line-height: 2.5;
+}
+
+span.k-dropdown-wrap.k-state-default {
+    text-align: left;
+    background-color: #f4f4f4;
+}
+
+/*span.k-widget.k-dropdown.k-header {*/
+/*height: 32px;*/
+/*border: 1px solid;*/
+/*border-radius: 4px;*/
+/*margin-top: 1px;*/
+/*}*/
+
+/*.k-window-titlebar {*/
+/*padding: 10px 0;*/
+/*border-width: 0 0 1px;*/
+/*border-style: solid;*/
+/*white-space: nowrap;*/
+/*display: block;*/
+/*flex-direction: row;*/
+/*flex-shrink: 0;*/
+/*align-items: center;*/
+/*position: relative;*/
+/*}*/
+
+span.k-picker-wrap.k-state-default {
+    height: 32px;
+    margin-top: 1px;
+    border: solid 1px #676a6c;
+    border-radius: 3px;
+}
+
+button#exportPDF {
+    margin-top: 2px;
+}
+
+span.k-picker-wrap.k-state-default {
+    background-color: #f4f4f4;
+}

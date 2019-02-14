@@ -1,0 +1,758 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.linghang.mapper.business.water.WaterMetaDataMapper">
+    <resultMap id="BaseResultMap" type="com.linghang.model.business.water.WaterMetaDataModel">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="isPass" jdbcType="INTEGER" property="isPass"/>
+        <result column="mixTime" jdbcType="DECIMAL" property="mixTime"/>
+        <result column="time" jdbcType="TIMESTAMP" property="time"/>
+        <result column="stationId" jdbcType="BIGINT" property="stationId"/>
+        <result column="formulaId" jdbcType="BIGINT" property="formulaId"/>
+        <result column="formulaCode" jdbcType="VARCHAR" property="formulaCode"/>
+        <result column="cement" jdbcType="DECIMAL" property="cement"/>
+        <result column="water" jdbcType="DECIMAL" property="water"/>
+        <result column="g1" jdbcType="DECIMAL" property="g1"/>
+        <result column="g2" jdbcType="DECIMAL" property="g2"/>
+        <result column="g3" jdbcType="DECIMAL" property="g3"/>
+        <result column="g4" jdbcType="DECIMAL" property="g4"/>
+        <result column="g5" jdbcType="DECIMAL" property="g5"/>
+        <result column="g6" jdbcType="DECIMAL" property="g6"/>
+        <result column="g7" jdbcType="DECIMAL" property="g7"/>
+        <result column="g8" jdbcType="DECIMAL" property="g8"/>
+        <result column="g9" jdbcType="DECIMAL" property="g9"/>
+        <result column="g10" jdbcType="DECIMAL" property="g10"/>
+        <result column="warnLevel" jdbcType="INTEGER" property="warnLevel"/>
+        <result column="createTime" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="batchCode" jdbcType="VARCHAR" property="batchCode"/>
+        <result column="weight" jdbcType="DECIMAL" property="weight"/>
+        <result column="startTime" jdbcType="TIMESTAMP" property="startTime"/>
+        <result column="endTime" jdbcType="TIMESTAMP" property="endTime"/>
+        <result column="sieveVersion" jdbcType="INTEGER" property="sieveVersion"/>
+        <result column="dataVersion" jdbcType="INTEGER" property="dataVersion"/>
+        <association property="formulaModel" select="com.linghang.mapper.business.water.WaterFormulaMapper.selectById"
+                     column="formulaId">
+        </association>
+        <collection property="sieves" column="{formulaId=formulaId,dataVersion=sieveVersion}"
+                    ofType="com.linghang.model.business.water.WaterSieveSettingModel"
+                    select="com.linghang.mapper.business.water.WaterSieveSettingMapper.selectByFormulaIdAndSieveVersion">
+        </collection>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,
+        time,
+        stationId,
+        formulaId,
+        formulaCode,
+        cement,
+        water,
+        g1,
+        g2,
+        g3,
+        g4,
+        g5,
+        g6,
+        g7,
+        g8,
+        g9,
+        g10,
+        warnLevel,
+        createTime,
+        batchCode,
+        weight,
+        isPass,
+        mixTime,
+        startTime,
+        endTime,
+        sieveVersion,
+        dataVersion
+    </sql>
+
+    <select id="selectById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select *
+        from imp_water_metadata
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <delete id="deleteById" parameterType="java.lang.Long">
+        delete
+        from imp_water_metadata
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+
+    <delete id="deleteByIds" parameterType="java.util.List">
+        delete from imp_water_metadata
+        where id in
+        <foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
+            #{item}
+        </foreach>
+    </delete>
+
+    <insert id="insert" keyProperty="id" parameterType="com.linghang.model.business.water.WaterMetaDataModel">
+        insert into imp_water_metadata (
+        <include refid="Base_Column_List"/>
+        )
+        values (
+        #{id,jdbcType=BIGINT},
+        #{time,jdbcType=TIMESTAMP},
+        #{stationId,jdbcType=BIGINT},
+        #{formulaId,jdbcType=BIGINT},
+        #{formulaCode,jdbcType=VARCHAR},
+        #{cement,jdbcType=DECIMAL},
+        #{water,jdbcType=DECIMAL},
+        #{g1,jdbcType=DECIMAL},
+        #{g2,jdbcType=DECIMAL},
+        #{g3,jdbcType=DECIMAL},
+        #{g4,jdbcType=DECIMAL},
+        #{g5,jdbcType=DECIMAL},
+        #{g6,jdbcType=DECIMAL},
+        #{g7,jdbcType=DECIMAL},
+        #{g8,jdbcType=DECIMAL},
+        #{g9,jdbcType=DECIMAL},
+        #{g10,jdbcType=DECIMAL},
+        #{warnLevel,jdbcType=INTEGER},
+        #{createTime,jdbcType=TIMESTAMP},
+        #{batchCode,jdbcType=VARCHAR},
+        #{weight,jdbcType=DECIMAL},
+        #{isPass,jdbcType=INTEGER},
+        #{mixTime,jdbcType=BIGINT},
+        #{startTime,jdbcType=TIMESTAMP},
+        #{endTime,jdbcType=TIMESTAMP},
+        #{sieveVersion,jdbcType=INTEGER},
+        #{dataVersion,jdbcType=INTEGER}
+        )
+    </insert>
+
+    <insert id="insertList" parameterType="java.util.List">
+        <foreach collection="list" index="index" item="item" separator=";">
+            insert into imp_water_metadata (
+            <include refid="Base_Column_List"/>
+            )
+            values (
+            #{item.id,jdbcType=BIGINT},
+            #{item.time,jdbcType=TIMESTAMP},
+            #{item.stationId,jdbcType=BIGINT},
+            #{item.formulaId,jdbcType=BIGINT},
+            #{formulaCode,jdbcType=VARCHAR},
+            #{item.cement,jdbcType=DECIMAL},
+            #{item.water,jdbcType=DECIMAL},
+            #{item.g1,jdbcType=DECIMAL},
+            #{item.g2,jdbcType=DECIMAL},
+            #{item.g3,jdbcType=DECIMAL},
+            #{item.g4,jdbcType=DECIMAL},
+            #{item.g5,jdbcType=DECIMAL},
+            #{item.g6,jdbcType=DECIMAL},
+            #{item.g7,jdbcType=DECIMAL},
+            #{item.g8,jdbcType=DECIMAL},
+            #{item.g9,jdbcType=DECIMAL},
+            #{item.g10,jdbcType=DECIMAL},
+            #{item.warnLevel,jdbcType=INTEGER},
+            #{item.createTime,jdbcType=TIMESTAMP},
+            #{item.batchCode,jdbcType=VARCHAR},
+            #{item.weight,jdbcType=DECIMAL},
+            #{item.isPass,jdbcType=INTEGER},
+            #{item.mixTime,jdbcType=BIGINT},
+            #{item.startTime,jdbcType=TIMESTAMP},
+            #{item.endTime,jdbcType=TIMESTAMP},
+            #{item.sieveVersion,jdbcType=INTEGER},
+            #{dataVersion,jdbcType=INTEGER}
+            )
+        </foreach>
+    </insert>
+
+    <select id="selectByOptions" resultMap="BaseResultMap">
+        select *
+        from imp_water_metadata m
+        LEFT JOIN imp_water_formula f ON f.id = m.formulaId
+        where m.stationId = #{options.stationId,jdbcType=BIGINT}
+        <if test="options.filters != null">
+            <foreach collection="options.filters" item="item">
+                <if test="item.field == 'formulaName'">
+                    <if test="item.value == '无配方'">
+                        AND f.name is null
+                    </if>
+                    <if test="item.value != '无配方'">
+                        AND f.name
+                        <if test="item.operator == 'eq'">
+                            = #{item.value}
+                        </if>
+                        <if test="item.operator == 'contains'">
+                            like '%'+#{item.value}+'%'
+                        </if>
+                    </if>
+                </if>
+            </foreach>
+        </if>
+        <if test="options.searchTime !=null ">
+            and CONVERT(varchar(100), time, 23) = #{options.searchTime,jdbcType=VARCHAR}
+        </if>
+        order by
+        <if test="options.sort != null">
+            <foreach collection="options.sort" item="item">
+                <if test="item.field == 'formulaName'">
+                    f.name ${item.dir}
+                </if>
+                <if test="item.field != 'formulaName'">
+                    ${item.field} ${item.dir}
+                </if>
+            </foreach>
+        </if>
+        <if test="options.sort == null">
+            time desc
+        </if>
+    </select>
+    <select id="selectByModel" parameterType="com.linghang.model.business.water.WaterMetaDataModel"
+            resultMap="BaseResultMap">
+        select * from imp_water_metadata
+        where 1 = 1
+        <if test="time != null">
+            and time = #{time,jdbcType=TIMESTAMP}
+        </if>
+        <if test="stationId != null">
+            and stationId = #{stationId,jdbcType=BIGINT}
+        </if>
+        <if test="formulaId != null">
+            and formulaId = #{formulaId,jdbcType=BIGINT}
+        </if>
+        <if test="cement != null">
+            and cement = #{cement,jdbcType=DECIMAL}
+        </if>
+        <if test="water != null">
+            and water = #{water,jdbcType=DECIMAL}
+        </if>
+        <if test="g1 != null">
+            and g1 = #{g1,jdbcType=DECIMAL}
+        </if>
+        <if test="g2 != null">
+            and g2 = #{g2,jdbcType=DECIMAL}
+        </if>
+        <if test="g3 != null">
+            and g3 = #{g3,jdbcType=DECIMAL}
+        </if>
+        <if test="g4 != null">
+            and g4 = #{g4,jdbcType=DECIMAL}
+        </if>
+        <if test="g5 != null">
+            and g5 = #{g5,jdbcType=DECIMAL}
+        </if>
+        <if test="g6 != null">
+            and g6 = #{g6,jdbcType=DECIMAL}
+        </if>
+        <if test="g7 != null">
+            and g7 = #{g7,jdbcType=DECIMAL}
+        </if>
+        <if test="g8 != null">
+            and g8 = #{g8,jdbcType=DECIMAL}
+        </if>
+        <if test="g9 != null">
+            and g9 = #{g9,jdbcType=DECIMAL}
+        </if>
+        <if test="g10 != null">
+            and g10 = #{g10,jdbcType=DECIMAL}
+        </if>
+        <if test="warnLevel != null">
+            and warnLevel = #{warnLevel,jdbcType=INTEGER}
+        </if>
+        <if test="createTime != null">
+            and createTime = #{createTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="batchCode != null">
+            and batchCode = #{batchCode,jdbcType=VARCHAR}
+        </if>
+        <if test="weight != null">
+            and weight = #{weight,jdbcType=DECIMAL}
+        </if>
+        <if test="isPass != null">
+            and isPass = #{isPass,jdbcType=INTEGER}
+        </if>
+        <if test="mixTime != null">
+            and mixTime = #{mixTime,jdbcType=BIGINT}
+        </if>
+        <if test="dataVersion != null">
+            and dataVersion = #{dataVersion,jdbcType=INTEGER}
+        </if>
+    </select>
+
+    <insert id="insertSelective" keyProperty="id" parameterType="com.linghang.model.business.water.WaterMetaDataModel">
+        insert into imp_water_metadata
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="time != null">
+                time,
+            </if>
+            <if test="stationId != null">
+                stationId,
+            </if>
+            <if test="formulaId != null">
+                formulaId,
+            </if>
+            <if test="cement != null">
+                cement,
+            </if>
+            <if test="water != null">
+                water,
+            </if>
+            <if test="g1 != null">
+                g1,
+            </if>
+            <if test="g2 != null">
+                g2,
+            </if>
+            <if test="g3 != null">
+                g3,
+            </if>
+            <if test="g4 != null">
+                g4,
+            </if>
+            <if test="g5 != null">
+                g5,
+            </if>
+            <if test="g6 != null">
+                g6,
+            </if>
+            <if test="g7 != null">
+                g7,
+            </if>
+            <if test="g8 != null">
+                g8,
+            </if>
+            <if test="g9 != null">
+                g9,
+            </if>
+            <if test="g10 != null">
+                g10,
+            </if>
+            <if test="warnLevel != null">
+                warnLevel,
+            </if>
+            <if test="createTime != null">
+                createTime,
+            </if>
+            <if test="batchCode != null">
+                batchCode,
+            </if>
+            <if test="weight != null">
+                weight,
+            </if>
+            <if test="isPass != null">
+                isPass,
+            </if>
+            <if test="mixTime != null">
+                mixTime,
+            </if>
+            <if test="dataVersion != null">
+                dataVersion,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="time != null">
+                #{time,jdbcType=TIMESTAMP},
+            </if>
+            <if test="stationId != null">
+                #{stationId,jdbcType=BIGINT},
+            </if>
+            <if test="formulaId != null">
+                #{formulaId,jdbcType=BIGINT},
+            </if>
+            <if test="cement != null">
+                #{cement,jdbcType=DECIMAL},
+            </if>
+            <if test="water != null">
+                #{water,jdbcType=DECIMAL},
+            </if>
+            <if test="g1 != null">
+                #{g1,jdbcType=DECIMAL},
+            </if>
+            <if test="g2 != null">
+                #{g2,jdbcType=DECIMAL},
+            </if>
+            <if test="g3 != null">
+                #{g3,jdbcType=DECIMAL},
+            </if>
+            <if test="g4 != null">
+                #{g4,jdbcType=DECIMAL},
+            </if>
+            <if test="g5 != null">
+                #{g5,jdbcType=DECIMAL},
+            </if>
+            <if test="g6 != null">
+                #{g6,jdbcType=DECIMAL},
+            </if>
+            <if test="g7 != null">
+                #{g7,jdbcType=DECIMAL},
+            </if>
+            <if test="g8 != null">
+                #{g8,jdbcType=DECIMAL},
+            </if>
+            <if test="g9 != null">
+                #{g9,jdbcType=DECIMAL},
+            </if>
+            <if test="g10 != null">
+                #{g10,jdbcType=DECIMAL},
+            </if>
+            <if test="warnLevel != null">
+                #{warnLevel,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="batchCode != null">
+                #{batchCode,jdbcType=VARCHAR},
+            </if>
+            <if test="weight != null">
+                #{weight,jdbcType=DECIMAL},
+            </if>
+            <if test="isPass != null">
+                #{isPass,jdbcType=INTEGER},
+            </if>
+            <if test="mixTime != null">
+                #{mixTime,jdbcType=BIGINT},
+            </if>
+            <if test="dataVersion != null">
+                #{dataVersion,jdbcType=INTEGER}
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByIdSelective" parameterType="com.linghang.model.business.water.WaterMetaDataModel">
+        update imp_water_metadata
+        <set>
+            <if test="time != null">
+                time = #{time,jdbcType=TIMESTAMP},
+            </if>
+            <if test="stationId != null">
+                stationId = #{stationId,jdbcType=BIGINT},
+            </if>
+            <if test="formulaId != null">
+                formulaId = #{formulaId,jdbcType=BIGINT},
+            </if>
+            <if test="cement != null">
+                cement = #{cement,jdbcType=DECIMAL},
+            </if>
+            <if test="water != null">
+                water = #{water,jdbcType=DECIMAL},
+            </if>
+            <if test="g1 != null">
+                g1 = #{g1,jdbcType=DECIMAL},
+            </if>
+            <if test="g2 != null">
+                g2 = #{g2,jdbcType=DECIMAL},
+            </if>
+            <if test="g3 != null">
+                g3 = #{g3,jdbcType=DECIMAL},
+            </if>
+            <if test="g4 != null">
+                g4 = #{g4,jdbcType=DECIMAL},
+            </if>
+            <if test="g5 != null">
+                g5 = #{g5,jdbcType=DECIMAL},
+            </if>
+            <if test="g6 != null">
+                g6 = #{g6,jdbcType=DECIMAL},
+            </if>
+            <if test="g7 != null">
+                g7 = #{g7,jdbcType=DECIMAL},
+            </if>
+            <if test="g8 != null">
+                g8 = #{g8,jdbcType=DECIMAL},
+            </if>
+            <if test="g9 != null">
+                g9 = #{g9,jdbcType=DECIMAL},
+            </if>
+            <if test="g10 != null">
+                g10 = #{g10,jdbcType=DECIMAL},
+            </if>
+            <if test="warnLevel != null">
+                warnLevel = #{warnLevel,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                createTime = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="batchCode != null">
+                batchCode = #{batchCode,jdbcType=VARCHAR},
+            </if>
+            <if test="weight != null">
+                weight = #{weight,jdbcType=DECIMAL},
+            </if>
+            <if test="isPass != null">
+                isPass = #{isPass,jdbcType=INTEGER},
+            </if>
+            <if test="mixTime != null">
+                mixTime = #{mixTime,jdbcType=BIGINT},
+            </if>
+            <if test="dataVersion != null">
+                dataVersion = #{dataVersion,jdbcType=BIGINT}
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <update id="updateById" parameterType="com.linghang.model.business.water.WaterMetaDataModel">
+        update imp_water_metadata
+        set time         = #{time,jdbcType=TIMESTAMP},
+            stationId    = #{stationId,jdbcType=BIGINT},
+            formulaId    = #{formulaId,jdbcType=BIGINT},
+            cement       = #{cement,jdbcType=DECIMAL},
+            water        = #{water,jdbcType=DECIMAL},
+            g1           = #{g1,jdbcType=DECIMAL},
+            g2           = #{g2,jdbcType=DECIMAL},
+            g3           = #{g3,jdbcType=DECIMAL},
+            g4           = #{g4,jdbcType=DECIMAL},
+            g5           = #{g5,jdbcType=DECIMAL},
+            g6           = #{g6,jdbcType=DECIMAL},
+            g7           = #{g7,jdbcType=DECIMAL},
+            g8           = #{g8,jdbcType=DECIMAL},
+            g9           = #{g9,jdbcType=DECIMAL},
+            g10          = #{g10,jdbcType=DECIMAL},
+            warnLevel    = #{warnLevel,jdbcType=INTEGER},
+            createTime   = #{createTime,jdbcType=TIMESTAMP},
+            batchCode    = #{batchCode,jdbcType=VARCHAR},
+            weight       = #{weight,jdbcType=DECIMAL},
+            isPass       = #{isPass,jdbcType=INTEGER},
+            mixTime      = #{mixTime,jdbcType=BIGINT},
+            formulaCode  = #{formulaCode,jdbcType=VARCHAR},
+            sieveVersion = #{sieveVersion,jdbcType=INTEGER},
+            dataVersion = #{dataVersion,jdbcType=INTEGER}
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <select id="getSearchTimeMark" resultType="java.util.Map">
+        select DISTINCT CONVERT(varchar (100), time, 23) as markTime,0 as markType
+        from imp_water_metadata
+        where stationId = #{stationId,jdbcType=BIGINT}
+          and formulaId is not null
+        union
+        select DISTINCT CONVERT(varchar (100), time, 23) as markTime,1 as markType
+        from imp_water_metadata
+        where stationId = #{stationId,jdbcType=BIGINT}
+          and formulaId is null
+    </select>
+
+    <select id="getStationStaticData" parameterType="com.linghang.model.business.water.WaterStaticModel"
+            resultType="com.linghang.model.business.water.WaterStaticModel">
+        SELECT f.name as formula,SUM (m.weight) AS productWeight,COUNT (1) AS productBatches
+        FROM imp_water_metadata_result m
+        LEFT JOIN imp_water_formula f ON f.id = m.formulaId
+        where 1=1 AND formulaId IS NOT NULL
+        <if test="stationId != null">
+            AND m.stationId = #{stationId,jdbcType=BIGINT}
+        </if>
+        <if test="startTime != null">
+            AND time BETWEEN #{startTime,jdbcType=VARCHAR} and #{endTime,jdbcType=VARCHAR}
+        </if>
+        <if test="qualifiedFlag == 1">
+            AND isPass =1
+        </if>
+        <if test="qualifiedFlag == 2">
+            AND isPass =1 AND waterMsg IS NOT NULL
+        </if>
+        GROUP BY f.name
+    </select>
+
+    <select id="selectSumGroupByInfoId" resultType="com.linghang.model.business.water.WaterMetaDataModel">
+        SELECT info.id,sum(weight) as yield
+        FROM imp_water_metadata metadata
+                 LEFT JOIN imp_water_info info on metadata.stationId = info.id
+                 LEFT JOIN imp_organization org on info.orgId = org.id
+        GROUP BY info.id
+    </select>
+
+    <select id="selectRepeatData" parameterType="com.linghang.model.business.water.WaterMetaDataModel"
+            resultMap="BaseResultMap">
+        select * from imp_water_metadata where 1 = 1
+        <if test="time != null">
+            and time = #{time,jdbcType=TIMESTAMP}
+        </if>
+        <if test="stationId != null">
+            and stationId = #{stationId,jdbcType=BIGINT}
+        </if>
+        <if test="formulaCode != null">
+            and formulaCode = #{formulaCode,jdbcType=VARCHAR}
+        </if>
+        <if test="g1 != null">
+            and g1 = #{g1,jdbcType=DECIMAL}
+        </if>
+        <if test="g2 != null">
+            and g2 = #{g2,jdbcType=DECIMAL}
+        </if>
+        <if test="g3 != null">
+            and g3 = #{g3,jdbcType=DECIMAL}
+        </if>
+        <if test="g4 != null">
+            and g4 = #{g4,jdbcType=DECIMAL}
+        </if>
+        <if test="g5 != null">
+            and g5 = #{g5,jdbcType=DECIMAL}
+        </if>
+        <if test="g6 != null">
+            and g6 = #{g6,jdbcType=DECIMAL}
+        </if>
+        <if test="g7 != null">
+            and g7 = #{g7,jdbcType=DECIMAL}
+        </if>
+        <if test="g8 != null">
+            and g8 = #{g8,jdbcType=DECIMAL}
+        </if>
+        <if test="g9 != null">
+            and g9 = #{g9,jdbcType=DECIMAL}
+        </if>
+        <if test="g10 != null">
+            and g10 = #{g10,jdbcType=DECIMAL}
+        </if>
+    </select>
+
+    <select id="selectByFormulaCodeAndStationId" resultMap="BaseResultMap">
+        select * from imp_water_metadata
+        where
+        stationId=#{stationId,jdbcType=BIGINT}
+        <if test="type==0">
+            and formulaId is null and (formulaCode is null or formulaCode='')
+        </if>
+        <if test="type==1">
+            and formulaCode=#{number} and formulaId is null
+        </if>
+    </select>
+
+    <!--查询时间范围内的数据-->
+    <select id="selectDataByTime" resultType="com.linghang.model.business.transport.MaterialInformationModel">
+        select m.id,
+               m.time,
+               m.endTime,
+               m.mixTime as mixingTime,
+               weight,
+               isPass,
+               f.name,
+               f.pavingLevel,
+               w.content,
+               ai.name   as bhName
+        from imp_water_metadata m
+                 left join imp_water_formula f on m.stationId = f.stationId and f.id = m.formulaId
+                 left join imp_water_warning_message w on m.id = w.dataId
+                 LEFT join imp_water_info ai on m.stationId = ai.id
+        where m.formulaId is not null
+          and m.stationId = #{mixingId,jdbcType=BIGINT}
+          and m.time between #{startTime,jdbcType=VARCHAR} and #{endTime,jdbcType=VARCHAR}
+        order by m.endTime
+    </select>
+
+    <select id="selectDataByIds" resultType="java.util.Map" parameterType="java.util.List">
+        select * from imp_water_metadata
+        where id in
+        <foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
+            #{item}
+        </foreach>
+        order by endTime
+    </select>
+
+    <select id="selectMsgDetail" resultType="com.linghang.model.business.water.param.MsgDetailModel">
+        SELECT metadata.g1,
+               metadata.g2,
+               metadata.g3,
+               metadata.g4,
+               metadata.g5,
+               metadata.g6,
+               metadata.g7,
+               metadata.g8,
+               metadata.g9,
+               metadata.g10,
+               aggregate.g1  as g1Rate,
+               aggregate.g2  as g2Rate,
+               aggregate.g3  as g3Rate,
+               aggregate.g4  as g4Rate,
+               aggregate.g5  as g5Rate,
+               aggregate.g6  as g6Rate,
+               aggregate.g7  as g7Rate,
+               aggregate.g8  as g8Rate,
+               aggregate.g9  as g9Rate,
+               aggregate.g10 as g10Rate,
+               aggregate.g1Level,
+               aggregate.g2Level,
+               aggregate.g3Level,
+               aggregate.g4Level,
+               aggregate.g5Level,
+               aggregate.g6Level,
+               aggregate.g7Level,
+               aggregate.g8Level,
+               aggregate.g9Level,
+               aggregate.g10Level
+        FROM imp_water_metadata metadata
+                 LEFT JOIN imp_water_metadata_aggregate aggregate on metadata.id = aggregate.dataId
+        where metadata.id = #{dataId}
+    </select>
+
+    <sql id="filterReport">
+       and time BETWEEN #{startTime,jdbcType=VARCHAR} and #{endTime,jdbcType=VARCHAR}
+    </sql>
+
+    <select id="getWaterStatisticalData" resultType="com.linghang.model.business.water.WaterStaticModel">
+        select temp.* from (
+        select
+        AF.stationId ,
+        AF.name As formula,
+        AF.id As formulaId,
+        (select count(id) from imp_water_metadata where formulaId = AF.id and stationId = #{stationId,jdbcType=BIGINT}
+        <include refid="filterReport"/>
+        ) AS productBatches,
+        (select sum(weight) from imp_water_metadata where formulaId = AF.id and stationId = #{stationId,jdbcType=BIGINT}
+        <include refid="filterReport"/>
+        ) AS productWeight,
+        (select sum(weight) from imp_water_metadata where formulaId = AF.id and isPass = 1 and stationId =
+        #{stationId,jdbcType=BIGINT}
+        <include refid="filterReport"/>
+        ) AS unqualifiedWeight,
+        (select count(id) from imp_water_metadata where formulaId = AF.id and isPass = 1 and stationId =
+        #{stationId,jdbcType=BIGINT}
+        <include refid="filterReport"/>
+        ) AS unqualifiedBatches,
+        (select count(id) from imp_water_metadata_aggregate where formulaId = AF.id and cementLevel>0 and stationId =
+        #{stationId,jdbcType=BIGINT}
+        <include refid="filterReport"/>
+        ) AS unqualifiedComentBatches
+        from imp_water_formula AF where AF.stationId = #{stationId,jdbcType=BIGINT} and isVisible = 0
+        UNION
+        select
+        NULL AS stationId,
+        '合计' AS formulaName,
+        NULL AS formulaId,
+        count(AF.id) AS productBatches,
+        sum(AF.weight) AS productWeight,
+        (select sum(weight) from imp_water_metadata where stationId = #{stationId,jdbcType=BIGINT} and isPass = 1
+        <include refid="filterReport"/>
+        ) AS unqualifiedWeight,
+        (select count(id) from imp_water_metadata where stationId = #{stationId,jdbcType=BIGINT} and isPass = 1
+        <include refid="filterReport"/>
+        ) AS unqualifiedBatches,
+        (select count(id) from imp_water_metadata_aggregate where stationId = #{stationId,jdbcType=BIGINT} and
+        cementLevel>0
+        <include refid="filterReport"/>
+        ) AS unqualifiedComentBatches
+        from imp_water_metadata AF , imp_water_formula WF where AF.formulaId = WF.id and AF.stationId =
+        #{stationId,jdbcType=BIGINT} and formulaId is not null and WF.isVisible = 0
+        and AF.time BETWEEN #{startTime,jdbcType=VARCHAR} and #{endTime,jdbcType=VARCHAR}
+        ) temp
+        ORDER BY temp.formulaId desc
+    </select>
+
+
+    <select id="selectWeight" resultType="java.util.HashMap">
+        select sum(weight) as allWeight
+        from imp_water_metadata m
+        where m.formulaId is not null
+          and m.stationId = #{mixingId,jdbcType=BIGINT}
+          and m.endTime between #{startTime,jdbcType=VARCHAR} and #{endTime,jdbcType=VARCHAR}
+    </select>
+
+    <select id="getContinuousData" resultMap="BaseResultMap">
+      select top ${size} * from imp_water_metadata
+      where stationId = #{stationId,jdbcType=BIGINT} and formulaId is not null and id != #{dataId,jdbcType=BIGINT}
+      and DateDiff(dd,time,getdate())=0
+      order by time desc
+    </select>
+    <select id="getWarningLevel" resultType="java.lang.Integer">
+      select
+      (select Max(leaeve) from (values
+      (aggregateResult),(cementResult),(waterResult),(sieveResult)) as
+      temp(leaeve)) AS allLevel
+      from imp_water_warning_message
+      where dataId = #{dataId,jdbcType=BIGINT}
+    </select>
+</mapper>

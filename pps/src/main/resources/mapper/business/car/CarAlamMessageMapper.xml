@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.linghang.mapper.car.CarAlamMessageMapper">
+    <resultMap id="BaseResultMap" type="com.linghang.model.car.CarAlamMessageModel">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="alamType" jdbcType="INTEGER" property="alamType"/>
+        <result column="carNumber" jdbcType="VARCHAR" property="carNumber"/>
+        <result column="alamTime" jdbcType="TIMESTAMP" property="alamTime"/>
+        <result column="load" jdbcType="VARCHAR" property="load"/>
+        <result column="orgId" jdbcType="BIGINT" property="orgId"/>
+        <result column="speed" jdbcType="VARCHAR" property="speed"/>
+        <result column="contact" jdbcType="VARCHAR" property="contact"/>
+        <result column="contactPhone" jdbcType="VARCHAR" property="contactPhone"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+       id,alamType, carNumber, alamTime, load, orgId, speed, contact, contactPhone
+    </sql>
+
+    <select id="selectById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select * 
+        from imp_car_alamMessage
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <delete id="deleteById" parameterType="java.lang.Long">
+        delete from imp_car_alamMessage
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+
+    <delete id="deleteByIds" parameterType="java.util.List">
+        delete from imp_car_alamMessage
+        where id in
+        <foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
+            #{item}
+        </foreach>
+    </delete>
+
+    <insert id="insert" keyProperty="id" parameterType="com.linghang.model.car.CarAlamMessageModel">
+        insert into imp_car_alamMessage (
+        <include refid="Base_Column_List"/>
+        )
+        values (#{id,jdbcType=BIGINT},
+        #{alamType,jdbcType=INTEGER},
+        #{carNumber,jdbcType=VARCHAR},
+        #{alamTime,jdbcType=TIMESTAMP},
+        #{load,jdbcType=VARCHAR},
+        #{orgId,jdbcType=BIGINT},
+        #{speed,jdbcType=VARCHAR},
+        #{contact,jdbcType=VARCHAR},
+        #{contactPhone,jdbcType=VARCHAR}
+        )
+    </insert>
+
+    <insert id="insertList" parameterType="java.util.List">
+        <foreach collection="list" index="index" item="item" separator=";">
+            insert into imp_car_alamMessage (
+            <include refid="Base_Column_List"/>
+            )
+            values (#{item.alamType,jdbcType=INTEGER},
+            #{item.carNumber,jdbcType=VARCHAR},
+            #{item.alamTime,jdbcType=TIMESTAMP},
+            #{item.load,jdbcType=VARCHAR},
+            #{item.orgId,jdbcType=BIGINT},
+            #{item.speed,jdbcType=VARCHAR},
+            #{item.contact,jdbcType=VARCHAR},
+            #{item.contactPhone,jdbcType=VARCHAR}
+            )
+        </foreach>
+    </insert>
+
+    <select id="selectByModel" parameterType="com.linghang.model.car.CarAlamMessageModel" resultMap="BaseResultMap">
+        select * from imp_car_alamMessage where 1 = 1
+        <if test="alamType != null">
+            and alamType = #{alamType,jdbcType=INTEGER}
+        </if>
+        <if test="carNumber != null">
+            and carNumber = #{carNumber,jdbcType=VARCHAR}
+        </if>
+        <if test="alamTime != null">
+            and alamTime = #{alamTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="load != null">
+            and load = #{load,jdbcType=VARCHAR}
+        </if>
+        <if test="orgId != null">
+            and orgId = #{orgId,jdbcType=BIGINT}
+        </if>
+        <if test="speed != null">
+            and speed = #{speed,jdbcType=VARCHAR}
+        </if>
+        <if test="contact != null">
+            and contact = #{contact,jdbcType=VARCHAR}
+        </if>
+        <if test="contactPhone != null">
+            and contactPhone = #{contactPhone,jdbcType=VARCHAR}
+        </if>
+    </select>
+
+    <insert id="insertSelective" keyProperty="id" parameterType="com.linghang.model.car.CarAlamMessageModel">
+        insert into imp_car_alamMessage
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="alamType != null">
+                alamType,
+            </if>
+            <if test="carNumber != null">
+                carNumber,
+            </if>
+            <if test="alamTime != null">
+                alamTime,
+            </if>
+            <if test="load != null">
+                load,
+            </if>
+            <if test="orgId != null">
+                orgId,
+            </if>
+            <if test="speed != null">
+                speed,
+            </if>
+            <if test="contact != null">
+                contact,
+            </if>
+            <if test="contactPhone != null">
+                contactPhone,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="alamType != null">
+                #{alamType,jdbcType=INTEGER},
+            </if>
+            <if test="carNumber != null">
+                #{carNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="alamTime != null">
+                #{alamTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="load != null">
+                #{load,jdbcType=VARCHAR},
+            </if>
+            <if test="orgId != null">
+                #{orgId,jdbcType=BIGINT},
+            </if>
+            <if test="speed != null">
+                #{speed,jdbcType=VARCHAR},
+            </if>
+            <if test="contact != null">
+                #{contact,jdbcType=VARCHAR},
+            </if>
+            <if test="contactPhone != null">
+                #{contactPhone,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByIdSelective" parameterType="com.linghang.model.car.CarAlamMessageModel">
+        update imp_car_alamMessage
+        <set>
+            <if test="alamType != null">
+                alamType = #{alamType,jdbcType=INTEGER},
+            </if>
+            <if test="carNumber != null">
+                carNumber = #{carNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="alamTime != null">
+                alamTime = #{alamTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="load != null">
+                load = #{load,jdbcType=VARCHAR},
+            </if>
+            <if test="orgId != null">
+                orgId = #{orgId,jdbcType=BIGINT},
+            </if>
+            <if test="speed != null">
+                speed = #{speed,jdbcType=VARCHAR},
+            </if>
+            <if test="contact != null">
+                contact = #{contact,jdbcType=VARCHAR},
+            </if>
+            <if test="contactPhone != null">
+                contactPhone = #{contactPhone,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <update id="updateById" parameterType="com.linghang.model.car.CarAlamMessageModel">
+        update imp_car_alamMessage
+        set alamType = #{alamType,jdbcType=INTEGER},
+            carNumber = #{carNumber,jdbcType=VARCHAR},
+            alamTime = #{alamTime,jdbcType=TIMESTAMP},
+            load = #{load,jdbcType=VARCHAR},
+            orgId = #{orgId,jdbcType=BIGINT},
+            speed = #{speed,jdbcType=VARCHAR},
+            contact = #{contact,jdbcType=VARCHAR},
+            contactPhone = #{contactPhone,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <select id="selectMoldeByOptions" resultMap="BaseResultMap">
+        select * from imp_car_alamMessage where 1 = 1
+        <if test="orgId != null">
+            and orgId = #{orgId,jdbcType=BIGINT}
+        </if>
+        <if test="startTime!=null and endTime !=null">
+            and alamTime between #{startTime} and #{endTime}
+        </if>
+        <if test="alamType!=null">
+            and alamType=#{alamType,jdbcType=INTEGER}
+        </if>
+        <if test="options.filters != null">
+            <foreach collection="options.filters" item="item">
+                and ${item.field}
+                <if test="item.operator == 'eq'">
+                    = #{item.value}
+                </if>
+                <if test="item.operator == 'neq'">
+                    !=#{item.value}
+                </if>
+                <if test="item.operator == 'contains'">
+                    like '%'+#{item.value}+'%'
+                </if>
+            </foreach>
+        </if>
+        order by
+        <if test="options.sort != null">
+            <foreach collection="options.sort" item="item">
+                ${item.field} ${item.dir}
+            </foreach>
+        </if>
+        <if test="options.sort == null">
+            alamTime desc
+        </if>
+    </select>
+
+</mapper>

@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.linghang.mapper.WorkAreaMapper">
+    <resultMap id="BaseResultMap" type="com.linghang.model.WorkAreaModel">
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="orgId" jdbcType="BIGINT" property="orgId" />
+        <result column="name" jdbcType="VARCHAR" property="name" />
+        <result column="level" jdbcType="INTEGER" property="level" />
+        <result column="updateTime" jdbcType="TIMESTAMP" property="updateTime" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+       id, orgId, name, level, updateTime
+    </sql>
+
+    <select id="selectById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select * 
+        from tbl_work_area
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <delete id="deleteById" parameterType="java.lang.Long">
+        delete from tbl_work_area
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+
+    <delete id="deleteByIds" parameterType="java.util.List">
+        delete from tbl_work_area
+        where id in 
+        <foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
+            #{item}
+        </foreach>
+    </delete>
+
+    <insert id="insert" keyProperty="id" parameterType="com.linghang.model.WorkAreaModel">
+        insert into tbl_work_area (
+        <include refid="Base_Column_List" />
+        )
+        values (#{id,jdbcType=BIGINT},
+            #{orgId,jdbcType=BIGINT},
+            #{name,jdbcType=VARCHAR}, 
+            #{level,jdbcType=INTEGER}, 
+            #{updateTime,jdbcType=TIMESTAMP}
+            )
+    </insert>
+
+    <insert id="insertList" parameterType="java.util.List">
+        <foreach collection="list" index="index" item="item" separator=";">
+            insert into tbl_work_area (
+            <include refid="Base_Column_List" />
+            )
+            values (
+            #{item.id,jdbcType=BIGINT},
+            #{item.name,jdbcType=VARCHAR},
+            #{item.name,jdbcType=VARCHAR},
+            #{item.level,jdbcType=INTEGER},
+            GETDATE()
+            )
+        </foreach>
+    </insert>
+
+    <select id="selectByModel" parameterType="com.linghang.model.WorkAreaModel" resultMap="BaseResultMap">
+        select * from tbl_work_area where 1 = 1
+        <if test="orgId != null">
+            and orgId = #{orgId,jdbcType=BIGINT}
+        </if>
+        <if test="name != null">
+            and name = #{name,jdbcType=VARCHAR}
+        </if>
+        <if test="level != null">
+            and level = #{level,jdbcType=INTEGER}
+        </if>
+        <if test="updateTime != null">
+            and updateTime = #{updateTime,jdbcType=TIMESTAMP}
+        </if>
+    </select>
+
+    <insert id="insertSelective" keyProperty="id" parameterType="com.linghang.model.WorkAreaModel">
+        insert into tbl_work_area
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            id,
+            <if test="orgId != null">
+                orgId,
+            </if>
+            <if test="name != null">
+                name,
+            </if>
+            <if test="level != null">
+                level,
+            </if>
+            <if test="updateTime != null">
+                updateTime,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            #{id,jdbcType=BIGINT},
+            <if test="orgId != null">
+                #{orgId,jdbcType=BIGINT},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="level != null">
+                #{level,jdbcType=INTEGER},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByIdSelective" parameterType="com.linghang.model.WorkAreaModel">
+        update tbl_work_area
+        <set>
+            <if test="orgId != null">
+                orgId = #{orgId,jdbcType=BIGINT},
+            </if>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="level != null">
+                level = #{level,jdbcType=INTEGER},
+            </if>
+            <if test="updateTime != null">
+                updateTime = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <update id="updateById" parameterType="com.linghang.model.WorkAreaModel">
+        update tbl_work_area
+        set orgId = #{orgId,jdbcType=BIGINT},
+            name = #{name,jdbcType=VARCHAR},
+            level = #{level,jdbcType=INTEGER},
+            updateTime = #{updateTime,jdbcType=TIMESTAMP}
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+</mapper>

@@ -1,0 +1,1089 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.linghang.mapper.business.water.WaterMetadataResultMapper">
+    <resultMap id="BaseResultMap" type="com.linghang.model.business.water.WaterMetadataResultModel">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="stationId" jdbcType="BIGINT" property="stationId"/>
+        <result column="formulaId" jdbcType="BIGINT" property="formulaId"/>
+        <result column="formulaCode" jdbcType="VARCHAR" property="formulaCode"/>
+        <result column="cement" jdbcType="DECIMAL" property="cement"/>
+        <result column="water" jdbcType="DECIMAL" property="water"/>
+        <result column="weight" jdbcType="DECIMAL" property="weight"/>
+        <result column="sieve1" jdbcType="DECIMAL" property="sieve1"/>
+        <result column="sieve2" jdbcType="DECIMAL" property="sieve2"/>
+        <result column="sieve3" jdbcType="DECIMAL" property="sieve3"/>
+        <result column="sieve4" jdbcType="DECIMAL" property="sieve4"/>
+        <result column="sieve5" jdbcType="DECIMAL" property="sieve5"/>
+        <result column="sieve6" jdbcType="DECIMAL" property="sieve6"/>
+        <result column="sieve7" jdbcType="DECIMAL" property="sieve7"/>
+        <result column="sieve8" jdbcType="DECIMAL" property="sieve8"/>
+        <result column="sieve9" jdbcType="DECIMAL" property="sieve9"/>
+        <result column="sieve10" jdbcType="DECIMAL" property="sieve10"/>
+        <result column="sieve11" jdbcType="DECIMAL" property="sieve11"/>
+        <result column="sieve12" jdbcType="DECIMAL" property="sieve12"/>
+        <result column="sieve13" jdbcType="DECIMAL" property="sieve13"/>
+        <result column="batchCode" jdbcType="VARCHAR" property="batchCode"/>
+        <result column="gradationLevel" jdbcType="INTEGER" property="gradationLevel"/>
+        <result column="aggregateWeight" jdbcType="DECIMAL" property="aggregateWeight"/>
+        <result column="isPass" jdbcType="INTEGER" property="isPass"/>
+        <result column="dataId" jdbcType="BIGINT" property="dataId"/>
+        <result column="excessMsg" jdbcType="VARCHAR" property="excessMsg"/>
+        <result column="sieve1State" jdbcType="INTEGER" property="sieve1State"/>
+        <result column="sieve2State" jdbcType="INTEGER" property="sieve2State"/>
+        <result column="sieve3State" jdbcType="INTEGER" property="sieve3State"/>
+        <result column="sieve4State" jdbcType="INTEGER" property="sieve4State"/>
+        <result column="sieve5State" jdbcType="INTEGER" property="sieve5State"/>
+        <result column="sieve6State" jdbcType="INTEGER" property="sieve6State"/>
+        <result column="sieve7State" jdbcType="INTEGER" property="sieve7State"/>
+        <result column="sieve8State" jdbcType="INTEGER" property="sieve8State"/>
+        <result column="sieve9State" jdbcType="INTEGER" property="sieve9State"/>
+        <result column="sieve10State" jdbcType="INTEGER" property="sieve10State"/>
+        <result column="sieve11State" jdbcType="INTEGER" property="sieve11State"/>
+        <result column="sieve12State" jdbcType="INTEGER" property="sieve12State"/>
+        <result column="sieve13State" jdbcType="INTEGER" property="sieve13State"/>
+        <result column="time" jdbcType="TIMESTAMP" property="time"/>
+        <result column="sieveVersion" jdbcType="INTEGER" property="sieveVersion"/>
+        <result column="sieve1Msg" jdbcType="VARCHAR" property="sieve1Msg"/>
+        <result column="sieve2Msg" jdbcType="VARCHAR" property="sieve2Msg"/>
+        <result column="sieve3Msg" jdbcType="VARCHAR" property="sieve3Msg"/>
+        <result column="sieve4Msg" jdbcType="VARCHAR" property="sieve4Msg"/>
+        <result column="sieve5Msg" jdbcType="VARCHAR" property="sieve5Msg"/>
+        <result column="sieve6Msg" jdbcType="VARCHAR" property="sieve6Msg"/>
+        <result column="sieve7Msg" jdbcType="VARCHAR" property="sieve7Msg"/>
+        <result column="sieve8Msg" jdbcType="VARCHAR" property="sieve8Msg"/>
+        <result column="sieve9Msg" jdbcType="VARCHAR" property="sieve9Msg"/>
+        <result column="sieve10Msg" jdbcType="VARCHAR" property="sieve10Msg"/>
+        <result column="sieve11Msg" jdbcType="VARCHAR" property="sieve11Msg"/>
+        <result column="sieve12Msg" jdbcType="VARCHAR" property="sieve12Msg"/>
+        <result column="sieve13Msg" jdbcType="VARCHAR" property="sieve13Msg"/>
+        <association property="formulaModel" select="com.linghang.mapper.business.water.WaterFormulaMapper.selectById"
+                     column="formulaId">
+        </association>
+        <collection property="sieves" column="{formulaId=formulaId,dataVersion=sieveVersion}"
+                    ofType="com.linghang.model.business.water.WaterSieveSettingModel"
+                    select="com.linghang.mapper.business.water.WaterSieveSettingMapper.selectByFormulaIdAndSieveVersion">
+        </collection>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,stationId, formulaId, formulaCode, cement, water, weight, sieve1, sieve2, sieve3,
+        sieve4, sieve5, sieve6, sieve7, sieve8, sieve9, sieve10, sieve11, sieve12, sieve13, 
+        batchCode, gradationLevel, aggregateWeight, isPass, dataId, excessMsg, sieve1State, 
+        sieve2State, sieve3State, sieve4State, sieve5State, sieve6State, sieve7State, sieve8State, 
+        sieve9State, sieve10State, sieve11State, sieve12State, sieve13State, time, sieveVersion, 
+        sieve1Msg, sieve2Msg, sieve3Msg, sieve4Msg, sieve5Msg, sieve6Msg, sieve7Msg, sieve8Msg, 
+        sieve9Msg, sieve10Msg, sieve11Msg, sieve12Msg, sieve13Msg
+    </sql>
+
+    <select id="selectById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select * 
+        from imp_water_metadata_result
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <!--查询统计信息-->
+    <select id="getCountStatistic" resultType="java.util.Map">
+        select count(1) passCount,isPass,sum(weight) weight,sum(mixTime) mixingTime
+        from imp_water_metadata
+        where stationId=#{stationId,jdbcType=BIGINT}
+        and formulaId is not null
+        and CONVERT(varchar(100), time, 23) = #{searchTime,jdbcType=VARCHAR}
+        group by isPass
+    </select>
+
+
+    <select id="selectByOptions" resultMap="BaseResultMap">
+        select r.* from imp_water_metadata_result r
+        LEFT JOIN imp_water_formula f ON f.id = r.formulaId
+        where r.stationId = #{options.stationId,jdbcType=BIGINT}
+        <if test="options.filters != null">
+            <foreach collection="options.filters" item="item">
+                <if test="item.field == 'formulaName'">
+                    AND f.name
+                    <if test="item.operator == 'eq'">
+                        = #{item.value}
+                    </if>
+                    <if test="item.operator == 'contains'">
+                        like '%'+#{item.value}+'%'
+                    </if>
+                </if>
+            </foreach>
+        </if>
+        <if test="options.searchTime !=null ">
+            and CONVERT(varchar(100), time, 23) = #{options.searchTime,jdbcType=VARCHAR}
+        </if>
+        order by
+        <if test="options.sort != null">
+            <foreach collection="options.sort" item="item">
+                <if test="item.field == 'formulaName'">
+                    f.name ${item.dir}
+                </if>
+                <if test="item.field != 'formulaName'">
+                    ${item.field} ${item.dir}
+                </if>
+            </foreach>
+        </if>
+        <if test="options.sort == null">
+            time desc
+        </if>
+    </select>
+
+    <delete id="deleteById" parameterType="java.lang.Long">
+        delete from imp_water_metadata_result
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+
+    <delete id="deleteByIds" parameterType="java.util.List">
+        delete from imp_water_metadata_result
+        where id in
+        <foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
+            #{item}
+        </foreach>
+    </delete>
+
+    <insert id="insert" keyProperty="id" parameterType="com.linghang.model.business.water.WaterMetadataResultModel">
+        insert into imp_water_metadata_result (
+        <include refid="Base_Column_List"/>
+        )
+        values (
+        #{id,jdbcType=BIGINT},
+        #{stationId,jdbcType=BIGINT},
+        #{formulaId,jdbcType=BIGINT},
+        #{formulaCode,jdbcType=VARCHAR},
+        #{cement,jdbcType=DECIMAL},
+        #{water,jdbcType=DECIMAL},
+        #{weight,jdbcType=DECIMAL},
+        #{sieve1,jdbcType=DECIMAL},
+        #{sieve2,jdbcType=DECIMAL},
+        #{sieve3,jdbcType=DECIMAL},
+        #{sieve4,jdbcType=DECIMAL},
+        #{sieve5,jdbcType=DECIMAL},
+        #{sieve6,jdbcType=DECIMAL},
+        #{sieve7,jdbcType=DECIMAL},
+        #{sieve8,jdbcType=DECIMAL},
+        #{sieve9,jdbcType=DECIMAL},
+        #{sieve10,jdbcType=DECIMAL},
+        #{sieve11,jdbcType=DECIMAL},
+        #{sieve12,jdbcType=DECIMAL},
+        #{sieve13,jdbcType=DECIMAL},
+        #{batchCode,jdbcType=VARCHAR},
+        #{gradationLevel,jdbcType=INTEGER},
+        #{aggregateWeight,jdbcType=DECIMAL},
+        #{isPass,jdbcType=INTEGER},
+        #{dataId,jdbcType=BIGINT},
+        #{excessMsg,jdbcType=VARCHAR},
+        #{sieve1State,jdbcType=INTEGER},
+        #{sieve2State,jdbcType=INTEGER},
+        #{sieve3State,jdbcType=INTEGER},
+        #{sieve4State,jdbcType=INTEGER},
+        #{sieve5State,jdbcType=INTEGER},
+        #{sieve6State,jdbcType=INTEGER},
+        #{sieve7State,jdbcType=INTEGER},
+        #{sieve8State,jdbcType=INTEGER},
+        #{sieve9State,jdbcType=INTEGER},
+        #{sieve10State,jdbcType=INTEGER},
+        #{sieve11State,jdbcType=INTEGER},
+        #{sieve12State,jdbcType=INTEGER},
+        #{sieve13State,jdbcType=INTEGER},
+        #{time,jdbcType=TIMESTAMP},
+        #{sieveVersion,jdbcType=INTEGER},
+        #{sieve1Msg,jdbcType=VARCHAR},
+        #{sieve2Msg,jdbcType=VARCHAR},
+        #{sieve3Msg,jdbcType=VARCHAR},
+        #{sieve4Msg,jdbcType=VARCHAR},
+        #{sieve5Msg,jdbcType=VARCHAR},
+        #{sieve6Msg,jdbcType=VARCHAR},
+        #{sieve7Msg,jdbcType=VARCHAR},
+        #{sieve8Msg,jdbcType=VARCHAR},
+        #{sieve9Msg,jdbcType=VARCHAR},
+        #{sieve10Msg,jdbcType=VARCHAR},
+        #{sieve11Msg,jdbcType=VARCHAR},
+        #{sieve12Msg,jdbcType=VARCHAR},
+        #{sieve13Msg,jdbcType=VARCHAR}
+        )
+    </insert>
+
+    <insert id="insertList" parameterType="java.util.List">
+        <foreach collection="list" index="index" item="item" separator=";">
+            insert into imp_water_metadata_result (
+            <include refid="Base_Column_List"/>
+            )
+            values (
+            #{item.id,jdbcType=BIGINT},
+            #{item.stationId,jdbcType=BIGINT},
+            #{item.formulaId,jdbcType=BIGINT},
+            #{item.formulaCode,jdbcType=VARCHAR},
+            #{item.cement,jdbcType=DECIMAL},
+            #{item.water,jdbcType=DECIMAL},
+            #{item.weight,jdbcType=DECIMAL},
+            #{item.sieve1,jdbcType=DECIMAL},
+            #{item.sieve2,jdbcType=DECIMAL},
+            #{item.sieve3,jdbcType=DECIMAL},
+            #{item.sieve4,jdbcType=DECIMAL},
+            #{item.sieve5,jdbcType=DECIMAL},
+            #{item.sieve6,jdbcType=DECIMAL},
+            #{item.sieve7,jdbcType=DECIMAL},
+            #{item.sieve8,jdbcType=DECIMAL},
+            #{item.sieve9,jdbcType=DECIMAL},
+            #{item.sieve10,jdbcType=DECIMAL},
+            #{item.sieve11,jdbcType=DECIMAL},
+            #{item.sieve12,jdbcType=DECIMAL},
+            #{item.sieve13,jdbcType=DECIMAL},
+            #{item.batchCode,jdbcType=VARCHAR},
+            #{item.gradationLevel,jdbcType=INTEGER},
+            #{item.aggregateWeight,jdbcType=DECIMAL},
+            #{item.isPass,jdbcType=INTEGER},
+            #{item.dataId,jdbcType=BIGINT},
+            #{item.excessMsg,jdbcType=VARCHAR},
+            #{item.sieve1State,jdbcType=INTEGER},
+            #{item.sieve2State,jdbcType=INTEGER},
+            #{item.sieve3State,jdbcType=INTEGER},
+            #{item.sieve4State,jdbcType=INTEGER},
+            #{item.sieve5State,jdbcType=INTEGER},
+            #{item.sieve6State,jdbcType=INTEGER},
+            #{item.sieve7State,jdbcType=INTEGER},
+            #{item.sieve8State,jdbcType=INTEGER},
+            #{item.sieve9State,jdbcType=INTEGER},
+            #{item.sieve10State,jdbcType=INTEGER},
+            #{item.sieve11State,jdbcType=INTEGER},
+            #{item.sieve12State,jdbcType=INTEGER},
+            #{item.sieve13State,jdbcType=INTEGER},
+            #{item.time,jdbcType=TIMESTAMP},
+            #{item.sieveVersion,jdbcType=INTEGER},
+            #{item.sieve1Msg,jdbcType=VARCHAR},
+            #{item.sieve2Msg,jdbcType=VARCHAR},
+            #{item.sieve3Msg,jdbcType=VARCHAR},
+            #{item.sieve4Msg,jdbcType=VARCHAR},
+            #{item.sieve5Msg,jdbcType=VARCHAR},
+            #{item.sieve6Msg,jdbcType=VARCHAR},
+            #{item.sieve7Msg,jdbcType=VARCHAR},
+            #{item.sieve8Msg,jdbcType=VARCHAR},
+            #{item.sieve9Msg,jdbcType=VARCHAR},
+            #{item.sieve10Msg,jdbcType=VARCHAR},
+            #{item.sieve11Msg,jdbcType=VARCHAR},
+            #{item.sieve12Msg,jdbcType=VARCHAR},
+            #{item.sieve13Msg,jdbcType=VARCHAR}
+            )
+        </foreach>
+    </insert>
+
+    <select id="selectByModel" parameterType="com.linghang.model.business.water.WaterMetadataResultModel"
+            resultMap="BaseResultMap">
+        select * from imp_water_metadata_result where 1 = 1
+        <if test="stationId != null">
+            and stationId = #{stationId,jdbcType=BIGINT}
+        </if>
+        <if test="formulaId != null">
+            and formulaId = #{formulaId,jdbcType=BIGINT}
+        </if>
+        <if test="formulaCode != null">
+            and formulaCode = #{formulaCode,jdbcType=VARCHAR}
+        </if>
+        <if test="cement != null">
+            and cement = #{cement,jdbcType=DECIMAL}
+        </if>
+        <if test="water != null">
+            and water = #{water,jdbcType=DECIMAL}
+        </if>
+        <if test="weight != null">
+            and weight = #{weight,jdbcType=DECIMAL}
+        </if>
+        <if test="sieve1 != null">
+            and sieve1 = #{sieve1,jdbcType=DECIMAL}
+        </if>
+        <if test="sieve2 != null">
+            and sieve2 = #{sieve2,jdbcType=DECIMAL}
+        </if>
+        <if test="sieve3 != null">
+            and sieve3 = #{sieve3,jdbcType=DECIMAL}
+        </if>
+        <if test="sieve4 != null">
+            and sieve4 = #{sieve4,jdbcType=DECIMAL}
+        </if>
+        <if test="sieve5 != null">
+            and sieve5 = #{sieve5,jdbcType=DECIMAL}
+        </if>
+        <if test="sieve6 != null">
+            and sieve6 = #{sieve6,jdbcType=DECIMAL}
+        </if>
+        <if test="sieve7 != null">
+            and sieve7 = #{sieve7,jdbcType=DECIMAL}
+        </if>
+        <if test="sieve8 != null">
+            and sieve8 = #{sieve8,jdbcType=DECIMAL}
+        </if>
+        <if test="sieve9 != null">
+            and sieve9 = #{sieve9,jdbcType=DECIMAL}
+        </if>
+        <if test="sieve10 != null">
+            and sieve10 = #{sieve10,jdbcType=DECIMAL}
+        </if>
+        <if test="sieve11 != null">
+            and sieve11 = #{sieve11,jdbcType=DECIMAL}
+        </if>
+        <if test="sieve12 != null">
+            and sieve12 = #{sieve12,jdbcType=DECIMAL}
+        </if>
+        <if test="sieve13 != null">
+            and sieve13 = #{sieve13,jdbcType=DECIMAL}
+        </if>
+        <if test="batchCode != null">
+            and batchCode = #{batchCode,jdbcType=VARCHAR}
+        </if>
+        <if test="gradationLevel != null">
+            and gradationLevel = #{gradationLevel,jdbcType=INTEGER}
+        </if>
+        <if test="aggregateWeight != null">
+            and aggregateWeight = #{aggregateWeight,jdbcType=DECIMAL}
+        </if>
+        <if test="isPass != null">
+            and isPass = #{isPass,jdbcType=INTEGER}
+        </if>
+        <if test="dataId != null">
+            and dataId = #{dataId,jdbcType=BIGINT}
+        </if>
+        <if test="excessMsg != null">
+            and excessMsg = #{excessMsg,jdbcType=VARCHAR}
+        </if>
+        <if test="sieve1State != null">
+            and sieve1State = #{sieve1State,jdbcType=INTEGER}
+        </if>
+        <if test="sieve2State != null">
+            and sieve2State = #{sieve2State,jdbcType=INTEGER}
+        </if>
+        <if test="sieve3State != null">
+            and sieve3State = #{sieve3State,jdbcType=INTEGER}
+        </if>
+        <if test="sieve4State != null">
+            and sieve4State = #{sieve4State,jdbcType=INTEGER}
+        </if>
+        <if test="sieve5State != null">
+            and sieve5State = #{sieve5State,jdbcType=INTEGER}
+        </if>
+        <if test="sieve6State != null">
+            and sieve6State = #{sieve6State,jdbcType=INTEGER}
+        </if>
+        <if test="sieve7State != null">
+            and sieve7State = #{sieve7State,jdbcType=INTEGER}
+        </if>
+        <if test="sieve8State != null">
+            and sieve8State = #{sieve8State,jdbcType=INTEGER}
+        </if>
+        <if test="sieve9State != null">
+            and sieve9State = #{sieve9State,jdbcType=INTEGER}
+        </if>
+        <if test="sieve10State != null">
+            and sieve10State = #{sieve10State,jdbcType=INTEGER}
+        </if>
+        <if test="sieve11State != null">
+            and sieve11State = #{sieve11State,jdbcType=INTEGER}
+        </if>
+        <if test="sieve12State != null">
+            and sieve12State = #{sieve12State,jdbcType=INTEGER}
+        </if>
+        <if test="sieve13State != null">
+            and sieve13State = #{sieve13State,jdbcType=INTEGER}
+        </if>
+        <if test="time != null">
+            and time = #{time,jdbcType=TIMESTAMP}
+        </if>
+        <if test="sieveVersion != null">
+            and sieveVersion = #{sieveVersion,jdbcType=INTEGER}
+        </if>
+        <if test="sieve1Msg != null">
+            and sieve1Msg = #{sieve1Msg,jdbcType=VARCHAR}
+        </if>
+        <if test="sieve2Msg != null">
+            and sieve2Msg = #{sieve2Msg,jdbcType=VARCHAR}
+        </if>
+        <if test="sieve3Msg != null">
+            and sieve3Msg = #{sieve3Msg,jdbcType=VARCHAR}
+        </if>
+        <if test="sieve4Msg != null">
+            and sieve4Msg = #{sieve4Msg,jdbcType=VARCHAR}
+        </if>
+        <if test="sieve5Msg != null">
+            and sieve5Msg = #{sieve5Msg,jdbcType=VARCHAR}
+        </if>
+        <if test="sieve6Msg != null">
+            and sieve6Msg = #{sieve6Msg,jdbcType=VARCHAR}
+        </if>
+        <if test="sieve7Msg != null">
+            and sieve7Msg = #{sieve7Msg,jdbcType=VARCHAR}
+        </if>
+        <if test="sieve8Msg != null">
+            and sieve8Msg = #{sieve8Msg,jdbcType=VARCHAR}
+        </if>
+        <if test="sieve9Msg != null">
+            and sieve9Msg = #{sieve9Msg,jdbcType=VARCHAR}
+        </if>
+        <if test="sieve10Msg != null">
+            and sieve10Msg = #{sieve10Msg,jdbcType=VARCHAR}
+        </if>
+        <if test="sieve11Msg != null">
+            and sieve11Msg = #{sieve11Msg,jdbcType=VARCHAR}
+        </if>
+        <if test="sieve12Msg != null">
+            and sieve12Msg = #{sieve12Msg,jdbcType=VARCHAR}
+        </if>
+        <if test="sieve13Msg != null">
+            and sieve13Msg = #{sieve13Msg,jdbcType=VARCHAR}
+        </if>
+    </select>
+
+    <insert id="insertSelective" keyProperty="id"
+            parameterType="com.linghang.model.business.water.WaterMetadataResultModel">
+        insert into imp_water_metadata_result
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="stationId != null">
+                stationId,
+            </if>
+            <if test="formulaId != null">
+                formulaId,
+            </if>
+            <if test="formulaCode != null">
+                formulaCode,
+            </if>
+            <if test="cement != null">
+                cement,
+            </if>
+            <if test="water != null">
+                water,
+            </if>
+            <if test="weight != null">
+                weight,
+            </if>
+            <if test="sieve1 != null">
+                sieve1,
+            </if>
+            <if test="sieve2 != null">
+                sieve2,
+            </if>
+            <if test="sieve3 != null">
+                sieve3,
+            </if>
+            <if test="sieve4 != null">
+                sieve4,
+            </if>
+            <if test="sieve5 != null">
+                sieve5,
+            </if>
+            <if test="sieve6 != null">
+                sieve6,
+            </if>
+            <if test="sieve7 != null">
+                sieve7,
+            </if>
+            <if test="sieve8 != null">
+                sieve8,
+            </if>
+            <if test="sieve9 != null">
+                sieve9,
+            </if>
+            <if test="sieve10 != null">
+                sieve10,
+            </if>
+            <if test="sieve11 != null">
+                sieve11,
+            </if>
+            <if test="sieve12 != null">
+                sieve12,
+            </if>
+            <if test="sieve13 != null">
+                sieve13,
+            </if>
+            <if test="batchCode != null">
+                batchCode,
+            </if>
+            <if test="gradationLevel != null">
+                gradationLevel,
+            </if>
+            <if test="aggregateWeight != null">
+                aggregateWeight,
+            </if>
+            <if test="isPass != null">
+                isPass,
+            </if>
+            <if test="dataId != null">
+                dataId,
+            </if>
+            <if test="excessMsg != null">
+                excessMsg,
+            </if>
+            <if test="sieve1State != null">
+                sieve1State,
+            </if>
+            <if test="sieve2State != null">
+                sieve2State,
+            </if>
+            <if test="sieve3State != null">
+                sieve3State,
+            </if>
+            <if test="sieve4State != null">
+                sieve4State,
+            </if>
+            <if test="sieve5State != null">
+                sieve5State,
+            </if>
+            <if test="sieve6State != null">
+                sieve6State,
+            </if>
+            <if test="sieve7State != null">
+                sieve7State,
+            </if>
+            <if test="sieve8State != null">
+                sieve8State,
+            </if>
+            <if test="sieve9State != null">
+                sieve9State,
+            </if>
+            <if test="sieve10State != null">
+                sieve10State,
+            </if>
+            <if test="sieve11State != null">
+                sieve11State,
+            </if>
+            <if test="sieve12State != null">
+                sieve12State,
+            </if>
+            <if test="sieve13State != null">
+                sieve13State,
+            </if>
+            <if test="time != null">
+                time,
+            </if>
+            <if test="sieveVersion != null">
+                sieveVersion,
+            </if>
+            <if test="sieve1Msg != null">
+                sieve1Msg,
+            </if>
+            <if test="sieve2Msg != null">
+                sieve2Msg,
+            </if>
+            <if test="sieve3Msg != null">
+                sieve3Msg,
+            </if>
+            <if test="sieve4Msg != null">
+                sieve4Msg,
+            </if>
+            <if test="sieve5Msg != null">
+                sieve5Msg,
+            </if>
+            <if test="sieve6Msg != null">
+                sieve6Msg,
+            </if>
+            <if test="sieve7Msg != null">
+                sieve7Msg,
+            </if>
+            <if test="sieve8Msg != null">
+                sieve8Msg,
+            </if>
+            <if test="sieve9Msg != null">
+                sieve9Msg,
+            </if>
+            <if test="sieve10Msg != null">
+                sieve10Msg,
+            </if>
+            <if test="sieve11Msg != null">
+                sieve11Msg,
+            </if>
+            <if test="sieve12Msg != null">
+                sieve12Msg,
+            </if>
+            <if test="sieve13Msg != null">
+                sieve13Msg,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="stationId != null">
+                #{stationId,jdbcType=BIGINT},
+            </if>
+            <if test="formulaId != null">
+                #{formulaId,jdbcType=BIGINT},
+            </if>
+            <if test="formulaCode != null">
+                #{formulaCode,jdbcType=VARCHAR},
+            </if>
+            <if test="cement != null">
+                #{cement,jdbcType=DECIMAL},
+            </if>
+            <if test="water != null">
+                #{water,jdbcType=DECIMAL},
+            </if>
+            <if test="weight != null">
+                #{weight,jdbcType=DECIMAL},
+            </if>
+            <if test="sieve1 != null">
+                #{sieve1,jdbcType=DECIMAL},
+            </if>
+            <if test="sieve2 != null">
+                #{sieve2,jdbcType=DECIMAL},
+            </if>
+            <if test="sieve3 != null">
+                #{sieve3,jdbcType=DECIMAL},
+            </if>
+            <if test="sieve4 != null">
+                #{sieve4,jdbcType=DECIMAL},
+            </if>
+            <if test="sieve5 != null">
+                #{sieve5,jdbcType=DECIMAL},
+            </if>
+            <if test="sieve6 != null">
+                #{sieve6,jdbcType=DECIMAL},
+            </if>
+            <if test="sieve7 != null">
+                #{sieve7,jdbcType=DECIMAL},
+            </if>
+            <if test="sieve8 != null">
+                #{sieve8,jdbcType=DECIMAL},
+            </if>
+            <if test="sieve9 != null">
+                #{sieve9,jdbcType=DECIMAL},
+            </if>
+            <if test="sieve10 != null">
+                #{sieve10,jdbcType=DECIMAL},
+            </if>
+            <if test="sieve11 != null">
+                #{sieve11,jdbcType=DECIMAL},
+            </if>
+            <if test="sieve12 != null">
+                #{sieve12,jdbcType=DECIMAL},
+            </if>
+            <if test="sieve13 != null">
+                #{sieve13,jdbcType=DECIMAL},
+            </if>
+            <if test="batchCode != null">
+                #{batchCode,jdbcType=VARCHAR},
+            </if>
+            <if test="gradationLevel != null">
+                #{gradationLevel,jdbcType=INTEGER},
+            </if>
+            <if test="aggregateWeight != null">
+                #{aggregateWeight,jdbcType=DECIMAL},
+            </if>
+            <if test="isPass != null">
+                #{isPass,jdbcType=INTEGER},
+            </if>
+            <if test="dataId != null">
+                #{dataId,jdbcType=BIGINT},
+            </if>
+            <if test="excessMsg != null">
+                #{excessMsg,jdbcType=VARCHAR},
+            </if>
+            <if test="sieve1State != null">
+                #{sieve1State,jdbcType=INTEGER},
+            </if>
+            <if test="sieve2State != null">
+                #{sieve2State,jdbcType=INTEGER},
+            </if>
+            <if test="sieve3State != null">
+                #{sieve3State,jdbcType=INTEGER},
+            </if>
+            <if test="sieve4State != null">
+                #{sieve4State,jdbcType=INTEGER},
+            </if>
+            <if test="sieve5State != null">
+                #{sieve5State,jdbcType=INTEGER},
+            </if>
+            <if test="sieve6State != null">
+                #{sieve6State,jdbcType=INTEGER},
+            </if>
+            <if test="sieve7State != null">
+                #{sieve7State,jdbcType=INTEGER},
+            </if>
+            <if test="sieve8State != null">
+                #{sieve8State,jdbcType=INTEGER},
+            </if>
+            <if test="sieve9State != null">
+                #{sieve9State,jdbcType=INTEGER},
+            </if>
+            <if test="sieve10State != null">
+                #{sieve10State,jdbcType=INTEGER},
+            </if>
+            <if test="sieve11State != null">
+                #{sieve11State,jdbcType=INTEGER},
+            </if>
+            <if test="sieve12State != null">
+                #{sieve12State,jdbcType=INTEGER},
+            </if>
+            <if test="sieve13State != null">
+                #{sieve13State,jdbcType=INTEGER},
+            </if>
+            <if test="time != null">
+                #{time,jdbcType=TIMESTAMP},
+            </if>
+            <if test="sieveVersion != null">
+                #{sieveVersion,jdbcType=INTEGER},
+            </if>
+            <if test="sieve1Msg != null">
+                #{sieve1Msg,jdbcType=VARCHAR},
+            </if>
+            <if test="sieve2Msg != null">
+                #{sieve2Msg,jdbcType=VARCHAR},
+            </if>
+            <if test="sieve3Msg != null">
+                #{sieve3Msg,jdbcType=VARCHAR},
+            </if>
+            <if test="sieve4Msg != null">
+                #{sieve4Msg,jdbcType=VARCHAR},
+            </if>
+            <if test="sieve5Msg != null">
+                #{sieve5Msg,jdbcType=VARCHAR},
+            </if>
+            <if test="sieve6Msg != null">
+                #{sieve6Msg,jdbcType=VARCHAR},
+            </if>
+            <if test="sieve7Msg != null">
+                #{sieve7Msg,jdbcType=VARCHAR},
+            </if>
+            <if test="sieve8Msg != null">
+                #{sieve8Msg,jdbcType=VARCHAR},
+            </if>
+            <if test="sieve9Msg != null">
+                #{sieve9Msg,jdbcType=VARCHAR},
+            </if>
+            <if test="sieve10Msg != null">
+                #{sieve10Msg,jdbcType=VARCHAR},
+            </if>
+            <if test="sieve11Msg != null">
+                #{sieve11Msg,jdbcType=VARCHAR},
+            </if>
+            <if test="sieve12Msg != null">
+                #{sieve12Msg,jdbcType=VARCHAR},
+            </if>
+            <if test="sieve13Msg != null">
+                #{sieve13Msg,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+
+    <update id="updateByIdSelective" parameterType="com.linghang.model.business.water.WaterMetadataResultModel">
+        update imp_water_metadata_result
+        <set>
+            <if test="stationId != null">
+                stationId = #{stationId,jdbcType=BIGINT},
+            </if>
+            <if test="formulaId != null">
+                formulaId = #{formulaId,jdbcType=BIGINT},
+            </if>
+            <if test="formulaCode != null">
+                formulaCode = #{formulaCode,jdbcType=VARCHAR},
+            </if>
+            <if test="cement != null">
+                cement = #{cement,jdbcType=DECIMAL},
+            </if>
+            <if test="water != null">
+                water = #{water,jdbcType=DECIMAL},
+            </if>
+            <if test="weight != null">
+                weight = #{weight,jdbcType=DECIMAL},
+            </if>
+            <if test="sieve1 != null">
+                sieve1 = #{sieve1,jdbcType=DECIMAL},
+            </if>
+            <if test="sieve2 != null">
+                sieve2 = #{sieve2,jdbcType=DECIMAL},
+            </if>
+            <if test="sieve3 != null">
+                sieve3 = #{sieve3,jdbcType=DECIMAL},
+            </if>
+            <if test="sieve4 != null">
+                sieve4 = #{sieve4,jdbcType=DECIMAL},
+            </if>
+            <if test="sieve5 != null">
+                sieve5 = #{sieve5,jdbcType=DECIMAL},
+            </if>
+            <if test="sieve6 != null">
+                sieve6 = #{sieve6,jdbcType=DECIMAL},
+            </if>
+            <if test="sieve7 != null">
+                sieve7 = #{sieve7,jdbcType=DECIMAL},
+            </if>
+            <if test="sieve8 != null">
+                sieve8 = #{sieve8,jdbcType=DECIMAL},
+            </if>
+            <if test="sieve9 != null">
+                sieve9 = #{sieve9,jdbcType=DECIMAL},
+            </if>
+            <if test="sieve10 != null">
+                sieve10 = #{sieve10,jdbcType=DECIMAL},
+            </if>
+            <if test="sieve11 != null">
+                sieve11 = #{sieve11,jdbcType=DECIMAL},
+            </if>
+            <if test="sieve12 != null">
+                sieve12 = #{sieve12,jdbcType=DECIMAL},
+            </if>
+            <if test="sieve13 != null">
+                sieve13 = #{sieve13,jdbcType=DECIMAL},
+            </if>
+            <if test="batchCode != null">
+                batchCode = #{batchCode,jdbcType=VARCHAR},
+            </if>
+            <if test="gradationLevel != null">
+                gradationLevel = #{gradationLevel,jdbcType=INTEGER},
+            </if>
+            <if test="aggregateWeight != null">
+                aggregateWeight = #{aggregateWeight,jdbcType=DECIMAL},
+            </if>
+            <if test="isPass != null">
+                isPass = #{isPass,jdbcType=INTEGER},
+            </if>
+            <if test="dataId != null">
+                dataId = #{dataId,jdbcType=BIGINT},
+            </if>
+            <if test="excessMsg != null">
+                excessMsg = #{excessMsg,jdbcType=VARCHAR},
+            </if>
+            <if test="sieve1State != null">
+                sieve1State = #{sieve1State,jdbcType=INTEGER},
+            </if>
+            <if test="sieve2State != null">
+                sieve2State = #{sieve2State,jdbcType=INTEGER},
+            </if>
+            <if test="sieve3State != null">
+                sieve3State = #{sieve3State,jdbcType=INTEGER},
+            </if>
+            <if test="sieve4State != null">
+                sieve4State = #{sieve4State,jdbcType=INTEGER},
+            </if>
+            <if test="sieve5State != null">
+                sieve5State = #{sieve5State,jdbcType=INTEGER},
+            </if>
+            <if test="sieve6State != null">
+                sieve6State = #{sieve6State,jdbcType=INTEGER},
+            </if>
+            <if test="sieve7State != null">
+                sieve7State = #{sieve7State,jdbcType=INTEGER},
+            </if>
+            <if test="sieve8State != null">
+                sieve8State = #{sieve8State,jdbcType=INTEGER},
+            </if>
+            <if test="sieve9State != null">
+                sieve9State = #{sieve9State,jdbcType=INTEGER},
+            </if>
+            <if test="sieve10State != null">
+                sieve10State = #{sieve10State,jdbcType=INTEGER},
+            </if>
+            <if test="sieve11State != null">
+                sieve11State = #{sieve11State,jdbcType=INTEGER},
+            </if>
+            <if test="sieve12State != null">
+                sieve12State = #{sieve12State,jdbcType=INTEGER},
+            </if>
+            <if test="sieve13State != null">
+                sieve13State = #{sieve13State,jdbcType=INTEGER},
+            </if>
+            <if test="time != null">
+                time = #{time,jdbcType=TIMESTAMP},
+            </if>
+            <if test="sieveVersion != null">
+                sieveVersion = #{sieveVersion,jdbcType=INTEGER},
+            </if>
+            <if test="sieve1Msg != null">
+                sieve1Msg = #{sieve1Msg,jdbcType=VARCHAR},
+            </if>
+            <if test="sieve2Msg != null">
+                sieve2Msg = #{sieve2Msg,jdbcType=VARCHAR},
+            </if>
+            <if test="sieve3Msg != null">
+                sieve3Msg = #{sieve3Msg,jdbcType=VARCHAR},
+            </if>
+            <if test="sieve4Msg != null">
+                sieve4Msg = #{sieve4Msg,jdbcType=VARCHAR},
+            </if>
+            <if test="sieve5Msg != null">
+                sieve5Msg = #{sieve5Msg,jdbcType=VARCHAR},
+            </if>
+            <if test="sieve6Msg != null">
+                sieve6Msg = #{sieve6Msg,jdbcType=VARCHAR},
+            </if>
+            <if test="sieve7Msg != null">
+                sieve7Msg = #{sieve7Msg,jdbcType=VARCHAR},
+            </if>
+            <if test="sieve8Msg != null">
+                sieve8Msg = #{sieve8Msg,jdbcType=VARCHAR},
+            </if>
+            <if test="sieve9Msg != null">
+                sieve9Msg = #{sieve9Msg,jdbcType=VARCHAR},
+            </if>
+            <if test="sieve10Msg != null">
+                sieve10Msg = #{sieve10Msg,jdbcType=VARCHAR},
+            </if>
+            <if test="sieve11Msg != null">
+                sieve11Msg = #{sieve11Msg,jdbcType=VARCHAR},
+            </if>
+            <if test="sieve12Msg != null">
+                sieve12Msg = #{sieve12Msg,jdbcType=VARCHAR},
+            </if>
+            <if test="sieve13Msg != null">
+                sieve13Msg = #{sieve13Msg,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <update id="updateById" parameterType="com.linghang.model.business.water.WaterMetadataResultModel">
+        update imp_water_metadata_result
+        set stationId = #{stationId,jdbcType=BIGINT},
+            formulaId = #{formulaId,jdbcType=BIGINT},
+            formulaCode = #{formulaCode,jdbcType=VARCHAR},
+            cement = #{cement,jdbcType=DECIMAL},
+            water = #{water,jdbcType=DECIMAL},
+            weight = #{weight,jdbcType=DECIMAL},
+            sieve1 = #{sieve1,jdbcType=DECIMAL},
+            sieve2 = #{sieve2,jdbcType=DECIMAL},
+            sieve3 = #{sieve3,jdbcType=DECIMAL},
+            sieve4 = #{sieve4,jdbcType=DECIMAL},
+            sieve5 = #{sieve5,jdbcType=DECIMAL},
+            sieve6 = #{sieve6,jdbcType=DECIMAL},
+            sieve7 = #{sieve7,jdbcType=DECIMAL},
+            sieve8 = #{sieve8,jdbcType=DECIMAL},
+            sieve9 = #{sieve9,jdbcType=DECIMAL},
+            sieve10 = #{sieve10,jdbcType=DECIMAL},
+            sieve11 = #{sieve11,jdbcType=DECIMAL},
+            sieve12 = #{sieve12,jdbcType=DECIMAL},
+            sieve13 = #{sieve13,jdbcType=DECIMAL},
+            batchCode = #{batchCode,jdbcType=VARCHAR},
+            gradationLevel = #{gradationLevel,jdbcType=INTEGER},
+            aggregateWeight = #{aggregateWeight,jdbcType=DECIMAL},
+            isPass = #{isPass,jdbcType=INTEGER},
+            dataId = #{dataId,jdbcType=BIGINT},
+            excessMsg = #{excessMsg,jdbcType=VARCHAR},
+            sieve1State = #{sieve1State,jdbcType=INTEGER},
+            sieve2State = #{sieve2State,jdbcType=INTEGER},
+            sieve3State = #{sieve3State,jdbcType=INTEGER},
+            sieve4State = #{sieve4State,jdbcType=INTEGER},
+            sieve5State = #{sieve5State,jdbcType=INTEGER},
+            sieve6State = #{sieve6State,jdbcType=INTEGER},
+            sieve7State = #{sieve7State,jdbcType=INTEGER},
+            sieve8State = #{sieve8State,jdbcType=INTEGER},
+            sieve9State = #{sieve9State,jdbcType=INTEGER},
+            sieve10State = #{sieve10State,jdbcType=INTEGER},
+            sieve11State = #{sieve11State,jdbcType=INTEGER},
+            sieve12State = #{sieve12State,jdbcType=INTEGER},
+            sieve13State = #{sieve13State,jdbcType=INTEGER},
+            time = #{time,jdbcType=TIMESTAMP},
+            sieveVersion = #{sieveVersion,jdbcType=INTEGER},
+            sieve1Msg = #{sieve1Msg,jdbcType=VARCHAR},
+            sieve2Msg = #{sieve2Msg,jdbcType=VARCHAR},
+            sieve3Msg = #{sieve3Msg,jdbcType=VARCHAR},
+            sieve4Msg = #{sieve4Msg,jdbcType=VARCHAR},
+            sieve5Msg = #{sieve5Msg,jdbcType=VARCHAR},
+            sieve6Msg = #{sieve6Msg,jdbcType=VARCHAR},
+            sieve7Msg = #{sieve7Msg,jdbcType=VARCHAR},
+            sieve8Msg = #{sieve8Msg,jdbcType=VARCHAR},
+            sieve9Msg = #{sieve9Msg,jdbcType=VARCHAR},
+            sieve10Msg = #{sieve10Msg,jdbcType=VARCHAR},
+            sieve11Msg = #{sieve11Msg,jdbcType=VARCHAR},
+            sieve12Msg = #{sieve12Msg,jdbcType=VARCHAR},
+            sieve13Msg = #{sieve13Msg,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <resultMap id="BaseResultMapAndSieveList"
+               type="com.linghang.model.business.water.param.WaterMetadataResultParamMolde" extends="BaseResultMap">
+        <association property="waterFormulaModel" column="{id=formulaId}"
+                     javaType="com.linghang.model.business.water.WaterFormulaModel"
+                     select="com.linghang.mapper.business.water.WaterFormulaMapper.selectMoldeById"
+        ></association>
+        <collection property="settingModels" column="{formulaId=formulaId,dataVersion=sieveVersion}"
+                    ofType="com.linghang.model.business.water.WaterSieveSettingModel"
+                    select="com.linghang.mapper.business.water.WaterSieveSettingMapper.selectByFormulaIdAndSieveVersion">
+        </collection>
+    </resultMap>
+
+
+    <!--根据元数据id查询级配信息-->
+    <select id="getGradationInfo" resultMap="BaseResultMapAndSieveList">
+         select * from imp_water_metadata_result r left join imp_water_metadata m on m.id=r.dataId
+        where m.id=#{id,jdbcType=BIGINT}
+    </select>
+    <select id="getWarningData" resultMap="BaseResultMapAndSieveList">
+        SELECT
+        WR.*,
+        CASE
+        WHEN WM.waterResult IS NULL THEN
+        0
+        ELSE
+        WM.waterResult
+        END AS waterResult,
+        CASE
+        WHEN WM.cementResult IS NULL THEN
+        0
+        ELSE
+        WM.cementResult
+        END AS cementResult,
+        CASE
+        WHEN WM.aggregateResult IS NULL THEN
+        0
+        ELSE
+        WM.aggregateResult
+        END AS aggregateResult,
+        CASE
+        WHEN WM.sieveResult IS NULL THEN
+        0
+        ELSE
+        WM.sieveResult
+        END AS sieveResult
+        FROM
+        imp_water_metadata_result WR
+        LEFT JOIN imp_water_warning_message WM ON WR.dataId = WM.dataId
+        WHERE
+        WR.isPass > 0 and WR.stationId = #{stationId,jdbcType=BIGINT}
+        <if test="startTime != null and endTime != null">
+            and WR.time BETWEEN #{startTime,jdbcType=VARCHAR} AND #{endTime,jdbcType=VARCHAR}
+        </if>
+        <if test="warningType == 1">
+            and waterResult > 0
+        </if>
+        <if test="warningType == 2">
+            and cementResult > 0
+        </if>
+        <if test="warningType == 3">
+            and aggregateResult > 0
+        </if>
+        <if test="warningType == 4">
+            and sieveResult > 0
+        </if>
+        <if test="options.filters != null">
+            <foreach collection="options.filters" item="item">
+                and WR.${item.field}
+                <choose>
+                    <when test="item.operator == 'eq'">
+                        = #{item.value}
+                    </when>
+                    <when test="item.operator == 'neq'">
+                        != #{item.value}
+                    </when>
+                    <when test="item.operator == 'gt'">
+                        &gt; #{item.value}
+                    </when>
+                    <when test="item.operator == 'lt'">
+                        &lt; #{item.value}
+                    </when>
+                    <when test="item.operator == 'isnull'">
+                        #{item.value} is null
+                    </when>
+                    <when test="item.operator == 'isnotnull'">
+                        #{item.value} is not null
+                    </when>
+                    <when test="item.operator == 'contains'">
+                        like '%'+#{item.value}+'%'
+                    </when>
+                </choose>
+            </foreach>
+        </if>
+        order by
+        <if test="options.sort != null">
+            <foreach collection="options.sort" item="item">
+                WR.${item.field} ${item.dir}
+            </foreach>
+        </if>
+        <if test="options.sort == null">
+            WR.time
+        </if>
+    </select>
+</mapper>

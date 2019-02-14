@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.linghang.mapper.base.NewsMapper">
+    <resultMap id="BaseResultMap" type="com.linghang.model.base.NewsModel">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="title" jdbcType="VARCHAR" property="title"/>
+        <result column="subtitle" jdbcType="VARCHAR" property="subtitle"/>
+        <result column="createTime" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="createUserId" jdbcType="INTEGER" property="createUserId"/>
+        <result column="orgId" jdbcType="INTEGER" property="orgId"/>
+        <result column="titlePicUrl" jdbcType="VARCHAR" property="titlePicUrl"/>
+        <result column="type" jdbcType="INTEGER" property="type"/>
+        <result column="status" jdbcType="INTEGER" property="status"/>
+        <result column="content" jdbcType="LONGVARCHAR" property="content"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        title, subtitle, createTime, createUserId, orgId, titlePicUrl, type, status, content
+    </sql>
+
+    <select id="selectById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select *
+        from imp_news
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <delete id="deleteById" parameterType="java.lang.Long">
+        delete from imp_news
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+
+    <delete id="deleteByIds" parameterType="java.util.List">
+        delete from imp_news
+        where id in
+        <foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
+            #{item}
+        </foreach>
+    </delete>
+
+    <insert id="insert" keyProperty="id" parameterType="com.linghang.model.base.NewsModel">
+        insert into imp_news (
+        <include refid="Base_Column_List"/>
+        )
+        values (#{title,jdbcType=VARCHAR},
+        #{subtitle,jdbcType=VARCHAR},
+        #{createTime,jdbcType=TIMESTAMP},
+        #{createUserId,jdbcType=INTEGER},
+        #{orgId,jdbcType=INTEGER},
+        #{titlePicUrl,jdbcType=VARCHAR},
+        #{type,jdbcType=INTEGER},
+        #{status,jdbcType=INTEGER},
+        #{content,jdbcType=LONGVARCHAR}
+        )
+    </insert>
+
+    <insert id="insertList" useGeneratedKeys="false" parameterType="java.util.List">
+        <foreach collection="list" index="index" item="item" separator=";">
+            insert into imp_news (
+            <include refid="Base_Column_List"/>
+            )
+            values (#{item.title,jdbcType=VARCHAR},
+            #{item.subtitle,jdbcType=VARCHAR},
+            #{item.createTime,jdbcType=TIMESTAMP},
+            #{item.createUserId,jdbcType=INTEGER},
+            #{item.orgId,jdbcType=INTEGER},
+            #{item.titlePicUrl,jdbcType=VARCHAR},
+            #{item.type,jdbcType=INTEGER},
+            #{item.status,jdbcType=INTEGER},
+            #{item.content,jdbcType=LONGVARCHAR}
+            )
+        </foreach>
+    </insert>
+
+    <select id="selectByModel" parameterType="com.linghang.model.base.NewsModel" resultMap="BaseResultMap">
+        select * from imp_news where 1 = 1
+        <if test="title != null">
+            and title = #{title,jdbcType=VARCHAR}
+        </if>
+        <if test="subtitle != null">
+            and subtitle = #{subtitle,jdbcType=VARCHAR}
+        </if>
+        <if test="createTime != null">
+            and createTime = #{createTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="createUserId != null">
+            and createUserId = #{createUserId,jdbcType=INTEGER}
+        </if>
+        <if test="orgId != null">
+            and orgId = #{orgId,jdbcType=INTEGER}
+        </if>
+        <if test="titlePicUrl != null">
+            and titlePicUrl = #{titlePicUrl,jdbcType=VARCHAR}
+        </if>
+        <if test="type != null">
+            and type = #{type,jdbcType=INTEGER}
+        </if>
+        <if test="status != null">
+            and status = #{status,jdbcType=INTEGER}
+        </if>
+        <if test="content != null">
+            and content = #{content,jdbcType=LONGVARCHAR}
+        </if>
+    </select>
+
+    <insert id="insertSelective" keyProperty="id" parameterType="com.linghang.model.base.NewsModel">
+        insert into imp_news
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="title != null">
+                title,
+            </if>
+            <if test="subtitle != null">
+                subtitle,
+            </if>
+            <if test="createTime != null">
+                createTime,
+            </if>
+            <if test="createUserId != null">
+                createUserId,
+            </if>
+            <if test="orgId != null">
+                orgId,
+            </if>
+            <if test="titlePicUrl != null">
+                titlePicUrl,
+            </if>
+            <if test="type != null">
+                type,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="content != null">
+                content,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="title != null">
+                #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="subtitle != null">
+                #{subtitle,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createUserId != null">
+                #{createUserId,jdbcType=INTEGER},
+            </if>
+            <if test="orgId != null">
+                #{orgId,jdbcType=INTEGER},
+            </if>
+            <if test="titlePicUrl != null">
+                #{titlePicUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=INTEGER},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=INTEGER},
+            </if>
+            <if test="content != null">
+                #{content,jdbcType=LONGVARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByIdSelective" parameterType="com.linghang.model.base.NewsModel">
+        update imp_news
+        <set>
+            <if test="title != null">
+                title = #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="subtitle != null">
+                subtitle = #{subtitle,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                createTime = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createUserId != null">
+                createUserId = #{createUserId,jdbcType=INTEGER},
+            </if>
+            <if test="orgId != null">
+                orgId = #{orgId,jdbcType=INTEGER},
+            </if>
+            <if test="titlePicUrl != null">
+                titlePicUrl = #{titlePicUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null">
+                type = #{type,jdbcType=INTEGER},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="content != null">
+                content = #{content,jdbcType=LONGVARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <update id="updateById" parameterType="com.linghang.model.base.NewsModel">
+        update imp_news
+        set title = #{title,jdbcType=VARCHAR},
+        subtitle = #{subtitle,jdbcType=VARCHAR},
+        createTime = #{createTime,jdbcType=TIMESTAMP},
+        createUserId = #{createUserId,jdbcType=INTEGER},
+        orgId = #{orgId,jdbcType=INTEGER},
+        titlePicUrl = #{titlePicUrl,jdbcType=VARCHAR},
+        type = #{type,jdbcType=INTEGER},
+        status = #{status,jdbcType=INTEGER},
+        content = #{content,jdbcType=LONGVARCHAR}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+</mapper>

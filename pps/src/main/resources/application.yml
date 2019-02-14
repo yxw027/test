@@ -1,0 +1,70 @@
+#developer
+server:
+  port: 8085
+spring:
+  #db
+  datasource:
+    url: jdbc:sqlserver://publicsoft-server:1433;databaseName=pps_dev
+    #    url: jdbc:sqlserver://117.34.105.239:1433;databaseName=pps
+    username: sa
+    password: public*963.
+  #freemarker
+  freemarker:
+    cache: false
+    request-context-attribute: request
+  #tomcat静态文件资源
+  mvc:
+    static-path-pattern: /**
+  resources:
+    static-locations: classpath:/static/,file:${fileRootPath}
+  #upload file
+  servlet:
+    multipart:
+      max-file-size: 64MB
+      max-request-size: 128MB
+  devtools:
+      restart:
+          enabled: true
+#mybatis
+mybatis:
+  mapperLocations: classpath:mapper/**/*.xml
+  configuration:
+    cache-enabled: true
+
+#pagehelper
+pagehelper:
+  helperDialect: sqlserver2012
+
+#logger
+logging:
+  #log文件
+  file: logs/ppm.log
+  #打印sql
+#  level:
+#    com.linghang.mapper: debug
+
+#项目上传文件根目录,不设置会自动在运行目录创建webFiles目录
+fileRootPath: D:/ppm/
+#fileRootPath: /Volumes/Data/ppm/
+##客户端上传目录
+clientUpload: clientUpload/
+updateClient: updateClient/
+#图片路径
+picture: picture/
+
+
+mina:
+  ctrm:
+    #差分数据端口
+    port: 8081
+  data:
+    #数据接收端口
+    port: 8082
+  radiofrequency:
+    #摊铺-射频数据接收端口
+    port: 8844
+
+##车辆定位相关配置
+locationPort: 8810
+##百度apiAk
+baiduapiak: "oBqlmCv2gUQTK6aVKqB3fWftpRNAqxH5"

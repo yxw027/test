@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.linghang.mapper.car.DeleteElectricfenceMapper">
+    <resultMap id="BaseResultMap" type="com.linghang.model.car.DeleteElectricfenceModel">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="carId" jdbcType="VARCHAR" property="carId"/>
+        <result column="electricFenceMark" jdbcType="INTEGER" property="electricFenceMark"/>
+        <result column="numberOfRegions" jdbcType="INTEGER" property="numberOfRegions"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+      id,carId, electricFenceMark, numberOfRegions
+    </sql>
+
+    <select id="selectById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select * 
+        from imp_car_deleteElectricfence
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <delete id="deleteById" parameterType="java.lang.Long">
+        delete from imp_car_deleteElectricfence
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+
+    <delete id="deleteByIds" parameterType="java.util.List">
+        delete from imp_car_deleteElectricfence
+        where id in
+        <foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
+            #{item}
+        </foreach>
+    </delete>
+
+    <insert id="insert" keyProperty="id" parameterType="com.linghang.model.car.DeleteElectricfenceModel">
+        insert into imp_car_deleteElectricfence (
+        <include refid="Base_Column_List"/>
+        )
+        values (#{id,jdbcType=BIGINT},
+        #{carId,jdbcType=VARCHAR},
+        #{electricFenceMark,jdbcType=INTEGER},
+        #{numberOfRegions,jdbcType=INTEGER}
+        )
+    </insert>
+
+    <insert id="insertList" keyProperty="id" parameterType="java.util.List">
+        <foreach collection="list" index="index" item="item" separator=";">
+            insert into imp_car_deleteElectricfence (
+            <include refid="Base_Column_List"/>
+            )
+            values (#{item.id,jdbcType=BIGINT},
+            #{item.carId,jdbcType=VARCHAR},
+            #{item.electricFenceMark,jdbcType=INTEGER},
+            #{item.numberOfRegions,jdbcType=INTEGER}
+            )
+        </foreach>
+    </insert>
+
+    <select id="selectByModel" parameterType="com.linghang.model.car.DeleteElectricfenceModel"
+            resultMap="BaseResultMap">
+        select * from imp_car_deleteElectricfence where 1 = 1
+        <if test="carId != null">
+            and carId = #{carId,jdbcType=VARCHAR}
+        </if>
+        <if test="electricFenceMark != null">
+            and electricFenceMark = #{electricFenceMark,jdbcType=INTEGER}
+        </if>
+        <if test="numberOfRegions != null">
+            and numberOfRegions = #{numberOfRegions,jdbcType=INTEGER}
+        </if>
+    </select>
+
+    <insert id="insertSelective" keyProperty="id" parameterType="com.linghang.model.car.DeleteElectricfenceModel">
+        insert into imp_car_deleteElectricfence
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="carId != null">
+                carId,
+            </if>
+            <if test="electricFenceMark != null">
+                electricFenceMark,
+            </if>
+            <if test="numberOfRegions != null">
+                numberOfRegions,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="carId != null">
+                #{carId,jdbcType=VARCHAR},
+            </if>
+            <if test="electricFenceMark != null">
+                #{electricFenceMark,jdbcType=INTEGER},
+            </if>
+            <if test="numberOfRegions != null">
+                #{numberOfRegions,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByIdSelective" parameterType="com.linghang.model.car.DeleteElectricfenceModel">
+        update imp_car_deleteElectricfence
+        <set>
+            <if test="carId != null">
+                carId = #{carId,jdbcType=VARCHAR},
+            </if>
+            <if test="electricFenceMark != null">
+                electricFenceMark = #{electricFenceMark,jdbcType=INTEGER},
+            </if>
+            <if test="numberOfRegions != null">
+                numberOfRegions = #{numberOfRegions,jdbcType=INTEGER},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <update id="updateById" parameterType="com.linghang.model.car.DeleteElectricfenceModel">
+        update imp_car_deleteElectricfence
+        set carId = #{carId,jdbcType=VARCHAR},
+            electricFenceMark = #{electricFenceMark,jdbcType=INTEGER},
+            numberOfRegions = #{numberOfRegions,jdbcType=INTEGER}
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <resultMap id="NeedDeleteCar" type="com.linghang.model.car.DeleteElectricfenceModel">
+        <association property="carVehicleManagementModel" column="{carId=carId}"
+                     select="com.linghang.mapper.CarVehicleManagementMapper.selectBycarId">
+        </association>
+    </resultMap>
+
+    <select id="selectNeedDeleteCar" resultMap="NeedDeleteCar">
+        select *  from imp_car_deleteElectricfence
+    </select>
+
+
+    <select id="selectNeedDeleteById" resultMap="NeedDeleteCar">
+        select * from imp_car_deleteElectricfence where id in
+        <foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
+            #{item.id}
+        </foreach>
+    </select>
+
+    <delete id="deleteByCarId">
+          delete from imp_car_deleteElectricfence
+        where carId=#{carId,jdbcType=VARCHAR}
+    </delete>
+
+</mapper>

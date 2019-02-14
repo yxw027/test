@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.linghang.mapper.business.water.WaterPushSettingMapper">
+    <resultMap id="BaseResultMap" type="com.linghang.model.business.water.WaterPushSettingModel">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="stationId" jdbcType="BIGINT" property="stationId"/>
+        <result column="type" jdbcType="INTEGER" property="type"/>
+        <result column="isOpen" jdbcType="INTEGER" property="isOpen"/>
+        <result column="phone" jdbcType="VARCHAR" property="phone"/>
+        <result column="level" jdbcType="INTEGER" property="level"/>
+        <result column="updateTime" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="updateUser" jdbcType="BIGINT" property="updateUser"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,stationId, type, isOpen, phone, level, updateTime, updateUser
+    </sql>
+
+    <select id="selectById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select * 
+        from imp_water_push_setting
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <delete id="deleteById" parameterType="java.lang.Long">
+        delete from imp_water_push_setting
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+
+    <delete id="deleteByIds" parameterType="java.util.List">
+        delete from imp_water_push_setting
+        where id in
+        <foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
+            #{item}
+        </foreach>
+    </delete>
+
+    <insert id="insert" keyProperty="id" parameterType="com.linghang.model.business.water.WaterPushSettingModel">
+        insert into imp_water_push_setting (
+        <include refid="Base_Column_List"/>
+        )
+        values (#{id,jdbcType=BIGINT},
+        #{stationId,jdbcType=BIGINT},
+        #{type,jdbcType=INTEGER},
+        #{isOpen,jdbcType=INTEGER},
+        #{phone,jdbcType=VARCHAR},
+        #{level,jdbcType=INTEGER},
+        #{updateTime,jdbcType=TIMESTAMP},
+        #{updateUser,jdbcType=BIGINT}
+        )
+    </insert>
+
+    <insert id="insertList" parameterType="java.util.List">
+        <foreach collection="list" index="index" item="item" separator=";">
+            insert into imp_water_push_setting (
+            <include refid="Base_Column_List"/>
+            )
+            values (#{item.stationId,jdbcType=BIGINT},
+            #{item.type,jdbcType=INTEGER},
+            #{item.isOpen,jdbcType=INTEGER},
+            #{item.phone,jdbcType=VARCHAR},
+            #{item.level,jdbcType=INTEGER},
+            #{item.updateTime,jdbcType=TIMESTAMP},
+            #{item.updateUser,jdbcType=BIGINT}
+            )
+        </foreach>
+    </insert>
+
+    <select id="selectByModel" parameterType="com.linghang.model.business.water.WaterPushSettingModel"
+            resultMap="BaseResultMap">
+        select * from imp_water_push_setting where 1 = 1
+        <if test="stationId != null">
+            and stationId = #{stationId,jdbcType=BIGINT}
+        </if>
+        <if test="type != null">
+            and type = #{type,jdbcType=INTEGER}
+        </if>
+        <if test="isOpen != null">
+            and isOpen = #{isOpen,jdbcType=INTEGER}
+        </if>
+        <if test="phone != null">
+            and phone = #{phone,jdbcType=VARCHAR}
+        </if>
+        <if test="level != null">
+            and level = #{level,jdbcType=INTEGER}
+        </if>
+        <if test="updateTime != null">
+            and updateTime = #{updateTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="updateUser != null">
+            and updateUser = #{updateUser,jdbcType=BIGINT}
+        </if>
+    </select>
+
+    <insert id="insertSelective" keyProperty="id"
+            parameterType="com.linghang.model.business.water.WaterPushSettingModel">
+        insert into imp_water_push_setting
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="stationId != null">
+                stationId,
+            </if>
+            <if test="type != null">
+                type,
+            </if>
+            <if test="isOpen != null">
+                isOpen,
+            </if>
+            <if test="phone != null">
+                phone,
+            </if>
+            <if test="level != null">
+                level,
+            </if>
+            <if test="updateTime != null">
+                updateTime,
+            </if>
+            <if test="updateUser != null">
+                updateUser,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="stationId != null">
+                #{stationId,jdbcType=BIGINT},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=INTEGER},
+            </if>
+            <if test="isOpen != null">
+                #{isOpen,jdbcType=INTEGER},
+            </if>
+            <if test="phone != null">
+                #{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="level != null">
+                #{level,jdbcType=INTEGER},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateUser != null">
+                #{updateUser,jdbcType=BIGINT},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByIdSelective" parameterType="com.linghang.model.business.water.WaterPushSettingModel">
+        update imp_water_push_setting
+        <set>
+            <if test="stationId != null">
+                stationId = #{stationId,jdbcType=BIGINT},
+            </if>
+            <if test="type != null">
+                type = #{type,jdbcType=INTEGER},
+            </if>
+            <if test="isOpen != null">
+                isOpen = #{isOpen,jdbcType=INTEGER},
+            </if>
+            <if test="phone != null">
+                phone = #{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="level != null">
+                level = #{level,jdbcType=INTEGER},
+            </if>
+            <if test="updateTime != null">
+                updateTime = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateUser != null">
+                updateUser = #{updateUser,jdbcType=BIGINT},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <update id="updateById" parameterType="com.linghang.model.business.water.WaterPushSettingModel">
+        update imp_water_push_setting
+        set stationId = #{stationId,jdbcType=BIGINT},
+            type = #{type,jdbcType=INTEGER},
+            isOpen = #{isOpen,jdbcType=INTEGER},
+            phone = #{phone,jdbcType=VARCHAR},
+            level = #{level,jdbcType=INTEGER},
+            updateTime = #{updateTime,jdbcType=TIMESTAMP},
+            updateUser = #{updateUser,jdbcType=BIGINT}
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <select id="getWarning" resultMap="BaseResultMap">
+        select * from imp_water_push_setting
+        where
+        stationId = #{stationId,jdbcType=BIGINT}
+        <if test="type != null">
+            and type = #{type,jdbcType=INTEGER}
+        </if>
+        <if test="level != null">
+            and level = #{level,jdbcType=INTEGER}
+        </if>
+    </select>
+</mapper>

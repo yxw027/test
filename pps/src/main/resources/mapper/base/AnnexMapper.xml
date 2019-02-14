@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.linghang.mapper.base.AnnexMapper">
+    <resultMap id="BaseResultMap" type="com.linghang.model.base.AnnexModel">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="fileName" jdbcType="VARCHAR" property="fileName"/>
+        <result column="path" jdbcType="VARCHAR" property="path"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        fileName, path
+    </sql>
+
+    <select id="selectById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select * 
+        from imp_annex
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <delete id="deleteById" parameterType="java.lang.Long">
+        delete from imp_annex
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+
+    <delete id="deleteByIds" parameterType="java.util.List">
+        delete from imp_annex
+        where id in
+        <foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
+            #{item}
+        </foreach>
+    </delete>
+
+    <insert id="insert" keyProperty="id" parameterType="com.linghang.model.base.AnnexModel">
+        insert into imp_annex (
+        <include refid="Base_Column_List"/>
+        )
+        values (#{fileName,jdbcType=VARCHAR},
+        #{path,jdbcType=VARCHAR}
+        )
+    </insert>
+
+    <insert id="insertList" parameterType="java.util.List">
+        <foreach collection="list" index="index" item="item" separator=";">
+            insert into imp_annex (
+            id,fileName, path
+            )
+            values (
+            #{item.id,jdbcType=BIGINT},
+            #{item.fileName,jdbcType=VARCHAR},
+            #{item.path,jdbcType=VARCHAR}
+            )
+        </foreach>
+    </insert>
+
+    <select id="selectByModel" parameterType="com.linghang.model.base.AnnexModel" resultMap="BaseResultMap">
+        select * from imp_annex where 1 = 1
+        <if test="fileName != null">
+            and fileName = #{fileName,jdbcType=VARCHAR}
+        </if>
+        <if test="path != null">
+            and path = #{path,jdbcType=VARCHAR}
+        </if>
+    </select>
+
+
+    <select id="selectAnnexByIds" resultMap="BaseResultMap">
+        select * from imp_annex where id in
+        <foreach collection="array" item="id" open="(" separator="," close=")">
+            #{id,jdbcType=BIGINT}
+        </foreach>
+    </select>
+
+    <insert id="insertSelective" keyProperty="id" parameterType="com.linghang.model.base.AnnexModel">
+        insert into imp_annex
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="fileName != null">
+                fileName,
+            </if>
+            <if test="path != null">
+                path,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="fileName != null">
+                #{fileName,jdbcType=VARCHAR},
+            </if>
+            <if test="path != null">
+                #{path,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByIdSelective" parameterType="com.linghang.model.base.AnnexModel">
+        update imp_annex
+        <set>
+            <if test="fileName != null">
+                fileName = #{fileName,jdbcType=VARCHAR},
+            </if>
+            <if test="path != null">
+                path = #{path,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <update id="updateById" parameterType="com.linghang.model.base.AnnexModel">
+        update imp_annex
+        set fileName = #{fileName,jdbcType=VARCHAR},
+            path = #{path,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+</mapper>

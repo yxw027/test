@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.linghang.mapper.CraftLayerMapper">
+    <resultMap id="BaseResultMap" type="com.linghang.model.CraftLayerModel">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="index" jdbcType="INTEGER" property="index"/>
+        <result column="materialType" jdbcType="INTEGER" property="materialType"/>
+        <result column="layer" jdbcType="INTEGER" property="layer"/>
+        <result column="version" jdbcType="VARCHAR" property="version"/>
+        <result column="orgId" jdbcType="BIGINT" property="orgId"/>
+    </resultMap>
+
+    <resultMap extends="BaseResultMap" id="limitResultMap" type="com.linghang.model.CraftLayerLimitModel">
+        <result column="tanpuType" jdbcType="INTEGER" property="tanpuType"/>
+        <result column="chuyaType" jdbcType="INTEGER" property="chuyaType"/>
+        <result column="fuyaType" jdbcType="INTEGER" property="fuyaType"/>
+        <result column="zhongyaType" jdbcType="INTEGER" property="zhongyaType"/>
+        <collection property="tanpu" column="{craftLayerId=id,craft=tanpuType}"
+                    ofType="com.linghang.model.CraftDetailModel"
+                    select="com.linghang.mapper.CraftDetailMapper.selectByCraftLayerIdAndCraft">
+        </collection>
+        <collection property="chuya" column="{craftLayerId=id,craft=chuyaType}"
+                    ofType="com.linghang.model.CraftDetailModel"
+                    select="com.linghang.mapper.CraftDetailMapper.selectByCraftLayerIdAndCraft">
+        </collection>
+        <collection property="fuya" column="{craftLayerId=id,craft=fuyaType}"
+                    ofType="com.linghang.model.CraftDetailModel"
+                    select="com.linghang.mapper.CraftDetailMapper.selectByCraftLayerIdAndCraft">
+        </collection>
+        <collection property="zhongya" column="{craftLayerId=id,craft=zhongyaType}"
+                    ofType="com.linghang.model.CraftDetailModel"
+                    select="com.linghang.mapper.CraftDetailMapper.selectByCraftLayerIdAndCraft">
+        </collection>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, [index], materialType, layer, version, orgId
+    </sql>
+
+    <select id="selectById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select * 
+        from tbl_craft_layer
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <delete id="deleteById" parameterType="java.lang.Long">
+        delete from tbl_craft_layer
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+
+    <delete id="deleteByIds" parameterType="java.util.List">
+        delete from tbl_craft_layer
+        where id in
+        <foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
+            #{item}
+        </foreach>
+    </delete>
+
+    <insert id="insert" keyProperty="id" parameterType="com.linghang.model.CraftLayerModel">
+        insert into tbl_craft_layer (
+        <include refid="Base_Column_List"/>
+        )
+        values (#{id,jdbcType=BIGINT},
+        #{index,jdbcType=INTEGER},
+        #{materialType,jdbcType=INTEGER},
+        #{layer,jdbcType=INTEGER},
+        #{version,jdbcType=VARCHAR},
+        #{orgId,jdbcType=BIGINT}
+        )
+    </insert>
+
+    <insert id="insertList" keyProperty="id" parameterType="java.util.List">
+        <foreach collection="list" index="index" item="item" separator=";">
+            insert into tbl_craft_layer (
+            <include refid="Base_Column_List"/>
+            )
+            values (#{item.id,jdbcType=BIGINT},
+            #{item.index,jdbcType=INTEGER},
+            #{item.materialType,jdbcType=INTEGER},
+            #{item.layer,jdbcType=INTEGER},
+            #{item.version,jdbcType=VARCHAR},
+            #{item.orgId,jdbcType=BIGINT}
+            )
+        </foreach>
+    </insert>
+
+    <select id="selectByModel" parameterType="com.linghang.model.CraftLayerModel" resultMap="BaseResultMap">
+        select * from tbl_craft_layer where 1 = 1
+        <if test="index != null">
+            and [index] = #{index,jdbcType=INTEGER}
+        </if>
+        <if test="materialType != null">
+            and materialType = #{materialType,jdbcType=INTEGER}
+        </if>
+        <if test="layer != null">
+            and layer = #{layer,jdbcType=INTEGER}
+        </if>
+        <if test="version != null">
+            and version = #{version,jdbcType=VARCHAR}
+        </if>
+        <if test="orgId != null">
+            and orgId = #{orgId,jdbcType=BIGINT}
+        </if>
+    </select>
+
+    <select id="selectByOptions" resultMap="limitResultMap">
+        select *, 0 as tanpuType,1 as chuyaType,2 as fuyaType,3 as zhongyaType
+        from tbl_craft_layer where orgId = #{orgId,jdbcType=BIGINT}
+        <if test="options.filters != null">
+            <foreach collection="options.filters" item="item">
+                and ${item.field}
+                <if test="item.operator == 'eq'">
+                    = #{item.value}
+                </if>
+                <if test="item.operator == 'contains'">
+                    like '%'+#{item.value}+'%'
+                </if>
+            </foreach>
+        </if>
+        order by
+        <if test="options.sort != null">
+            <foreach collection="options.sort" item="item">
+                <if test="item.field == 'index'">
+                    [${item.field}]
+                </if>
+                <if test="item.field != 'index'">
+                    ${item.field}
+                </if>
+                ${item.dir}
+            </foreach>
+        </if>
+        <if test="options.sort == null">
+            [index],materialType
+        </if>
+    </select>
+
+    <insert id="insertSelective" keyProperty="id" parameterType="com.linghang.model.CraftLayerModel">
+        insert into tbl_craft_layer
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null and id != ''">
+                id,
+            </if>
+            <if test="index != null and index != ''">
+                [index],
+            </if>
+            <if test="materialType != null and materialType != ''">
+                materialType,
+            </if>
+            <if test="layer != null and layer != ''">
+                layer,
+            </if>
+            <if test="version != null and version != ''">
+                version,
+            </if>
+            <if test="orgId != null and orgId != ''">
+                orgId,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null and id != ''">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="index != null and index != ''">
+                #{index,jdbcType=INTEGER},
+            </if>
+            <if test="materialType != null and materialType != ''">
+                #{materialType,jdbcType=INTEGER},
+            </if>
+            <if test="layer != null and layer != ''">
+                #{layer,jdbcType=INTEGER},
+            </if>
+            <if test="version != null and version != ''">
+                #{version,jdbcType=VARCHAR},
+            </if>
+            <if test="orgId != null and orgId != ''">
+                #{orgId,jdbcType=BIGINT},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByIdSelective" parameterType="com.linghang.model.CraftLayerModel">
+        update tbl_craft_layer
+        <set>
+            <if test="index != null">
+                [index] = #{index,jdbcType=INTEGER},
+            </if>
+            <if test="materialType != null">
+                materialType = #{materialType,jdbcType=INTEGER},
+            </if>
+            <if test="layer != null">
+                layer = #{layer,jdbcType=INTEGER},
+            </if>
+            <if test="version != null">
+                version = #{version,jdbcType=VARCHAR},
+            </if>
+            <if test="orgId != null">
+                orgId = #{orgId,jdbcType=BIGINT},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <update id="updateById" parameterType="com.linghang.model.CraftLayerModel">
+        update tbl_craft_layer
+        set [index] = #{index,jdbcType=INTEGER},
+            materialType = #{materialType,jdbcType=INTEGER},
+            layer = #{layer,jdbcType=INTEGER},
+            version = #{version,jdbcType=VARCHAR},
+            orgId = #{orgId,jdbcType=BIGINT}
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+</mapper>

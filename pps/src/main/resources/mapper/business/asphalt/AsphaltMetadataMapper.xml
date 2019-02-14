@@ -1,0 +1,973 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.linghang.mapper.business.asphalt.AsphaltMetadataMapper">
+    <resultMap id="BaseResultMap" type="com.linghang.model.business.asphalt.AsphaltMetadataModel">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="time" jdbcType="TIMESTAMP" property="time"/>
+        <result column="startTime" jdbcType="TIMESTAMP" property="startTime"/>
+        <result column="endTime" jdbcType="TIMESTAMP" property="endTime"/>
+        <result column="mixingTime" jdbcType="BIGINT" property="mixingTime"/>
+        <result column="asphaltId" jdbcType="BIGINT" property="asphaltId"/>
+        <result column="formulaId" jdbcType="BIGINT" property="formulaId"/>
+        <result column="formulaCode" jdbcType="VARCHAR" property="formulaCode"/>
+        <result column="formulaName" jdbcType="VARCHAR" property="formulaName"/>
+        <result column="oilStoneProportion" jdbcType="DECIMAL" property="oilStoneProportion"/>
+        <result column="asphalt" jdbcType="DECIMAL" property="asphalt"/>
+        <result column="temperature" jdbcType="DECIMAL" property="temperature"/>
+        <result column="weight" jdbcType="DECIMAL" property="weight"/>
+        <result column="g1" jdbcType="DECIMAL" property="g1"/>
+        <result column="g2" jdbcType="DECIMAL" property="g2"/>
+        <result column="g3" jdbcType="DECIMAL" property="g3"/>
+        <result column="g4" jdbcType="DECIMAL" property="g4"/>
+        <result column="g5" jdbcType="DECIMAL" property="g5"/>
+        <result column="g6" jdbcType="DECIMAL" property="g6"/>
+        <result column="g7" jdbcType="DECIMAL" property="g7"/>
+        <result column="g8" jdbcType="DECIMAL" property="g8"/>
+        <result column="g9" jdbcType="DECIMAL" property="g9"/>
+        <result column="g10" jdbcType="DECIMAL" property="g10"/>
+        <result column="f1" jdbcType="DECIMAL" property="f1"/>
+        <result column="f2" jdbcType="DECIMAL" property="f2"/>
+        <result column="f3" jdbcType="DECIMAL" property="f3"/>
+        <result column="f4" jdbcType="DECIMAL" property="f4"/>
+        <result column="f5" jdbcType="DECIMAL" property="f5"/>
+        <result column="warnLevel" jdbcType="INTEGER" property="warnLevel"/>
+        <result column="asphaltTemperature" jdbcType="DECIMAL" property="asphaltTemperature"/>
+        <result column="aggregateTemperature" jdbcType="DECIMAL" property="aggregateTemperature"/>
+        <result column="createTime" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="batchCode" jdbcType="VARCHAR" property="batchCode"/>
+        <result column="tempLevel" jdbcType="INTEGER" property="tempLevel"/>
+        <result column="gradationLevel" jdbcType="INTEGER" property="gradationLevel"/>
+        <result column="oilStoneLevel" jdbcType="INTEGER" property="oilStoneLevel"/>
+        <result column="aggregateWeight" jdbcType="DECIMAL" property="aggregateWeight"/>
+        <result column="isPass" jdbcType="INTEGER" property="isPass"/>
+        <result column="asphaltTempLevel" jdbcType="INTEGER" property="asphaltTempLevel"/>
+        <result column="aggTempLevel" jdbcType="INTEGER" property="aggTempLevel"/>
+        <result column="mixingTemperature" jdbcType="DECIMAL" property="mixingTemperature"/>
+        <result column="mixingTempLevel" jdbcType="INTEGER" property="mixingTempLevel"/>
+
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, time, mixingTime, startTime, endTime, asphaltId, formulaId, formulaCode, oilStoneProportion, asphalt,
+        temperature, weight, g1, g2, g3, g4, g5, g6, g7, g8, g9, g10, f1, f2, f3, f4, f5, 
+        warnLevel, asphaltTemperature, aggregateTemperature, createTime, batchCode, tempLevel, 
+        gradationLevel, oilStoneLevel, aggregateWeight,isPass,asphaltTempLevel,aggTempLevel,mixingTemperature,
+        mixingTempLevel
+    </sql>
+
+    <select id="selectById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select * 
+        from imp_asphalt_metadata
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <delete id="deleteById" parameterType="java.lang.Long">
+        delete from imp_asphalt_metadata
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+
+    <delete id="deleteByIds" parameterType="java.util.List">
+        delete from imp_asphalt_metadata
+        where id in
+        <foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
+            #{item}
+        </foreach>
+    </delete>
+
+    <insert id="insert" keyProperty="id" parameterType="com.linghang.model.business.asphalt.AsphaltMetadataModel">
+        insert into imp_asphalt_metadata (
+        <include refid="Base_Column_List"/>
+        )
+        values (#{id,jdbcType=BIGINT},
+        #{time,jdbcType=TIMESTAMP},
+        #{mixingTime,jdbcType=BIGINT},
+        #{startTime,jdbcType=TIMESTAMP},
+        #{endTime,jdbcType=TIMESTAMP},
+        #{asphaltId,jdbcType=BIGINT},
+        #{formulaId,jdbcType=BIGINT},
+        #{formulaCode,jdbcType=VARCHAR},
+        #{oilStoneProportion,jdbcType=DECIMAL},
+        #{asphalt,jdbcType=DECIMAL},
+        #{temperature,jdbcType=DECIMAL},
+        #{weight,jdbcType=DECIMAL},
+        #{g1,jdbcType=DECIMAL},
+        #{g2,jdbcType=DECIMAL},
+        #{g3,jdbcType=DECIMAL},
+        #{g4,jdbcType=DECIMAL},
+        #{g5,jdbcType=DECIMAL},
+        #{g6,jdbcType=DECIMAL},
+        #{g7,jdbcType=DECIMAL},
+        #{g8,jdbcType=DECIMAL},
+        #{g9,jdbcType=DECIMAL},
+        #{g10,jdbcType=DECIMAL},
+        #{f1,jdbcType=DECIMAL},
+        #{f2,jdbcType=DECIMAL},
+        #{f3,jdbcType=DECIMAL},
+        #{f4,jdbcType=DECIMAL},
+        #{f5,jdbcType=DECIMAL},
+        #{warnLevel,jdbcType=INTEGER},
+        #{asphaltTemperature,jdbcType=DECIMAL},
+        #{aggregateTemperature,jdbcType=DECIMAL},
+        #{createTime,jdbcType=TIMESTAMP},
+        #{batchCode,jdbcType=VARCHAR},
+        #{tempLevel,jdbcType=INTEGER},
+        #{gradationLevel,jdbcType=INTEGER},
+        #{oilStoneLevel,jdbcType=INTEGER},
+        #{aggregateWeight,jdbcType=DECIMAL},
+        #{isPass,jdbcType=INTEGER},
+        #{asphaltTempLevel,jdbcType=INTEGER},
+        #{aggTempLevel,jdbcType=INTEGER},
+        #{mixingTemperature,jdbcType=DECIMAL},
+        #{mixingTempLevel,jdbcType=INTEGER}
+        )
+    </insert>
+
+    <insert id="insertList" keyProperty="id" parameterType="java.util.List">
+        <foreach collection="list" index="index" item="item" separator=";">
+            insert into imp_asphalt_metadata (
+            <include refid="Base_Column_List"/>
+            )
+            values (#{item.id,jdbcType=BIGINT},
+            #{item.time,jdbcType=TIMESTAMP},
+            #{item.mixingTime,jdbcType=BIGINT},
+            #{item.startTime,jdbcType=TIMESTAMP},
+            #{item.endTime,jdbcType=TIMESTAMP},
+            #{item.asphaltId,jdbcType=BIGINT},
+            #{item.formulaId,jdbcType=BIGINT},
+            #{item.formulaCode,jdbcType=VARCHAR},
+            #{item.oilStoneProportion,jdbcType=DECIMAL},
+            #{item.asphalt,jdbcType=DECIMAL},
+            #{item.temperature,jdbcType=DECIMAL},
+            #{item.weight,jdbcType=DECIMAL},
+            #{item.g1,jdbcType=DECIMAL},
+            #{item.g2,jdbcType=DECIMAL},
+            #{item.g3,jdbcType=DECIMAL},
+            #{item.g4,jdbcType=DECIMAL},
+            #{item.g5,jdbcType=DECIMAL},
+            #{item.g6,jdbcType=DECIMAL},
+            #{item.g7,jdbcType=DECIMAL},
+            #{item.g8,jdbcType=DECIMAL},
+            #{item.g9,jdbcType=DECIMAL},
+            #{item.g10,jdbcType=DECIMAL},
+            #{item.f1,jdbcType=DECIMAL},
+            #{item.f2,jdbcType=DECIMAL},
+            #{item.f3,jdbcType=DECIMAL},
+            #{item.f4,jdbcType=DECIMAL},
+            #{item.f5,jdbcType=DECIMAL},
+            #{item.warnLevel,jdbcType=INTEGER},
+            #{item.asphaltTemperature,jdbcType=DECIMAL},
+            #{item.aggregateTemperature,jdbcType=DECIMAL},
+            #{item.createTime,jdbcType=TIMESTAMP},
+            #{item.batchCode,jdbcType=VARCHAR},
+            #{item.tempLevel,jdbcType=INTEGER},
+            #{item.gradationLevel,jdbcType=INTEGER},
+            #{item.oilStoneLevel,jdbcType=INTEGER},
+            #{item.aggregateWeight,jdbcType=DECIMAL},
+            #{item.isPass,jdbcType=INTEGER},
+            #{item.asphaltTempLevel,jdbcType=INTEGER},
+            #{item.aggTempLevel,jdbcType=INTEGER},
+            #{item.mixingTemperature,jdbcType=DECIMAL},
+            #{item.mixingTempLevel,jdbcType=INTEGER}
+            )
+        </foreach>
+    </insert>
+
+    <select id="selectByModel" parameterType="com.linghang.model.business.asphalt.AsphaltMetadataModel"
+            resultMap="BaseResultMap">
+        select * from imp_asphalt_metadata where 1 = 1
+        <if test="time != null">
+            and time = #{time,jdbcType=TIMESTAMP}
+        </if>
+        <if test="startTime != null">
+            and startTime = #{startTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="endTime != null">
+            and endTime = #{endTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="mixingTime != null">
+            and mixingTime = #{mixingTime,jdbcType=BIGINT}
+        </if>
+        <if test="asphaltId != null">
+            and asphaltId = #{asphaltId,jdbcType=BIGINT}
+        </if>
+        <if test="formulaId != null">
+            and formulaId = #{formulaId,jdbcType=BIGINT}
+        </if>
+        <if test="formulaCode != null">
+            and formulaCode = #{formulaCode,jdbcType=VARCHAR}
+        </if>
+        <if test="oilStoneProportion != null">
+            and oilStoneProportion = #{oilStoneProportion,jdbcType=DECIMAL}
+        </if>
+        <if test="asphalt != null">
+            and asphalt = #{asphalt,jdbcType=DECIMAL}
+        </if>
+        <if test="temperature != null">
+            and temperature = #{temperature,jdbcType=DECIMAL}
+        </if>
+        <if test="weight != null">
+            and weight = #{weight,jdbcType=DECIMAL}
+        </if>
+        <if test="g1 != null">
+            and g1 = #{g1,jdbcType=DECIMAL}
+        </if>
+        <if test="g2 != null">
+            and g2 = #{g2,jdbcType=DECIMAL}
+        </if>
+        <if test="g3 != null">
+            and g3 = #{g3,jdbcType=DECIMAL}
+        </if>
+        <if test="g4 != null">
+            and g4 = #{g4,jdbcType=DECIMAL}
+        </if>
+        <if test="g5 != null">
+            and g5 = #{g5,jdbcType=DECIMAL}
+        </if>
+        <if test="g6 != null">
+            and g6 = #{g6,jdbcType=DECIMAL}
+        </if>
+        <if test="g7 != null">
+            and g7 = #{g7,jdbcType=DECIMAL}
+        </if>
+        <if test="g8 != null">
+            and g8 = #{g8,jdbcType=DECIMAL}
+        </if>
+        <if test="g9 != null">
+            and g9 = #{g9,jdbcType=DECIMAL}
+        </if>
+        <if test="g10 != null">
+            and g10 = #{g10,jdbcType=DECIMAL}
+        </if>
+        <if test="f1 != null">
+            and f1 = #{f1,jdbcType=DECIMAL}
+        </if>
+        <if test="f2 != null">
+            and f2 = #{f2,jdbcType=DECIMAL}
+        </if>
+        <if test="f3 != null">
+            and f3 = #{f3,jdbcType=DECIMAL}
+        </if>
+        <if test="f4 != null">
+            and f4 = #{f4,jdbcType=DECIMAL}
+        </if>
+        <if test="f5 != null">
+            and f5 = #{f5,jdbcType=DECIMAL}
+        </if>
+        <if test="warnLevel != null">
+            and warnLevel = #{warnLevel,jdbcType=INTEGER}
+        </if>
+        <if test="asphaltTemperature != null">
+            and asphaltTemperature = #{asphaltTemperature,jdbcType=DECIMAL}
+        </if>
+        <if test="aggregateTemperature != null">
+            and aggregateTemperature = #{aggregateTemperature,jdbcType=DECIMAL}
+        </if>
+        <if test="createTime != null">
+            and createTime = #{createTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="batchCode != null">
+            and batchCode = #{batchCode,jdbcType=VARCHAR}
+        </if>
+        <if test="tempLevel != null">
+            and tempLevel = #{tempLevel,jdbcType=INTEGER}
+        </if>
+        <if test="gradationLevel != null">
+            and gradationLevel = #{gradationLevel,jdbcType=INTEGER}
+        </if>
+        <if test="oilStoneLevel != null">
+            and oilStoneLevel = #{oilStoneLevel,jdbcType=INTEGER}
+        </if>
+        <if test="aggregateWeight != null">
+            and aggregateWeight = #{aggregateWeight,jdbcType=DECIMAL}
+        </if>
+        <if test="isPass != null">
+            and isPass = #{isPass,jdbcType=INTEGER}
+        </if>
+        <if test="asphaltTempLevel != null">
+            and asphaltTempLevel = #{asphaltTempLevel,jdbcType=INTEGER}
+        </if>
+        <if test="aggTempLevel != null">
+            and aggTempLevel = #{aggTempLevel,jdbcType=INTEGER}
+        </if>
+
+    </select>
+
+    <select id="selectByOptions" resultMap="BaseResultMap">
+        select * from (
+        select m.*,(select name from imp_asphalt_formula f where m.formulaId=f.id) formulaName
+        from imp_asphalt_metadata m
+        where asphaltId = #{options.asphaltId,jdbcType=BIGINT}
+        ) as t where 1=1
+        <if test="options.filters != null">
+            <foreach collection="options.filters" item="item">
+                and ${item.field}
+                <if test="item.operator == 'eq'">
+                    <if test="item.value == '无配方'">
+                        is null
+                    </if>
+                    <if test="item.value != '无配方'">
+                        = #{item.value}
+                    </if>
+                </if>
+                <if test="item.operator == 'contains'">
+                    like '%'+#{item.value}+'%'
+                </if>
+            </foreach>
+        </if>
+        <if test="options.searchTime !=null ">
+            and CONVERT(varchar(100), time, 23) = #{options.searchTime,jdbcType=VARCHAR}
+        </if>
+        order by
+        <if test="options.sort != null">
+            <foreach collection="options.sort" item="item">
+                ${item.field} ${item.dir}
+            </foreach>
+        </if>
+        <if test="options.sort == null">
+            time desc
+        </if>
+    </select>
+
+    <insert id="insertSelective" keyProperty="id"
+            parameterType="com.linghang.model.business.asphalt.AsphaltMetadataModel">
+        insert into imp_asphalt_metadata
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null and id != ''">
+                id,
+            </if>
+            <if test="time != null and time != ''">
+                time,
+            </if>
+            <if test="startTime != null and startTime != ''">
+                startTime,
+            </if>
+            <if test="endTime != null and endTime != ''">
+                endTime,
+            </if>
+            <if test="mixingTime != null and mixingTime != ''">
+                mixingTime,
+            </if>
+            <if test="asphaltId != null and asphaltId != ''">
+                asphaltId,
+            </if>
+            <if test="formulaId != null and formulaId != ''">
+                formulaId,
+            </if>
+            <if test="formulaCode != null and formulaCode != ''">
+                formulaCode,
+            </if>
+            <if test="oilStoneProportion != null and oilStoneProportion != ''">
+                oilStoneProportion,
+            </if>
+            <if test="asphalt != null and asphalt != ''">
+                asphalt,
+            </if>
+            <if test="temperature != null and temperature != ''">
+                temperature,
+            </if>
+            <if test="weight != null and weight != ''">
+                weight,
+            </if>
+            <if test="g1 != null and g1 != ''">
+                g1,
+            </if>
+            <if test="g2 != null and g2 != ''">
+                g2,
+            </if>
+            <if test="g3 != null and g3 != ''">
+                g3,
+            </if>
+            <if test="g4 != null and g4 != ''">
+                g4,
+            </if>
+            <if test="g5 != null and g5 != ''">
+                g5,
+            </if>
+            <if test="g6 != null and g6 != ''">
+                g6,
+            </if>
+            <if test="g7 != null and g7 != ''">
+                g7,
+            </if>
+            <if test="g8 != null and g8 != ''">
+                g8,
+            </if>
+            <if test="g9 != null and g9 != ''">
+                g9,
+            </if>
+            <if test="g10 != null and g10 != ''">
+                g10,
+            </if>
+            <if test="f1 != null and f1 != ''">
+                f1,
+            </if>
+            <if test="f2 != null and f2 != ''">
+                f2,
+            </if>
+            <if test="f3 != null and f3 != ''">
+                f3,
+            </if>
+            <if test="f4 != null and f4 != ''">
+                f4,
+            </if>
+            <if test="f5 != null and f5 != ''">
+                f5,
+            </if>
+            <if test="warnLevel != null and warnLevel != ''">
+                warnLevel,
+            </if>
+            <if test="asphaltTemperature != null and asphaltTemperature != ''">
+                asphaltTemperature,
+            </if>
+            <if test="aggregateTemperature != null and aggregateTemperature != ''">
+                aggregateTemperature,
+            </if>
+            <if test="createTime != null and createTime != ''">
+                createTime,
+            </if>
+            <if test="batchCode != null and batchCode != ''">
+                batchCode,
+            </if>
+            <if test="tempLevel != null and tempLevel != ''">
+                tempLevel,
+            </if>
+            <if test="gradationLevel != null and gradationLevel != ''">
+                gradationLevel,
+            </if>
+            <if test="oilStoneLevel != null and oilStoneLevel != ''">
+                oilStoneLevel,
+            </if>
+            <if test="aggregateWeight != null and aggregateWeight != ''">
+                aggregateWeight,
+            </if>
+            <if test="isPass != null and isPass != ''">
+                isPass,
+            </if>
+            <if test="aggTempLevel != null and aggTempLevel != ''">
+                aggTempLevel,
+            </if>
+            <if test="asphaltTempLevel != null and asphaltTempLevel != ''">
+                asphaltTempLevel,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null and id != ''">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="time != null and time != ''">
+                #{time,jdbcType=TIMESTAMP},
+            </if>
+            <if test="startTime != null and startTime != ''">
+                #{startTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="endTime != null and endTime != ''">
+                #{endTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="mixingTime != null and mixingTime != ''">
+                #{mixingTime,jdbcType=BIGINT},
+            </if>
+            <if test="asphaltId != null and asphaltId != ''">
+                #{asphaltId,jdbcType=BIGINT},
+            </if>
+            <if test="formulaId != null and formulaId != ''">
+                #{formulaId,jdbcType=BIGINT},
+            </if>
+            <if test="formulaCode != null and formulaCode != ''">
+                #{formulaCode,jdbcType=VARCHAR},
+            </if>
+            <if test="oilStoneProportion != null and oilStoneProportion != ''">
+                #{oilStoneProportion,jdbcType=DECIMAL},
+            </if>
+            <if test="asphalt != null and asphalt != ''">
+                #{asphalt,jdbcType=DECIMAL},
+            </if>
+            <if test="temperature != null and temperature != ''">
+                #{temperature,jdbcType=DECIMAL},
+            </if>
+            <if test="weight != null and weight != ''">
+                #{weight,jdbcType=DECIMAL},
+            </if>
+            <if test="g1 != null and g1 != ''">
+                #{g1,jdbcType=DECIMAL},
+            </if>
+            <if test="g2 != null and g2 != ''">
+                #{g2,jdbcType=DECIMAL},
+            </if>
+            <if test="g3 != null and g3 != ''">
+                #{g3,jdbcType=DECIMAL},
+            </if>
+            <if test="g4 != null and g4 != ''">
+                #{g4,jdbcType=DECIMAL},
+            </if>
+            <if test="g5 != null and g5 != ''">
+                #{g5,jdbcType=DECIMAL},
+            </if>
+            <if test="g6 != null and g6 != ''">
+                #{g6,jdbcType=DECIMAL},
+            </if>
+            <if test="g7 != null and g7 != ''">
+                #{g7,jdbcType=DECIMAL},
+            </if>
+            <if test="g8 != null and g8 != ''">
+                #{g8,jdbcType=DECIMAL},
+            </if>
+            <if test="g9 != null and g9 != ''">
+                #{g9,jdbcType=DECIMAL},
+            </if>
+            <if test="g10 != null and g10 != ''">
+                #{g10,jdbcType=DECIMAL},
+            </if>
+            <if test="f1 != null and f1 != ''">
+                #{f1,jdbcType=DECIMAL},
+            </if>
+            <if test="f2 != null and f2 != ''">
+                #{f2,jdbcType=DECIMAL},
+            </if>
+            <if test="f3 != null and f3 != ''">
+                #{f3,jdbcType=DECIMAL},
+            </if>
+            <if test="f4 != null and f4 != ''">
+                #{f4,jdbcType=DECIMAL},
+            </if>
+            <if test="f5 != null and f5 != ''">
+                #{f5,jdbcType=DECIMAL},
+            </if>
+            <if test="warnLevel != null and warnLevel != ''">
+                #{warnLevel,jdbcType=INTEGER},
+            </if>
+            <if test="asphaltTemperature != null and asphaltTemperature != ''">
+                #{asphaltTemperature,jdbcType=DECIMAL},
+            </if>
+            <if test="aggregateTemperature != null and aggregateTemperature != ''">
+                #{aggregateTemperature,jdbcType=DECIMAL},
+            </if>
+            <if test="createTime != null and createTime != ''">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="batchCode != null and batchCode != ''">
+                #{batchCode,jdbcType=VARCHAR},
+            </if>
+            <if test="tempLevel != null and tempLevel != ''">
+                #{tempLevel,jdbcType=INTEGER},
+            </if>
+            <if test="gradationLevel != null and gradationLevel != ''">
+                #{gradationLevel,jdbcType=INTEGER},
+            </if>
+            <if test="oilStoneLevel != null and oilStoneLevel != ''">
+                #{oilStoneLevel,jdbcType=INTEGER},
+            </if>
+            <if test="aggregateWeight != null and aggregateWeight != ''">
+                #{aggregateWeight,jdbcType=DECIMAL},
+            </if>
+            <if test="isPass != null and isPass != ''">
+                #{isPass,jdbcType=INTEGER},
+            </if>
+            <if test="asphaltTempLevel != null and asphaltTempLevel != ''">
+                #{asphaltTempLevel,jdbcType=INTEGER},
+            </if>
+            <if test="aggTempLevel != null and aggTempLevel != ''">
+                #{aggTempLevel,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByIdSelective" parameterType="com.linghang.model.business.asphalt.AsphaltMetadataModel">
+        update imp_asphalt_metadata
+        <set>
+            <if test="time != null">
+                time = #{time,jdbcType=TIMESTAMP},
+            </if>
+            <if test="startTime != null">
+                startTime = #{startTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="endTime != null">
+                endTime = #{endTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="mixingTime != null">
+                mixingTime = #{mixingTime,jdbcType=BIGINT},
+            </if>
+            <if test="asphaltId != null">
+                asphaltId = #{asphaltId,jdbcType=BIGINT},
+            </if>
+            <if test="formulaId != null">
+                formulaId = #{formulaId,jdbcType=BIGINT},
+            </if>
+            <if test="formulaCode != null">
+                formulaCode = #{formulaCode,jdbcType=VARCHAR},
+            </if>
+            <if test="oilStoneProportion != null">
+                oilStoneProportion = #{oilStoneProportion,jdbcType=DECIMAL},
+            </if>
+            <if test="asphalt != null">
+                asphalt = #{asphalt,jdbcType=DECIMAL},
+            </if>
+            <if test="temperature != null">
+                temperature = #{temperature,jdbcType=DECIMAL},
+            </if>
+            <if test="weight != null">
+                weight = #{weight,jdbcType=DECIMAL},
+            </if>
+            <if test="g1 != null">
+                g1 = #{g1,jdbcType=DECIMAL},
+            </if>
+            <if test="g2 != null">
+                g2 = #{g2,jdbcType=DECIMAL},
+            </if>
+            <if test="g3 != null">
+                g3 = #{g3,jdbcType=DECIMAL},
+            </if>
+            <if test="g4 != null">
+                g4 = #{g4,jdbcType=DECIMAL},
+            </if>
+            <if test="g5 != null">
+                g5 = #{g5,jdbcType=DECIMAL},
+            </if>
+            <if test="g6 != null">
+                g6 = #{g6,jdbcType=DECIMAL},
+            </if>
+            <if test="g7 != null">
+                g7 = #{g7,jdbcType=DECIMAL},
+            </if>
+            <if test="g8 != null">
+                g8 = #{g8,jdbcType=DECIMAL},
+            </if>
+            <if test="g9 != null">
+                g9 = #{g9,jdbcType=DECIMAL},
+            </if>
+            <if test="g10 != null">
+                g10 = #{g10,jdbcType=DECIMAL},
+            </if>
+            <if test="f1 != null">
+                f1 = #{f1,jdbcType=DECIMAL},
+            </if>
+            <if test="f2 != null">
+                f2 = #{f2,jdbcType=DECIMAL},
+            </if>
+            <if test="f3 != null">
+                f3 = #{f3,jdbcType=DECIMAL},
+            </if>
+            <if test="f4 != null">
+                f4 = #{f4,jdbcType=DECIMAL},
+            </if>
+            <if test="f5 != null">
+                f5 = #{f5,jdbcType=DECIMAL},
+            </if>
+            <if test="warnLevel != null">
+                warnLevel = #{warnLevel,jdbcType=INTEGER},
+            </if>
+            <if test="asphaltTemperature != null">
+                asphaltTemperature = #{asphaltTemperature,jdbcType=DECIMAL},
+            </if>
+            <if test="aggregateTemperature != null">
+                aggregateTemperature = #{aggregateTemperature,jdbcType=DECIMAL},
+            </if>
+            <if test="createTime != null">
+                createTime = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="batchCode != null">
+                batchCode = #{batchCode,jdbcType=VARCHAR},
+            </if>
+            <if test="tempLevel != null">
+                tempLevel = #{tempLevel,jdbcType=INTEGER},
+            </if>
+            <if test="gradationLevel != null">
+                gradationLevel = #{gradationLevel,jdbcType=INTEGER},
+            </if>
+            <if test="oilStoneLevel != null">
+                oilStoneLevel = #{oilStoneLevel,jdbcType=INTEGER},
+            </if>
+            <if test="aggregateWeight != null">
+                aggregateWeight = #{aggregateWeight,jdbcType=DECIMAL},
+            </if>
+            <if test="isPass != null">
+                isPass = #{isPass,jdbcType=INTEGER},
+            </if>
+            <if test="aggTempLevel != null">
+                aggTempLevel = #{aggTempLevel,jdbcType=INTEGER},
+            </if>
+            <if test="asphaltTempLevel != null">
+                asphaltTempLevel = #{asphaltTempLevel,jdbcType=INTEGER},
+            </if>
+            <if test="mixingTemperature !=null">
+                mixingTemperature= #{mixingTemperature,jdbcType=DECIMAL},
+            </if>
+            <if test="mixingTempLevel!=null">
+                mixingTempLevel = #{mixingTempLevel,jdbcType=INTEGER},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <update id="updateById" parameterType="com.linghang.model.business.asphalt.AsphaltMetadataModel">
+        update imp_asphalt_metadata
+        set time = #{time,jdbcType=TIMESTAMP},
+            startTime = #{startTime,jdbcType=TIMESTAMP},
+            endTime = #{endTime,jdbcType=TIMESTAMP},
+            mixingTime = #{mixingTime,jdbcType=BIGINT},
+            asphaltId = #{asphaltId,jdbcType=BIGINT},
+            formulaId = #{formulaId,jdbcType=BIGINT},
+            formulaCode = #{formulaCode,jdbcType=VARCHAR},
+            oilStoneProportion = #{oilStoneProportion,jdbcType=DECIMAL},
+            asphalt = #{asphalt,jdbcType=DECIMAL},
+            temperature = #{temperature,jdbcType=DECIMAL},
+            weight = #{weight,jdbcType=DECIMAL},
+            g1 = #{g1,jdbcType=DECIMAL},
+            g2 = #{g2,jdbcType=DECIMAL},
+            g3 = #{g3,jdbcType=DECIMAL},
+            g4 = #{g4,jdbcType=DECIMAL},
+            g5 = #{g5,jdbcType=DECIMAL},
+            g6 = #{g6,jdbcType=DECIMAL},
+            g7 = #{g7,jdbcType=DECIMAL},
+            g8 = #{g8,jdbcType=DECIMAL},
+            g9 = #{g9,jdbcType=DECIMAL},
+            g10 = #{g10,jdbcType=DECIMAL},
+            f1 = #{f1,jdbcType=DECIMAL},
+            f2 = #{f2,jdbcType=DECIMAL},
+            f3 = #{f3,jdbcType=DECIMAL},
+            f4 = #{f4,jdbcType=DECIMAL},
+            f5 = #{f5,jdbcType=DECIMAL},
+            warnLevel = #{warnLevel,jdbcType=INTEGER},
+            asphaltTemperature = #{asphaltTemperature,jdbcType=DECIMAL},
+            aggregateTemperature = #{aggregateTemperature,jdbcType=DECIMAL},
+            createTime = #{createTime,jdbcType=TIMESTAMP},
+            batchCode = #{batchCode,jdbcType=VARCHAR},
+            tempLevel = #{tempLevel,jdbcType=INTEGER},
+            gradationLevel = #{gradationLevel,jdbcType=INTEGER},
+            oilStoneLevel = #{oilStoneLevel,jdbcType=INTEGER},
+            aggregateWeight = #{aggregateWeight,jdbcType=DECIMAL},
+            isPass = #{isPass,jdbcType=DECIMAL},
+            aggTempLevel = #{aggTempLevel,jdbcType=DECIMAL},
+            asphaltTempLevel = #{asphaltTempLevel,jdbcType=DECIMAL},
+            mixingTemperature= #{mixingTemperature,jdbcType=DECIMAL},
+            mixingTempLevel = #{mixingTempLevel,jdbcType=INTEGER}
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <sql id="filterReport">
+        <if test="type == 1">
+            and DATEDIFF(d,time,#{time,jdbcType=VARCHAR})=0
+        </if>
+        <if test="type == 2">
+            and DATEDIFF(year,time , #{year,jdbcType=VARCHAR}) = 0
+            and datepart(week,time) = #{time,jdbcType=VARCHAR}
+        </if>
+        <if test="type == 3">
+            and Convert(varchar,time,120) LIKE #{time,jdbcType=VARCHAR}+'%'
+        </if>
+        <if test="type == 4">
+            and time BETWEEN #{startTime,jdbcType=VARCHAR} and #{endTime,jdbcType=VARCHAR}
+        </if>
+    </sql>
+
+    <select id="dailyStatistical" resultType="com.linghang.model.business.asphalt.AsphaltStatisticsReportModel">
+        select temp.* from (
+        select
+        AF.asphaltId AS asphaltId,
+        (select name from imp_asphalt_formula where AF.formulaId = id) AS formulaName,
+        AF.formulaId AS formulaId,
+        count(id) AS productionBatch,
+        sum(weight) AS productionWeight,
+        avg(oilStoneProportion) AS averageOilStone,
+        (select top 1 formulaValue from imp_asphalt_warning_config where AF.formulaId = formulaId and type = 2 and
+        isVisible = 0) AS designOilStone,
+        avg(asphaltTemperature) AS averageTemperature,
+        (select top 1 formulaValue from imp_asphalt_warning_config where AF.formulaId = formulaId and type = 4 and
+        isVisible = 0) AS designTemperature,
+        (select sum(weight) from imp_asphalt_metadata where AF.formulaId = formulaId and isPass = 1
+        <include refid="filterReport"/>
+        ) AS unqualifiedWeight,
+        (select count(id) from imp_asphalt_metadata_result where AF.formulaId = formulaId and isPass = 1
+        <include refid="filterReport"/>
+        ) AS unqualifiedBatch,
+        (select count(id) from imp_asphalt_metadata_result where AF.formulaId = formulaId and oilStoneLevel>0
+        <include refid="filterReport"/>
+        ) AS oilStoneExceed,
+        (select count(id) from imp_asphalt_metadata_result where AF.formulaId = formulaId and gradationLevel > 0
+        <include refid="filterReport"/>
+        ) AS gradationExceed,
+        (select count(id) from imp_asphalt_metadata_result where AF.formulaId = formulaId and asphaltTempLevel > 0
+        <include refid="filterReport"/>
+        ) AS temperatureExceed
+        from imp_asphalt_metadata_result AF where AF.asphaltId = #{asphaltId,jdbcType=BIGINT} and AF.formulaId is not
+        null
+        <include refid="filterReport"/>
+        GROUP BY AF.asphaltId , AF.formulaId
+        UNION
+        select
+        AF.asphaltId AS asphaltId,
+        '合计' AS formulaName,
+        null AS formulaId,
+        count(id) AS productionBatch,
+        sum(weight) AS productionWeight,
+        null AS averageOilStone,
+        null AS designOilStone,
+        null AS averageTemperature,
+        null AS designTemperature,
+        (select sum(weight) from imp_asphalt_metadata_result where asphaltId = AF.asphaltId and isPass = 1
+        <include refid="filterReport"/>
+        ) AS unqualifiedWeight,
+        (select count(id) from imp_asphalt_metadata_result where asphaltId = AF.asphaltId and isPass = 1
+        <include refid="filterReport"/>
+        ) AS unqualifiedBatch,
+        (select count(id) from imp_asphalt_metadata_result where asphaltId = AF.asphaltId and oilStoneLevel>0
+        <include refid="filterReport"/>
+        ) AS oilStoneExceed,
+        (select count(id) from imp_asphalt_metadata_result where asphaltId = AF.asphaltId and gradationLevel > 0
+        <include refid="filterReport"/>
+        ) AS gradationExceed,
+        (select count(id) from imp_asphalt_metadata_result where asphaltId = AF.asphaltId and asphaltTempLevel > 0
+        <include refid="filterReport"/>
+        ) AS temperatureExceed
+        from imp_asphalt_metadata_result AF where AF.asphaltId = #{asphaltId,jdbcType=BIGINT} and AF.formulaId is not
+        null
+        <include refid="filterReport"/>
+        GROUP BY AF.asphaltId
+        ) temp
+        ORDER BY temp.formulaId desc
+    </select>
+
+    <select id="getWeek" resultType="com.linghang.model.business.asphalt.param.WeeModel">
+        select temp.week AS value,
+        case when temp.week is null then null else concat('第',temp.week,'周') end AS name
+        from (select datepart(week,time) AS week from imp_asphalt_metadata_result where
+        asphaltId = #{asphaltId,jdbcType=BIGINT} and
+        DATEDIFF(year,time ,  #{year,jdbcType=VARCHAR}) = 0
+        ) AS temp
+        GROUP BY temp.week
+        ORDER By temp.week DESC
+    </select>
+
+    <select id="selectRepeatData" parameterType="com.linghang.model.business.asphalt.AsphaltMetadataModel"
+            resultMap="BaseResultMap">
+        select * from imp_asphalt_metadata where 1 = 1
+        <if test="time != null">
+            and time = #{time,jdbcType=TIMESTAMP}
+        </if>
+        <if test="startTime != null">
+            and startTime = #{startTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="endTime != null">
+            and endTime = #{endTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="mixingTime != null">
+            and mixingTime = #{mixingTime,jdbcType=BIGINT}
+        </if>
+        <if test="asphaltId != null">
+            and asphaltId = #{asphaltId,jdbcType=BIGINT}
+        </if>
+        <if test="formulaCode != null">
+            and formulaCode = #{formulaCode,jdbcType=VARCHAR}
+        </if>
+        <if test="asphalt != null">
+            and asphalt = #{asphalt,jdbcType=DECIMAL}
+        </if>
+        <if test="temperature != null">
+            and temperature = #{temperature,jdbcType=DECIMAL}
+        </if>
+        <if test="g1 != null">
+            and g1 = #{g1,jdbcType=DECIMAL}
+        </if>
+        <if test="g2 != null">
+            and g2 = #{g2,jdbcType=DECIMAL}
+        </if>
+        <if test="g3 != null">
+            and g3 = #{g3,jdbcType=DECIMAL}
+        </if>
+        <if test="g4 != null">
+            and g4 = #{g4,jdbcType=DECIMAL}
+        </if>
+        <if test="g5 != null">
+            and g5 = #{g5,jdbcType=DECIMAL}
+        </if>
+        <if test="g6 != null">
+            and g6 = #{g6,jdbcType=DECIMAL}
+        </if>
+        <if test="g7 != null">
+            and g7 = #{g7,jdbcType=DECIMAL}
+        </if>
+        <if test="g8 != null">
+            and g8 = #{g8,jdbcType=DECIMAL}
+        </if>
+        <if test="g9 != null">
+            and g9 = #{g9,jdbcType=DECIMAL}
+        </if>
+        <if test="g10 != null">
+            and g10 = #{g10,jdbcType=DECIMAL}
+        </if>
+        <if test="f1 != null">
+            and f1 = #{f1,jdbcType=DECIMAL}
+        </if>
+        <if test="f2 != null">
+            and f2 = #{f2,jdbcType=DECIMAL}
+        </if>
+        <if test="f3 != null">
+            and f3 = #{f3,jdbcType=DECIMAL}
+        </if>
+        <if test="f4 != null">
+            and f4 = #{f4,jdbcType=DECIMAL}
+        </if>
+        <if test="f5 != null">
+            and f5 = #{f5,jdbcType=DECIMAL}
+        </if>
+    </select>
+
+
+    <select id="getSearchTimeMark" resultType="java.util.Map">
+        select DISTINCT CONVERT(varchar(100), time, 23) as markTime,0 as markType from imp_asphalt_metadata
+        where asphaltId=#{asphaltId,jdbcType=BIGINT} and formulaId is not null
+        union
+        select DISTINCT CONVERT(varchar(100), time, 23) as markTime,1 as markType from imp_asphalt_metadata
+        where asphaltId=#{asphaltId,jdbcType=BIGINT} and formulaId is null
+    </select>
+    <select id="getSearchTimeMonthMark" resultType="java.lang.String">
+        select
+        <if test="type == 1">
+            DISTINCT CONVERT(varchar(7), time, 120 )
+        </if>
+        <if test="type == 2">
+            DISTINCT DATENAME(year,time)
+        </if>
+        from imp_asphalt_metadata where asphaltId=#{asphaltId,jdbcType=BIGINT}
+    </select>
+
+    <select id="selectByFormulaCodeAndAsphaltId" resultMap="BaseResultMap">
+        select * from imp_asphalt_metadata where formulaId is null
+        and formulaCode = #{asphaltNo,jdbcType=VARCHAR}
+        and asphaltId=#{asphaltId,jdbcType=BIGINT}
+    </select>
+
+    <!--第三方查询时间范围内的数据-->
+    <select id="selectDataByTime" resultType="com.linghang.model.business.transport.MaterialInformationModel">
+           select  m.id,m.time,m.endTime,m.mixingTime,weight,isPass,f.name,f.pavingLevel,ai.name as bhName,
+        (  ISNULL(w.sieveMsg,'')+
+        ISNULL(w.aggTempMsg, '')+
+        ISNULL(w.asphaltTempMsg,'')+
+        ISNULL(w.oilStoneMsg,'')+
+        ISNULL(w.tempMsg,'')+
+        ISNULL(w.mixingTempMsg,''))as content
+        from imp_asphalt_metadata m left join imp_asphalt_formula f on m.asphaltId=f.asphaltId and f.id=m.formulaId
+		left join imp_asphalt_warning_message w on m.id=w.dataId
+        LEFT join imp_asphalt_info ai on m.asphaltId=ai.id
+        where m.formulaId is not null
+        and m.asphaltId=#{mixingId,jdbcType=BIGINT}
+        and m.time between #{startTime,jdbcType=VARCHAR} and #{endTime,jdbcType=VARCHAR}
+        order by m.endTime
+    </select>
+    <!--第三方根据id查询数据-->
+    <select id="selectDataByIds" resultType="java.util.Map" parameterType="java.util.List">
+        select * from imp_asphalt_metadata
+        where id in
+        <foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
+            #{item}
+        </foreach>
+        order by endTime
+    </select>
+
+    <select id="selectWeight" resultType="java.util.HashMap">
+        select  sum (weight) as allWeight
+        from imp_asphalt_metadata m
+        where m.formulaId is not null
+        and m.asphaltId=#{mixingId,jdbcType=BIGINT}
+        and m.endTime between #{startTime,jdbcType=VARCHAR} and #{endTime,jdbcType=VARCHAR}
+    </select>
+</mapper>

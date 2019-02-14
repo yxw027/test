@@ -1,0 +1,724 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.linghang.mapper.base.OrganizationMapper">
+
+    <!--<cache type="org.mybatis.caches.ehcache.EhcacheCache"/>-->
+
+    <resultMap id="BaseResultMap" type="com.linghang.model.base.OrganizationModel">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="type" jdbcType="INTEGER" property="type"/>
+        <result column="number" jdbcType="VARCHAR" property="number"/>
+        <result column="keyword" jdbcType="VARCHAR" property="keyword"/>
+        <result column="createUserId" jdbcType="BIGINT" property="createUserId"/>
+        <result column="createTime" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="status" jdbcType="INTEGER" property="status"/>
+        <result column="address" jdbcType="VARCHAR" property="address"/>
+        <result column="phone" jdbcType="VARCHAR" property="phone"/>
+        <result column="web" jdbcType="VARCHAR" property="web"/>
+        <result column="remark" jdbcType="VARCHAR" property="remark"/>
+        <result column="parentId" jdbcType="BIGINT" property="parentId"/>
+        <result column="postcode" jdbcType="VARCHAR" property="postcode"/>
+        <result column="tenderNo" jdbcType="VARCHAR" property="tenderNo"/>
+        <result column="units" jdbcType="VARCHAR" property="units"/>
+        <result column="workType" jdbcType="VARCHAR" property="workType"/>
+        <result column="contractType" jdbcType="VARCHAR" property="contractType"/>
+        <result column="startPoint" jdbcType="VARCHAR" property="startPoint"/>
+        <result column="endPoint" jdbcType="VARCHAR" property="endPoint"/>
+        <result column="fullLength" jdbcType="VARCHAR" property="fullLength"/>
+        <result column="startDate" jdbcType="VARCHAR" property="startDate"/>
+        <result column="estimateEndDate" jdbcType="VARCHAR" property="estimateEndDate"/>
+        <result column="sub" jdbcType="VARCHAR" property="sub"/>
+        <result column="submitDate" jdbcType="VARCHAR" property="submitDate"/>
+        <result column="level" jdbcType="INTEGER" property="level"/>
+        <result column="createUserName" jdbcType="VARCHAR" property="createUserName"/>
+        <result column="logo" jdbcType="VARCHAR" property="logo"/>
+        <result column="synopsis" jdbcType="VARCHAR" property="synopsis"/>
+    </resultMap>
+
+    <resultMap type="com.linghang.model.base.OrganizationModel" id="andorid">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, name, type, number, keyword, createUserId, createTime, status, address,
+        phone, web, remark, parentId, postcode, tenderNo, units, workType,
+        contractType,startPoint, endPoint, fullLength, startDate, estimateEndDate,
+        sub, submitDate, level, logo,synopsis
+    </sql>
+
+    <select id="getSupervisorByOrgId" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select DISTINCT temp.*
+        from (
+        select o.* from imp_organization as org INNER JOIN imp_organization as o on org.id=#{orgid,jdbcType=BIGINT}
+        and org.parentId=o.id and o.type=${@com.linghang.enums.OrgType@SUPERVISOR.getInteger()} and
+        type=${@com.linghang.enums.OrgType@SUPERVISOR.getInteger()}
+        ) as temp
+    </select>
+
+    <select id="selectForAndroid" resultMap="andorid">
+        select orgId,name , tenderno from imp_organization WHERE status != -1 AND type =
+        ${@com.linghang.enums.OrgType@TENDERS.getInteger()}
+    </select>
+
+    <select id="selectSomeTypeByModel" resultMap="BaseResultMap"
+            parameterType="com.linghang.model.base.OrganizationModel">
+        with cte(id,parentid,name,type)
+        as
+        (
+        select id,parentid,name,type from imp_organization where status =1
+        <if test="id != null">
+            AND (parentid = #{id,jdbcType=BIGINT} or id = #{id,jdbcType=BIGINT})
+        </if>
+        union all
+        select t.id,t.parentid,t.name,t.type from imp_organization as t
+        inner join cte as c on t.parentid = c.id where t.status =1
+        )
+        select DISTINCT t.typeName orgtypename, b.id, b.name, b.type, b.number, b.keyword,b.status,
+        b.parentId,b.tenderNo,b.units
+        from cte a,imp_projectType t, imp_organization b
+        where
+        (a.id = b.id and b.status = 1)
+        and a.type not in(0,1,2,6)
+        and b.type = t.orgTypeid
+        order by b.keyword
+    </select>
+
+    <select id="selectSomeModelsByModel" resultMap="BaseResultMap"
+            parameterType="com.linghang.model.base.OrganizationModel">
+        with cte(id,parentid,name,type)
+        as
+        (
+        select id,parentid,name,type from imp_organization where status =1
+        <if test="id != null">
+            AND parentid = #{id,jdbcType=BIGINT} or orgId = #{id,jdbcType=BIGINT}
+        </if>
+        union all
+        select t.id,t.parentid,t.name,t.type from imp_organization as t
+        inner join cte as c on t.parentid = c.orgId where t.status =1
+        )
+        select DISTINCT t.typeName orgtypename, b.orgId, b.name, b.type, b.orgNo, b.keyword,b.status,
+        b.parentId,b.tenderNo,b.units
+        from cte a,imp_projectType t, imp_organization b
+        where
+        ((a.orgId = c.orgId and c.ownOrgId = b.orgId and b.status = 1) or (a.orgId = b.orgId and b.status = 1))
+        <if test="orgtypename != null">
+            and a.type in(${orgtypename})
+        </if>
+        and b.type = t.type
+        order by b.keyword
+    </select>
+
+    <select id="selectOrgForLogging" resultMap="BaseResultMap" parameterType="java.lang.String">
+        SELECT * from imp_organization a
+        LEFT JOIN imp_user b ON a.id=b.orgId
+        where b.loginName= #{loginname,jdbcType=VARCHAR} and a.status != -1
+    </select>
+
+    <select id="selectById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select *
+        from imp_organization
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <select id="selectByParentId" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        *
+        from imp_organization
+        where parentId = #{parentId,jdbcType=BIGINT}
+        and status = ${@com.linghang.enums.Status@ENABLE.getInteger()}
+    </select>
+
+    <select id="selectChildrenById" resultMap="BaseResultMap">
+        WITH TREE AS (
+        SELECT
+        *
+        FROM
+        imp_organization
+        WHERE
+        id = #{orgId,jdbcType=BIGINT}
+        UNION ALL
+        SELECT
+        imp_organization.*
+        FROM
+        imp_organization,
+        TREE
+        WHERE
+        imp_organization.parentId = TREE.id
+        ) SELECT
+        *
+        FROM
+        TREE
+        WHERE
+        status = ${@com.linghang.enums.Status@ENABLE.getInteger()}
+        <if test="type != null">
+            and type = ${type}
+        </if>
+        <if test="types != null">
+            and type in
+            <foreach close=")" collection="types" index="index" item="item" open="(" separator=",">
+                #{item}
+            </foreach>
+        </if>
+    </select>
+
+    <select id="selectChildrenByProjectId" resultMap="BaseResultMap">
+        WITH TREE AS (
+        SELECT
+        *
+        FROM
+        imp_organization
+        WHERE
+        id = #{orgId,jdbcType=BIGINT}
+        UNION ALL
+        SELECT
+        imp_organization.*
+        FROM
+        imp_organization,
+        TREE
+        WHERE
+        imp_organization.parentId = TREE.id
+        )
+        SELECT [id], [name], [type], [number], [keyword], [createUserId], [createTime], [status], [address], [phone], [web], [remark], [postcode], [tenderNo], [units], [workType], [contractType], [startPoint], [endPoint], [fullLength], [startDate], [estimateEndDate], [sub], [submitDate], [level], logo,
+        case when id = #{orgId,jdbcType=BIGINT} then null else parentId end as parentId FROM TREE WHERE status = 1
+    </select>
+
+    <select id="selectGroupTree" resultMap="BaseResultMap">
+        WITH TREE AS (
+            SELECT
+                *
+            FROM
+                imp_organization
+            UNION ALL
+            SELECT
+                imp_organization.*
+            FROM
+                imp_organization,
+                TREE
+            WHERE
+                imp_organization.parentId = TREE.id
+        ) SELECT
+            [id],
+            [name],
+            [type],
+            [number],
+            [keyword],
+            [createUserId],
+            [createTime],
+            [status],
+            [address],
+            [phone],
+            [web],
+            [remark],
+            [postcode],
+            [tenderNo],
+            [units],
+            [workType],
+            [contractType],
+            [startPoint],
+            [endPoint],
+            [fullLength],
+            [startDate],
+            [estimateEndDate],
+            [sub],
+            [submitDate],
+            [level],
+             logo,
+             synopsis,
+             CASE
+             WHEN type = 0 THEN
+             NULL
+             ELSE
+             parentId
+             END AS parentId
+        FROM
+            TREE
+        WHERE
+            status = 1
+            AND (type = 0 OR type = 6)
+        GROUP BY
+            [id],
+            [name],
+            [type],
+            [number],
+            [keyword],
+            [createUserId],
+            [createTime],
+            [status],
+            [address],
+            [phone],
+            [web],
+            [remark],
+            [postcode],
+            [tenderNo],
+            [units],
+            [workType],
+            [contractType],
+            [startPoint],
+            [endPoint],
+            [fullLength],
+            [startDate],
+            [estimateEndDate],
+            [sub],
+            [submitDate],
+            [level],
+             logo,
+             synopsis,
+             parentId
+    </select>
+
+    <select id="selectLotIdByOrgId" resultType="java.lang.Long" parameterType="java.lang.Long">
+        WITH TREE AS (
+        SELECT
+        *
+        FROM
+        imp_organization
+        WHERE
+        id = #{orgId}
+        UNION ALL
+        SELECT
+        imp_organization.*
+        FROM
+        imp_organization,
+        TREE
+        WHERE
+        imp_organization.parentId = TREE.id
+        ) SELECT
+        id
+        FROM
+        TREE
+        WHERE
+        type = ${@com.linghang.enums.OrgType@TENDERS.getInteger()} AND status != -1
+    </select>
+    <select id="selectChildrenByIdAndTypes" resultMap="BaseResultMap">
+        WITH TREE AS (
+        SELECT
+        *
+        FROM
+        imp_organization
+        <if test="orgId != null">
+            WHERE
+            id = #{orgId,jdbcType=BIGINT}
+        </if>
+        UNION ALL
+        SELECT
+        imp_organization.*
+        FROM
+        imp_organization,
+        TREE
+        WHERE
+        imp_organization.parentId = TREE.id
+        ) SELECT
+        DISTINCT
+        *
+        FROM
+        TREE
+        WHERE
+        status = ${@com.linghang.enums.Status@ENABLE.getInteger()}
+        <if test="types != null">
+            and type in
+            <foreach close=")" collection="types" index="index" item="item" open="(" separator=",">
+                #{item}
+            </foreach>
+        </if>
+    </select>
+    <select id="selectByUserOrgLinkAndTypes" resultMap="BaseResultMap">
+        select * from imp_organization o
+        INNER JOIN imp_user_org_link l on l.userId = #{userId,jdbcType=BIGINT} and l.projectId =
+        #{projectId,jdbcType=BIGINT} and l.orgId = o.id
+        WHERE
+        status = ${@com.linghang.enums.Status@ENABLE.getInteger()}
+        <if test="types != null">
+            and type in
+            <foreach close=")" collection="types" index="index" item="item" open="(" separator=",">
+                #{item}
+            </foreach>
+        </if>
+    </select>
+    <select id="selectByTypeFilter" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select * from imp_organization where type = #{typeId} and status =1
+    </select>
+
+    <select id="selectLotByOrgId" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        WITH TREE AS (
+        SELECT
+        *
+        FROM
+        view_org_meter
+        WHERE
+        id = #{orgId}
+        UNION ALL
+        SELECT
+        view_org_meter.*
+        FROM
+        view_org_meter,
+        TREE
+        WHERE
+        view_org_meter.parentId = TREE.id
+        ) SELECT
+        *
+        FROM
+        TREE
+        WHERE
+        type = ${@com.linghang.enums.OrgType@TENDERS.getInteger()} AND status != -1
+    </select>
+
+    <select id="selectProject" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        with cte(id,parentid,name,type)
+        as
+        (
+        select id,parentid,name,type from imp_organization where id = #{orgId,jdbcType=BIGINT}
+        union all
+        select t.id,t.parentid,t.name,t.type from imp_organization as t
+        inner join cte as c on t.id = c.parentid
+        )
+        select e.* from cte d,imp_organization e where d.type = ${@com.linghang.enums.OrgType@PROJECT.getInteger()} and
+        d.id = e.id AND e.status != -1
+    </select>
+
+
+    <select id="selectUserProject" resultMap="BaseResultMap">
+        select * from imp_organization org WHERE status != -1 and (type =
+        ${@com.linghang.enums.OrgType@GROUP.getInteger()} or type=
+        ${@com.linghang.enums.OrgType@PROJECT.getInteger()})
+    </select>
+
+    <select id="findOrgWithFilter" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select * from imp_organization org LEFT JOIN imp_projectType impType ON org.type = impType.type WHERE
+        status != -1
+    </select>
+
+    <select id="selectOrgMenuUp" resultMap="BaseResultMap">
+        WITH TREE AS (
+        SELECT
+        id,parentId,name,tenderNo,status,type
+        FROM
+        imp_organization
+        WHERE
+        id = #{orgId}
+        UNION ALL
+        SELECT
+        imp_organization.id,imp_organization.parentId,imp_organization.name,
+        imp_organization.tenderNo,imp_organization.status,imp_organization.type
+        FROM
+        imp_organization,
+        TREE
+        WHERE
+        imp_organization.id = TREE.parentId
+        ) SELECT
+        id,name,tenderNo,type
+        FROM
+        TREE
+        WHERE
+        status = ${@com.linghang.enums.Status@ENABLE.getInteger()}
+        <if test="orgType != null">
+            and type = ${orgType}
+        </if>
+        ORDER BY id
+    </select>
+
+    <select id="selectOrgMenuDown" resultMap="BaseResultMap">
+        WITH TREE AS (
+        SELECT
+        id,parentId,name,tenderNo,status,type
+        FROM
+        imp_organization
+        WHERE
+        id = #{orgId}
+        UNION ALL
+        SELECT
+        imp_organization.id,imp_organization.parentId,imp_organization.name,
+        imp_organization.tenderNo,imp_organization.status,imp_organization.type
+        FROM
+        imp_organization,
+        TREE
+        WHERE
+        imp_organization.parentId = TREE.id
+        ) SELECT
+        id,name,tenderNo,type
+        FROM
+        TREE
+        WHERE
+        status = ${@com.linghang.enums.Status@ENABLE.getInteger()}
+        <if test="orgType != null">
+            and type = ${orgType}
+        </if>
+        ORDER BY id
+    </select>
+
+
+    <delete id="deleteById" parameterType="java.lang.Long">
+        delete from imp_organization
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+
+    <insert id="insert" keyProperty="id"
+            parameterType="com.linghang.model.base.OrganizationModel">
+        insert into imp_organization (
+        <include refid="Base_Column_List"/>
+        )
+        values (
+        #{id,jdbcType=BIGINT},
+        #{name,jdbcType=VARCHAR},
+        #{type,jdbcType=INTEGER},
+        #{number,jdbcType=VARCHAR},
+        #{keyword,jdbcType=VARCHAR},
+        #{createUserId,jdbcType=BIGINT},
+        #{createTime,jdbcType=TIMESTAMP},
+        #{status,jdbcType=INTEGER},
+        #{address,jdbcType=VARCHAR},
+        #{phone,jdbcType=VARCHAR},
+        #{web,jdbcType=VARCHAR},
+        #{remark,jdbcType=VARCHAR},
+        #{parentId,jdbcType=BIGINT},
+        #{postcode,jdbcType=VARCHAR},
+        #{tenderNo,jdbcType=VARCHAR},
+        #{units,jdbcType=VARCHAR},
+        #{workType,jdbcType=VARCHAR},
+        #{contractType,jdbcType=VARCHAR},
+        #{startPoint,jdbcType=VARCHAR},
+        #{endPoint,jdbcType=VARCHAR},
+        #{fullLength,jdbcType=VARCHAR},
+        #{startDate,jdbcType=VARCHAR},
+        #{estimateEndDate,jdbcType=VARCHAR},
+        #{sub,jdbcType=VARCHAR},
+        #{submitDate,jdbcType=VARCHAR},
+        #{level,jdbcType=INTEGER},
+        #{logo,jdbcType=VARCHAR},
+        #{synopsis,jdbcType=VARCHAR}
+        )
+    </insert>
+
+    <insert id="insertList" keyProperty="id" parameterType="java.util.List">
+        <foreach collection="list" index="index" item="item" separator=";">
+            insert into imp_organization (
+            <include refid="Base_Column_List"/>
+            )
+            values (
+            #{item.id,jdbcType=BIGINT},
+            #{item.name,jdbcType=VARCHAR},
+            #{item.type,jdbcType=INTEGER},
+            #{item.number,jdbcType=VARCHAR},
+            #{item.keyword,jdbcType=VARCHAR},
+            #{item.createUserId,jdbcType=BIGINT},
+            #{item.createTime,jdbcType=TIMESTAMP},
+            #{item.status,jdbcType=INTEGER},
+            #{item.address,jdbcType=VARCHAR},
+            #{item.phone,jdbcType=VARCHAR},
+            #{item.web,jdbcType=VARCHAR},
+            #{item.remark,jdbcType=VARCHAR},
+            #{item.parentId,jdbcType=BIGINT},
+            #{item.postcode,jdbcType=VARCHAR},
+            #{item.tenderNo,jdbcType=VARCHAR},
+            #{item.units,jdbcType=VARCHAR},
+            #{item.workType,jdbcType=VARCHAR},
+            #{item.contractType,jdbcType=VARCHAR},
+            #{item.startPoint,jdbcType=VARCHAR},
+            #{item.endPoint,jdbcType=VARCHAR},
+            #{item.fullLength,jdbcType=VARCHAR},
+            #{item.startDate,jdbcType=VARCHAR},
+            #{item.estimateEndDate,jdbcType=VARCHAR},
+            #{item.sub,jdbcType=VARCHAR},
+            #{item.submitDate,jdbcType=VARCHAR},
+            #{item.level,jdbcType=INTEGER},
+            #{item.logo,jdbcType=VARCHAR}
+            )
+        </foreach>
+    </insert>
+
+    <select id="selectByModel" parameterType="com.linghang.model.base.OrganizationModel" resultMap="BaseResultMap">
+        SELECT
+        o.*, u.name AS createUserName
+        FROM
+        imp_organization o
+        LEFT JOIN imp_user u ON o.createUserId = u.id
+        WHERE 1 = 1
+        <if test="name != null">
+            and o.name = #{name,jdbcType=VARCHAR}
+        </if>
+        <if test="type != null">
+            and o.type = #{type,jdbcType=INTEGER}
+        </if>
+        <if test="number != null">
+            and o.number = #{number,jdbcType=VARCHAR}
+        </if>
+        <if test="keyword != null">
+            and o.keyword = #{keyword,jdbcType=VARCHAR}
+        </if>
+        <if test="createUserId != null">
+            and o.createUserId = #{createUserId,jdbcType=BIGINT}
+        </if>
+        <if test="createTime != null">
+            and o.createTime = #{createTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="status != null">
+            and o.status = #{status,jdbcType=INTEGER}
+        </if>
+        <if test="address != null">
+            and o.address = #{address,jdbcType=VARCHAR}
+        </if>
+        <if test="phone != null">
+            and o.phone = #{phone,jdbcType=VARCHAR}
+        </if>
+        <if test="web != null">
+            and o.web = #{web,jdbcType=VARCHAR}
+        </if>
+        <if test="remark != null">
+            and o.remark = #{remark,jdbcType=VARCHAR}
+        </if>
+        <if test="parentId != null">
+            and o.parentId = #{parentId,jdbcType=BIGINT}
+        </if>
+        <if test="postcode != null">
+            and o.postcode = #{postcode,jdbcType=VARCHAR}
+        </if>
+        <if test="tenderNo != null">
+            and o.tenderNo = #{tenderNo,jdbcType=VARCHAR}
+        </if>
+        <if test="units != null">
+            and o.units = #{units,jdbcType=VARCHAR}
+        </if>
+        <if test="workType != null">
+            and o.workType = #{workType,jdbcType=VARCHAR}
+        </if>
+        <if test="contractType != null">
+            and o.contractType = #{contractType,jdbcType=VARCHAR}
+        </if>
+        <if test="startPoint != null">
+            and o.startPoint = #{startPoint,jdbcType=VARCHAR}
+        </if>
+        <if test="endPoint != null">
+            and o.endPoint = #{endPoint,jdbcType=VARCHAR}
+        </if>
+        <if test="fullLength != null">
+            and o.fullLength = #{fullLength,jdbcType=VARCHAR}
+        </if>
+        <if test="startDate != null">
+            and o.startDate = #{startDate,jdbcType=VARCHAR}
+        </if>
+        <if test="estimateEndDate != null">
+            and o.estimateEndDate = #{estimateEndDate,jdbcType=VARCHAR}
+        </if>
+        <if test="sub != null">
+            and o.sub = #{sub,jdbcType=VARCHAR}
+        </if>
+        <if test="submitDate != null">
+            and o.submitDate = #{submitDate,jdbcType=VARCHAR}
+        </if>
+        <if test="level != null">
+            and o.level = #{level,jdbcType=INTEGER}
+        </if>
+        ORDER BY o.id
+    </select>
+
+    <update id="updateById" parameterType="com.linghang.model.base.OrganizationModel">
+        update imp_organization
+        set name = #{name,jdbcType=VARCHAR},
+        type = #{type,jdbcType=INTEGER},
+        number = #{number,jdbcType=VARCHAR},
+        keyword = #{keyword,jdbcType=VARCHAR},
+        createUserId = #{createUserId,jdbcType=BIGINT},
+        createTime = #{createTime,jdbcType=TIMESTAMP},
+        status = #{status,jdbcType=INTEGER},
+        address = #{address,jdbcType=VARCHAR},
+        phone = #{phone,jdbcType=VARCHAR},
+        web = #{web,jdbcType=VARCHAR},
+        remark = #{remark,jdbcType=VARCHAR},
+        parentId = #{parentId,jdbcType=BIGINT},
+        postcode = #{postcode,jdbcType=VARCHAR},
+        tenderNo = #{tenderNo,jdbcType=VARCHAR},
+        units = #{units,jdbcType=VARCHAR},
+        workType = #{workType,jdbcType=VARCHAR},
+        contractType = #{contractType,jdbcType=VARCHAR},
+        startPoint = #{startPoint,jdbcType=VARCHAR},
+        endPoint = #{endPoint,jdbcType=VARCHAR},
+        fullLength = #{fullLength,jdbcType=VARCHAR},
+        startDate = #{startDate,jdbcType=VARCHAR},
+        estimateEndDate = #{estimateEndDate,jdbcType=VARCHAR},
+        sub = #{sub,jdbcType=VARCHAR},
+        submitDate = #{submitDate,jdbcType=VARCHAR},
+        level = #{level,jdbcType=INTEGER},
+        logo = #{logo,jdbcType=VARCHAR},
+            synopsis = #{synopsis,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <update id="updateLogoById" parameterType="com.linghang.model.base.OrganizationModel">
+        update imp_organization
+        set  logo = #{logo,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <update id="updateStatuByParentId" parameterType="int">
+        update imp_organization set status = 0 where parentId = #{parentid,jdbcType=BIGINT}
+    </update>
+
+    <select id="findOrgBelowProject" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        WITH Emp AS ( SELECT orgId,name,parentId FROM imp_organization WHERE orgId = #{orgid,jdbcType=BIGINT} UNION ALL
+        SELECT d.orgId,d.name,d.parentId FROM Emp INNER JOIN imp_organization d ON d.parentId = Emp.orgId)
+        SELECT orgId FROM Emp
+    </select>
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        *
+        from imp_organization
+        where id = #{id,jdbcType=BIGINT}
+        and status != -1
+    </select>
+
+    <select id="selectUpperToFindProjectId" resultType="com.linghang.model.base.OrganizationModel">
+        with cte(id,parentid,name,type)
+        as
+        (
+        select id,parentid,name,type from imp_organization where id = #{orgId,jdbcType=BIGINT}
+        union all
+        select t.id,t.parentid,t.name,t.type from imp_organization as t
+        inner join cte as c on t.id = c.parentid
+        )
+        select e.* from cte d,imp_organization e where d.type = ${@com.linghang.enums.OrgType@PROJECT.getInteger()} and
+        d.id = e.id AND e.status != -1
+    </select>
+
+    <select id="selectDownToFindProjectId" resultType="com.linghang.model.base.OrganizationModel">
+        with cte(id,parentid,name,type)
+        as
+        (
+        select id,parentid,name,type from imp_organization where id = #{orgId,jdbcType=BIGINT}
+        union all
+        select t.id,t.parentid,t.name,t.type from imp_organization as t
+        inner join cte as c on t.parentid = c.id
+        )
+        select e.id, e.name from cte d,imp_organization e where d.type = ${@com.linghang.enums.OrgType@PROJECT.getInteger()} and
+        d.id = e.id AND e.status != -1
+    </select>
+
+    <select id="getSections" resultType="java.util.HashMap">
+        with cte(id,name,type,parentId,status)
+        as (select a.id,a.name,a.type,a.parentId,a.status from imp_organization a WHERE a.id=#{orgId,jdbcType=BIGINT}
+        union all
+        select t.id,t.name,t.type,t.parentId,t.status
+        from imp_organization as t inner join cte as c on c.id = t.parentid )
+        select C.id AS value , (select keyword from imp_organization where id = C.id) AS name  from cte AS C where C.type=3  and C.status !=-1 order by C.name
+    </select>
+
+    <select id="getProjectData" resultMap="BaseResultMap">
+       with cte(id,name,type,parentId,status)
+        as (select a.id,a.name,a.type,a.parentId,a.status from imp_organization a WHERE a.id=#{orgId,jdbcType=BIGINT}
+        union all
+        select t.id,t.name,t.type,t.parentId,t.status
+        from imp_organization as t inner join cte as c on c.parentid = t.id )
+		select  * from cte where type=#{type,jdbcType=INTEGER} order by id
+    </select>
+
+    <select id="getTendersData" resultMap="BaseResultMap">
+       with cte(id,name,type,parentId,status)
+        as (select a.id,a.name,a.type,a.parentId,a.status from imp_organization a WHERE a.id=#{orgId,jdbcType=BIGINT}
+        union all
+        select t.id,t.name,t.type,t.parentId,t.status
+        from imp_organization as t inner join cte as c on c.id = t.parentid )
+		select  * from cte where type=#{type,jdbcType=INTEGER} order by name
+    </select>
+
+</mapper>

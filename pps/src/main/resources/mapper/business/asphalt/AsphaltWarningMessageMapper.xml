@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.linghang.mapper.business.asphalt.AsphaltWarningMessageMapper">
+    <resultMap id="BaseResultMap" type="com.linghang.model.business.asphalt.AsphaltWarningMessageModel">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="dataId" jdbcType="BIGINT" property="dataId"/>
+        <result column="createTime" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="content" jdbcType="VARCHAR" property="content"/>
+        <result column="type" jdbcType="VARCHAR" property="type"/>
+        <result column="oilStoneResult" jdbcType="INTEGER" property="oilStoneResult"/>
+        <result column="sieveResult" jdbcType="INTEGER" property="sieveResult"/>
+        <result column="tempResult" jdbcType="INTEGER" property="tempResult"/>
+        <result column="oilStoneMsg" jdbcType="VARCHAR" property="oilStoneMsg"/>
+        <result column="sieveMsg" jdbcType="VARCHAR" property="sieveMsg"/>
+        <result column="tempMsg" jdbcType="VARCHAR" property="tempMsg"/>
+        <result column="asphaltId" jdbcType="BIGINT" property="asphaltId"/>
+        <result column="asphaltTempResult" jdbcType="INTEGER" property="asphaltTempResult"/>
+        <result column="asphaltTempMsg" jdbcType="VARCHAR" property="asphaltTempMsg"/>
+        <result column="aggTempResult" jdbcType="INTEGER" property="aggTempResult"/>
+        <result column="aggTempMsg" jdbcType="VARCHAR" property="aggTempMsg"/>
+        <result column="dealStatus" jdbcType="INTEGER" property="dealStatus"/>
+        <result column="sendFlag" jdbcType="INTEGER" property="sendFlag"/>
+        <result column="returnKey" jdbcType="VARCHAR" property="returnKey"/>
+        <result column="mixingTempResult" jdbcType="INTEGER" property="mixingTempResult"/>
+        <result column="mixingTempMsg" jdbcType="VARCHAR" property="mixingTempMsg"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, dataId, createTime, content, type, oilStoneResult, sieveResult, tempResult, 
+        asphaltId, oilStoneMsg, sieveMsg, tempMsg,asphaltTempResult,asphaltTempMsg,aggTempResult,aggTempMsg,mixingTempResult,mixingTempMsg
+    </sql>
+
+    <select id="selectById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select * 
+        from imp_asphalt_warning_message
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <insert id="insert" keyProperty="id" parameterType="com.linghang.model.business.asphalt.AsphaltWarningMessageModel">
+        insert into imp_asphalt_warning_message (
+        <include refid="Base_Column_List"/>
+        )
+        values (#{id,jdbcType=BIGINT},
+        #{dataId,jdbcType=BIGINT},
+        #{createTime,jdbcType=TIMESTAMP},
+        #{content,jdbcType=VARCHAR},
+        #{type,jdbcType=VARCHAR},
+        #{oilStoneResult,jdbcType=INTEGER},
+        #{sieveResult,jdbcType=INTEGER},
+        #{tempResult,jdbcType=INTEGER},
+        #{asphaltId,jdbcType=BIGINT},
+        #{oilStoneMsg,jdbcType=VARCHAR},
+        #{sieveMsg,jdbcType=VARCHAR},
+        #{tempMsg,jdbcType=VARCHAR},
+        #{asphaltTempResult,jdbcType=INTEGER},
+        #{asphaltTempMsg,jdbcType=VARCHAR},
+        #{aggTempResult,jdbcType=INTEGER},
+        #{aggTempMsg,jdbcType=VARCHAR},
+        #{mixingTempResult,jdbcType=INTEGER},
+        #{mixingTempMsg,jdbcType=VARCHAR}
+        )
+    </insert>
+
+    <select id="selectByModel" parameterType="com.linghang.model.business.asphalt.AsphaltWarningMessageModel"
+            resultMap="BaseResultMap">
+        select * from imp_asphalt_warning_message where 1 = 1
+        <if test="dataId != null">
+            and dataId = #{dataId,jdbcType=BIGINT}
+        </if>
+        <if test="createTime != null">
+            and createTime = #{createTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="content != null">
+            and content = #{content,jdbcType=VARCHAR}
+        </if>
+        <if test="type != null">
+            and type = #{type,jdbcType=VARCHAR}
+        </if>
+        <if test="oilStoneResult != null">
+            and oilStoneResult = #{oilStoneResult,jdbcType=INTEGER}
+        </if>
+        <if test="sieveResult != null">
+            and sieveResult = #{sieveResult,jdbcType=INTEGER}
+        </if>
+        <if test="tempResult != null">
+            and tempResult = #{tempResult,jdbcType=INTEGER}
+        </if>
+        <if test="asphaltId != null">
+            and asphaltId = #{asphaltId,jdbcType=BIGINT}
+        </if>
+        <if test="oilStoneMsg != null">
+            and oilStoneMsg = #{oilStoneMsg,jdbcType=VARCHAR}
+        </if>
+        <if test="sieveMsg != null">
+            and sieveMsg = #{sieveMsg,jdbcType=VARCHAR}
+        </if>
+        <if test="tempMsg != null">
+            and tempMsg = #{tempMsg,jdbcType=VARCHAR}
+        </if>
+    </select>
+
+    <update id="updateByModel" parameterType="com.linghang.model.business.asphalt.AsphaltWarningMessageModel">
+        update imp_asphalt_warning_message
+        <set>
+            <if test="dealStatus != null">
+                dealStatus = #{dealStatus,jdbcType=INTEGER},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+
+    <select id="selectByOptions" resultMap="BaseResultMap">
+        select * from imp_asphalt_warning_message where 1 = 1
+        <if test="options.filters != null">
+            <foreach collection="options.filters" item="item">
+                and ${item.field}
+                <if test="item.operator == 'eq'">
+                    = #{item.value}
+                </if>
+                <if test="item.operator == 'contains'">
+                    like '%'+#{item.value}+'%'
+                </if>
+            </foreach>
+        </if>
+        order by
+        <if test="options.sort != null">
+            <foreach collection="options.sort" item="item">
+                ${item.field} ${item.dir}
+            </foreach>
+        </if>
+        <if test="options.sort == null">
+            id
+        </if>
+    </select>
+
+    <sql id="filter_warning_data">
+        <if test="startTime != null and endTime != null">
+            and time BETWEEN #{startTime,jdbcType=VARCHAR} AND #{endTime,jdbcType=VARCHAR}
+        </if>
+    </sql>
+
+    <select id="getWarningData" resultMap="BaseResultMap">
+        select temp.* from ( select MR.*,AM.time time,
+        (select Max(leaeve) from (values
+        (oilStoneResult),(tempResult),(aggTempResult),(asphaltTempResult),(sieveResult),(mixingTempResult)) as
+        temp(leaeve)) AS allLevel,
+        (select top 1 AF.name from imp_asphalt_formula AF where AM.formulaId = AF.id) AS formulaCode,
+        (select top 1 AF.id from imp_asphalt_formula AF where AM.formulaId = AF.id) AS formulaId,
+        AM.time AS productionTime
+        from imp_asphalt_warning_message MR , imp_asphalt_metadata AM WHERE MR.asphaltId = #{asphaltId,jdbcType=BIGINT}
+        <if test="dealStatus == 0">
+            and MR.dealStatus is null
+        </if>
+        <if test="dealStatus == 1">
+            and MR.dealStatus = 1
+        </if>
+        <if test="dealStatus == 2">
+            and MR.dealStatus = 2
+        </if>
+        <if test="dealStatus == 3">
+            and MR.dealStatus =3
+        </if>
+        and MR.dataId = AM.id ) AS temp
+        where 1 = 1
+        <if test="startTime != null and endTime != null">
+            and temp.time BETWEEN #{startTime,jdbcType=VARCHAR} AND #{endTime,jdbcType=VARCHAR}
+        </if>
+        <if test="warningType != 0">
+            and temp.allLevel = #{warningType,jdbcType=INTEGER}
+        </if>
+        <!--<if test="warningType == 2">-->
+        <!--and temp.sieveResult > 0-->
+        <!--</if>-->
+        <!--<if test="warningType == 3">-->
+        <!--and temp.oilStoneResult > 0-->
+        <!--</if>-->
+
+        <if test="options.filters != null">
+            <foreach collection="options.filters" item="item">
+                and temp.${item.field}
+                <choose>
+                    <when test="item.operator == 'eq'">
+                        = #{item.value}
+                    </when>
+                    <when test="item.operator == 'neq'">
+                        != #{item.value}
+                    </when>
+                    <when test="item.operator == 'gt'">
+                        &gt; #{item.value}
+                    </when>
+                    <when test="item.operator == 'lt'">
+                        &lt; #{item.value}
+                    </when>
+                    <when test="item.operator == 'isnull'">
+                        #{item.value} is null
+                    </when>
+                    <when test="item.operator == 'isnotnull'">
+                        #{item.value} is not null
+                    </when>
+                    <when test="item.operator == 'contains'">
+                        like '%'+#{item.value}+'%'
+                    </when>
+                </choose>
+            </foreach>
+        </if>
+        order by
+        <if test="options.sort != null">
+            <foreach collection="options.sort" item="item">
+                temp.${item.field} ${item.dir}
+            </foreach>
+        </if>
+        <if test="options.sort == null">
+            temp.time desc
+        </if>
+    </select>
+
+    <select id="getFormulas" resultType="com.linghang.model.business.asphalt.param.WeeModel">
+        select distinct
+        (select top 1 AF.name from imp_asphalt_formula AF where AM.formulaId = AF.id) AS name,
+        (select top 1 AF.id from imp_asphalt_formula AF where AM.formulaId = AF.id) AS value
+        from imp_asphalt_warning_message MR , imp_asphalt_metadata AM WHERE MR.asphaltId = #{asphaltId,jdbcType=BIGINT}
+        and MR.dataId = AM.id
+        <if test="startTime != null and endTime != null">
+            and AM.time BETWEEN #{startTime,jdbcType=VARCHAR} AND #{endTime,jdbcType=VARCHAR}
+        </if>
+        <if test="warningType == 1">
+            and MR.Result > 0
+        </if>
+        <if test="warningType == 2">
+            and MR.sieveResult > 0
+        </if>
+        <if test="warningType == 3">
+            and MR.oilStoneResult > 0
+        </if>
+        <if test="dealStatus == 0">
+            and MR.dealStatus is null
+        </if>
+        <if test="dealStatus == 1">
+            and MR.dealStatus = 1
+        </if>
+        <if test="dealStatus == 2">
+            and MR.dealStatus = 2
+        </if>
+        <if test="dealStatus == 3">
+            and MR.dealStatus =3
+        </if>
+    </select>
+
+</mapper>

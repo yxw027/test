@@ -1,0 +1,908 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.linghang.mapper.business.water.WaterMetadataAggregateMapper">
+    <resultMap id="BaseResultMap" type="com.linghang.model.business.water.WaterMetadataAggregateModel">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="stationId" jdbcType="BIGINT" property="stationId"/>
+        <result column="formulaId" jdbcType="BIGINT" property="formulaId"/>
+        <result column="formulaCode" jdbcType="VARCHAR" property="formulaCode"/>
+        <result column="cement" jdbcType="DECIMAL" property="cement"/>
+        <result column="water" jdbcType="DECIMAL" property="water"/>
+        <result column="weight" jdbcType="DECIMAL" property="weight"/>
+        <result column="g1" jdbcType="DECIMAL" property="g1"/>
+        <result column="g2" jdbcType="DECIMAL" property="g2"/>
+        <result column="g3" jdbcType="DECIMAL" property="g3"/>
+        <result column="g4" jdbcType="DECIMAL" property="g4"/>
+        <result column="g5" jdbcType="DECIMAL" property="g5"/>
+        <result column="g6" jdbcType="DECIMAL" property="g6"/>
+        <result column="g7" jdbcType="DECIMAL" property="g7"/>
+        <result column="g8" jdbcType="DECIMAL" property="g8"/>
+        <result column="g9" jdbcType="DECIMAL" property="g9"/>
+        <result column="g10" jdbcType="DECIMAL" property="g10"/>
+        <result column="batchCode" jdbcType="VARCHAR" property="batchCode"/>
+        <result column="aggregateLevel" jdbcType="INTEGER" property="aggregateLevel"/>
+        <result column="aggregateWeight" jdbcType="DECIMAL" property="aggregateWeight"/>
+        <result column="isPass" jdbcType="INTEGER" property="isPass"/>
+        <result column="dataId" jdbcType="BIGINT" property="dataId"/>
+        <result column="excessMsg" jdbcType="VARCHAR" property="excessMsg"/>
+        <result column="g1State" jdbcType="INTEGER" property="g1State"/>
+        <result column="g2State" jdbcType="INTEGER" property="g2State"/>
+        <result column="g3State" jdbcType="INTEGER" property="g3State"/>
+        <result column="g4State" jdbcType="INTEGER" property="g4State"/>
+        <result column="g5State" jdbcType="INTEGER" property="g5State"/>
+        <result column="g6State" jdbcType="INTEGER" property="g6State"/>
+        <result column="g7State" jdbcType="INTEGER" property="g7State"/>
+        <result column="g8State" jdbcType="INTEGER" property="g8State"/>
+        <result column="g9State" jdbcType="INTEGER" property="g9State"/>
+        <result column="g10State" jdbcType="INTEGER" property="g10State"/>
+        <result column="time" jdbcType="TIMESTAMP" property="time"/>
+        <result column="sieveVersion" jdbcType="INTEGER" property="sieveVersion"/>
+        <result column="g1Msg" jdbcType="VARCHAR" property="g1Msg"/>
+        <result column="g2Msg" jdbcType="VARCHAR" property="g2Msg"/>
+        <result column="g3Msg" jdbcType="VARCHAR" property="g3Msg"/>
+        <result column="g4Msg" jdbcType="VARCHAR" property="g4Msg"/>
+        <result column="g5Msg" jdbcType="VARCHAR" property="g5Msg"/>
+        <result column="g6Msg" jdbcType="VARCHAR" property="g6Msg"/>
+        <result column="g7Msg" jdbcType="VARCHAR" property="g7Msg"/>
+        <result column="g8Msg" jdbcType="VARCHAR" property="g8Msg"/>
+        <result column="g9Msg" jdbcType="VARCHAR" property="g9Msg"/>
+        <result column="g10Msg" jdbcType="VARCHAR" property="g10Msg"/>
+        <result column="g1Level" jdbcType="INTEGER" property="g1Level"/>
+        <result column="g2Level" jdbcType="INTEGER" property="g2Level"/>
+        <result column="g3Level" jdbcType="INTEGER" property="g3Level"/>
+        <result column="g4Level" jdbcType="INTEGER" property="g4Level"/>
+        <result column="g5Level" jdbcType="INTEGER" property="g5Level"/>
+        <result column="g6Level" jdbcType="INTEGER" property="g6Level"/>
+        <result column="g7Level" jdbcType="INTEGER" property="g7Level"/>
+        <result column="g8Level" jdbcType="INTEGER" property="g8Level"/>
+        <result column="g9Level" jdbcType="INTEGER" property="g9Level"/>
+        <result column="g10Level" jdbcType="INTEGER" property="g10Level"/>
+        <result column="cementState" jdbcType="INTEGER" property="cementState"/>
+        <result column="waterState" jdbcType="INTEGER" property="waterState"/>
+        <result column="cementLevel" jdbcType="INTEGER" property="cementLevel"/>
+        <result column="waterLevel" jdbcType="INTEGER" property="waterLevel"/>
+        <result column="cementMsg" jdbcType="VARCHAR" property="cementMsg"/>
+        <result column="waterMsg" jdbcType="VARCHAR" property="waterMsg"/>
+        <association property="formulaModel" select="com.linghang.mapper.business.water.WaterFormulaMapper.selectById"
+                     column="formulaId">
+        </association>
+        <collection property="sieves" column="{formulaId=formulaId,dataVersion=sieveVersion}"
+                    ofType="com.linghang.model.business.water.WaterWarningConfigModel"
+                    select="com.linghang.mapper.business.water.WaterWarningConfigMapper.selectByFormulaIdAndSieveVersion">
+        </collection>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,stationId, formulaId, formulaCode, cement, water, weight, g1, g2, g3, g4, g5, g6,
+        g7, g8, g9, g10, batchCode, aggregateLevel, aggregateWeight, isPass, dataId, excessMsg, 
+        g1State, g2State, g3State, g4State, g5State, g6State, g7State, g8State, g9State, 
+        g10State, time, sieveVersion, g1Msg, g2Msg, g3Msg, g4Msg, g5Msg, g6Msg, g7Msg, g8Msg, 
+        g9Msg, g10Msg, g1Level, g2Level, g3Level, g4Level, g5Level, g6Level, g7Level, g8Level, g9Level,
+        g10Level,cementState,waterState,cementLevel,waterLevel,cementMsg,waterMsg
+    </sql>
+
+    <select id="selectById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select * 
+        from imp_water_metadata_aggregate
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <select id="selectByOptions" resultMap="BaseResultMap">
+        select r.* from imp_water_metadata_aggregate r
+        LEFT JOIN imp_water_formula f ON f.id = r.formulaId
+        where r.stationId = #{options.stationId,jdbcType=BIGINT}
+        <if test="options.filters != null">
+            <foreach collection="options.filters" item="item">
+                <if test="item.field == 'formulaName'">
+                    AND f.name
+                    <if test="item.operator == 'eq'">
+                        = #{item.value}
+                    </if>
+                    <if test="item.operator == 'contains'">
+                        like '%'+#{item.value}+'%'
+                    </if>
+                </if>
+            </foreach>
+        </if>
+        <if test="options.searchTime !=null ">
+            and CONVERT(varchar(100), time, 23) = #{options.searchTime,jdbcType=VARCHAR}
+        </if>
+        order by
+        <if test="options.sort != null">
+            <foreach collection="options.sort" item="item">
+                <if test="item.field == 'formulaName'">
+                    f.name ${item.dir}
+                </if>
+                <if test="item.field != 'formulaName'">
+                    ${item.field} ${item.dir}
+                </if>
+            </foreach>
+        </if>
+        <if test="options.sort == null">
+            time desc
+        </if>
+    </select>
+
+
+    <delete id="deleteById" parameterType="java.lang.Long">
+        delete from imp_water_metadata_aggregate
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+
+    <delete id="deleteByIds" parameterType="java.util.List">
+        delete from imp_water_metadata_aggregate
+        where id in
+        <foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
+            #{item}
+        </foreach>
+    </delete>
+
+    <insert id="insert" keyProperty="id" parameterType="com.linghang.model.business.water.WaterMetadataAggregateModel">
+        insert into imp_water_metadata_aggregate (
+        <include refid="Base_Column_List"/>
+        )
+        values (
+        #{id,jdbcType=BIGINT},
+        #{stationId,jdbcType=BIGINT},
+        #{formulaId,jdbcType=BIGINT},
+        #{formulaCode,jdbcType=VARCHAR},
+        #{cement,jdbcType=DECIMAL},
+        #{water,jdbcType=DECIMAL},
+        #{weight,jdbcType=DECIMAL},
+        #{g1,jdbcType=DECIMAL},
+        #{g2,jdbcType=DECIMAL},
+        #{g3,jdbcType=DECIMAL},
+        #{g4,jdbcType=DECIMAL},
+        #{g5,jdbcType=DECIMAL},
+        #{g6,jdbcType=DECIMAL},
+        #{g7,jdbcType=DECIMAL},
+        #{g8,jdbcType=DECIMAL},
+        #{g9,jdbcType=DECIMAL},
+        #{g10,jdbcType=DECIMAL},
+        #{batchCode,jdbcType=VARCHAR},
+        #{aggregateLevel,jdbcType=INTEGER},
+        #{aggregateWeight,jdbcType=DECIMAL},
+        #{isPass,jdbcType=INTEGER},
+        #{dataId,jdbcType=BIGINT},
+        #{excessMsg,jdbcType=VARCHAR},
+        #{g1State,jdbcType=INTEGER},
+        #{g2State,jdbcType=INTEGER},
+        #{g3State,jdbcType=INTEGER},
+        #{g4State,jdbcType=INTEGER},
+        #{g5State,jdbcType=INTEGER},
+        #{g6State,jdbcType=INTEGER},
+        #{g7State,jdbcType=INTEGER},
+        #{g8State,jdbcType=INTEGER},
+        #{g9State,jdbcType=INTEGER},
+        #{g10State,jdbcType=INTEGER},
+        #{time,jdbcType=TIMESTAMP},
+        #{sieveVersion,jdbcType=INTEGER},
+        #{g1Msg,jdbcType=VARCHAR},
+        #{g2Msg,jdbcType=VARCHAR},
+        #{g3Msg,jdbcType=VARCHAR},
+        #{g4Msg,jdbcType=VARCHAR},
+        #{g5Msg,jdbcType=VARCHAR},
+        #{g6Msg,jdbcType=VARCHAR},
+        #{g7Msg,jdbcType=VARCHAR},
+        #{g8Msg,jdbcType=VARCHAR},
+        #{g9Msg,jdbcType=VARCHAR},
+        #{g10Msg,jdbcType=VARCHAR},
+        #{g1Level,jdbcType=INTEGER},
+        #{g2Level,jdbcType=INTEGER},
+        #{g3Level,jdbcType=INTEGER},
+        #{g4Level,jdbcType=INTEGER},
+        #{g5Level,jdbcType=INTEGER},
+        #{g6Level,jdbcType=INTEGER},
+        #{g7Level,jdbcType=INTEGER},
+        #{g8Level,jdbcType=INTEGER},
+        #{g9Level,jdbcType=INTEGER},
+        #{g10Level,jdbcType=INTEGER},
+        #{cementState,jdbcType=INTEGER},
+        #{waterState,jdbcType=INTEGER},
+        #{cementLevel,jdbcType=INTEGER},
+        #{waterLevel,jdbcType=INTEGER},
+        #{cementMsg,jdbcType=VARCHAR},
+        #{waterMsg,jdbcType=VARCHAR}
+        )
+    </insert>
+
+    <insert id="insertList" parameterType="java.util.List">
+        <foreach collection="list" index="index" item="item" separator=";">
+            insert into imp_water_metadata_aggregate (
+            <include refid="Base_Column_List"/>
+            )
+            values (#{item.stationId,jdbcType=BIGINT},
+            #{item.formulaId,jdbcType=BIGINT},
+            #{item.formulaCode,jdbcType=VARCHAR},
+            #{item.cement,jdbcType=DECIMAL},
+            #{item.water,jdbcType=DECIMAL},
+            #{item.weight,jdbcType=DECIMAL},
+            #{item.g1,jdbcType=DECIMAL},
+            #{item.g2,jdbcType=DECIMAL},
+            #{item.g3,jdbcType=DECIMAL},
+            #{item.g4,jdbcType=DECIMAL},
+            #{item.g5,jdbcType=DECIMAL},
+            #{item.g6,jdbcType=DECIMAL},
+            #{item.g7,jdbcType=DECIMAL},
+            #{item.g8,jdbcType=DECIMAL},
+            #{item.g9,jdbcType=DECIMAL},
+            #{item.g10,jdbcType=DECIMAL},
+            #{item.batchCode,jdbcType=VARCHAR},
+            #{item.aggregateLevel,jdbcType=INTEGER},
+            #{item.aggregateWeight,jdbcType=DECIMAL},
+            #{item.isPass,jdbcType=INTEGER},
+            #{item.dataId,jdbcType=BIGINT},
+            #{item.excessMsg,jdbcType=VARCHAR},
+            #{item.g1State,jdbcType=INTEGER},
+            #{item.g2State,jdbcType=INTEGER},
+            #{item.g3State,jdbcType=INTEGER},
+            #{item.g4State,jdbcType=INTEGER},
+            #{item.g5State,jdbcType=INTEGER},
+            #{item.g6State,jdbcType=INTEGER},
+            #{item.g7State,jdbcType=INTEGER},
+            #{item.g8State,jdbcType=INTEGER},
+            #{item.g9State,jdbcType=INTEGER},
+            #{item.g10State,jdbcType=INTEGER},
+            #{item.time,jdbcType=TIMESTAMP},
+            #{item.sieveVersion,jdbcType=INTEGER},
+            #{item.g1Msg,jdbcType=VARCHAR},
+            #{item.g2Msg,jdbcType=VARCHAR},
+            #{item.g3Msg,jdbcType=VARCHAR},
+            #{item.g4Msg,jdbcType=VARCHAR},
+            #{item.g5Msg,jdbcType=VARCHAR},
+            #{item.g6Msg,jdbcType=VARCHAR},
+            #{item.g7Msg,jdbcType=VARCHAR},
+            #{item.g8Msg,jdbcType=VARCHAR},
+            #{item.g9Msg,jdbcType=VARCHAR},
+            #{item.g10Msg,jdbcType=VARCHAR}
+            )
+        </foreach>
+    </insert>
+
+    <select id="selectByModel" parameterType="com.linghang.model.business.water.WaterMetadataAggregateModel"
+            resultMap="BaseResultMap">
+        select * from imp_water_metadata_aggregate where 1 = 1
+        <if test="stationId != null">
+            and stationId = #{stationId,jdbcType=BIGINT}
+        </if>
+        <if test="formulaId != null">
+            and formulaId = #{formulaId,jdbcType=BIGINT}
+        </if>
+        <if test="formulaCode != null">
+            and formulaCode = #{formulaCode,jdbcType=VARCHAR}
+        </if>
+        <if test="cement != null">
+            and cement = #{cement,jdbcType=DECIMAL}
+        </if>
+        <if test="water != null">
+            and water = #{water,jdbcType=DECIMAL}
+        </if>
+        <if test="weight != null">
+            and weight = #{weight,jdbcType=DECIMAL}
+        </if>
+        <if test="g1 != null">
+            and g1 = #{g1,jdbcType=DECIMAL}
+        </if>
+        <if test="g2 != null">
+            and g2 = #{g2,jdbcType=DECIMAL}
+        </if>
+        <if test="g3 != null">
+            and g3 = #{g3,jdbcType=DECIMAL}
+        </if>
+        <if test="g4 != null">
+            and g4 = #{g4,jdbcType=DECIMAL}
+        </if>
+        <if test="g5 != null">
+            and g5 = #{g5,jdbcType=DECIMAL}
+        </if>
+        <if test="g6 != null">
+            and g6 = #{g6,jdbcType=DECIMAL}
+        </if>
+        <if test="g7 != null">
+            and g7 = #{g7,jdbcType=DECIMAL}
+        </if>
+        <if test="g8 != null">
+            and g8 = #{g8,jdbcType=DECIMAL}
+        </if>
+        <if test="g9 != null">
+            and g9 = #{g9,jdbcType=DECIMAL}
+        </if>
+        <if test="g10 != null">
+            and g10 = #{g10,jdbcType=DECIMAL}
+        </if>
+        <if test="batchCode != null">
+            and batchCode = #{batchCode,jdbcType=VARCHAR}
+        </if>
+        <if test="aggregateLevel != null">
+            and aggregateLevel = #{aggregateLevel,jdbcType=INTEGER}
+        </if>
+        <if test="aggregateWeight != null">
+            and aggregateWeight = #{aggregateWeight,jdbcType=DECIMAL}
+        </if>
+        <if test="isPass != null">
+            and isPass = #{isPass,jdbcType=INTEGER}
+        </if>
+        <if test="dataId != null">
+            and dataId = #{dataId,jdbcType=BIGINT}
+        </if>
+        <if test="excessMsg != null">
+            and excessMsg = #{excessMsg,jdbcType=VARCHAR}
+        </if>
+        <if test="g1State != null">
+            and g1State = #{g1State,jdbcType=INTEGER}
+        </if>
+        <if test="g2State != null">
+            and g2State = #{g2State,jdbcType=INTEGER}
+        </if>
+        <if test="g3State != null">
+            and g3State = #{g3State,jdbcType=INTEGER}
+        </if>
+        <if test="g4State != null">
+            and g4State = #{g4State,jdbcType=INTEGER}
+        </if>
+        <if test="g5State != null">
+            and g5State = #{g5State,jdbcType=INTEGER}
+        </if>
+        <if test="g6State != null">
+            and g6State = #{g6State,jdbcType=INTEGER}
+        </if>
+        <if test="g7State != null">
+            and g7State = #{g7State,jdbcType=INTEGER}
+        </if>
+        <if test="g8State != null">
+            and g8State = #{g8State,jdbcType=INTEGER}
+        </if>
+        <if test="g9State != null">
+            and g9State = #{g9State,jdbcType=INTEGER}
+        </if>
+        <if test="g10State != null">
+            and g10State = #{g10State,jdbcType=INTEGER}
+        </if>
+        <if test="time != null">
+            and time = #{time,jdbcType=TIMESTAMP}
+        </if>
+        <if test="sieveVersion != null">
+            and sieveVersion = #{sieveVersion,jdbcType=INTEGER}
+        </if>
+        <if test="g1Msg != null">
+            and g1Msg = #{g1Msg,jdbcType=VARCHAR}
+        </if>
+        <if test="g2Msg != null">
+            and g2Msg = #{g2Msg,jdbcType=VARCHAR}
+        </if>
+        <if test="g3Msg != null">
+            and g3Msg = #{g3Msg,jdbcType=VARCHAR}
+        </if>
+        <if test="g4Msg != null">
+            and g4Msg = #{g4Msg,jdbcType=VARCHAR}
+        </if>
+        <if test="g5Msg != null">
+            and g5Msg = #{g5Msg,jdbcType=VARCHAR}
+        </if>
+        <if test="g6Msg != null">
+            and g6Msg = #{g6Msg,jdbcType=VARCHAR}
+        </if>
+        <if test="g7Msg != null">
+            and g7Msg = #{g7Msg,jdbcType=VARCHAR}
+        </if>
+        <if test="g8Msg != null">
+            and g8Msg = #{g8Msg,jdbcType=VARCHAR}
+        </if>
+        <if test="g9Msg != null">
+            and g9Msg = #{g9Msg,jdbcType=VARCHAR}
+        </if>
+        <if test="g10Msg != null">
+            and g10Msg = #{g10Msg,jdbcType=VARCHAR}
+        </if>
+    </select>
+
+    <insert id="insertSelective" keyProperty="id"
+            parameterType="com.linghang.model.business.water.WaterMetadataAggregateModel">
+        insert into imp_water_metadata_aggregate
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="stationId != null">
+                stationId,
+            </if>
+            <if test="formulaId != null">
+                formulaId,
+            </if>
+            <if test="formulaCode != null">
+                formulaCode,
+            </if>
+            <if test="cement != null">
+                cement,
+            </if>
+            <if test="water != null">
+                water,
+            </if>
+            <if test="weight != null">
+                weight,
+            </if>
+            <if test="g1 != null">
+                g1,
+            </if>
+            <if test="g2 != null">
+                g2,
+            </if>
+            <if test="g3 != null">
+                g3,
+            </if>
+            <if test="g4 != null">
+                g4,
+            </if>
+            <if test="g5 != null">
+                g5,
+            </if>
+            <if test="g6 != null">
+                g6,
+            </if>
+            <if test="g7 != null">
+                g7,
+            </if>
+            <if test="g8 != null">
+                g8,
+            </if>
+            <if test="g9 != null">
+                g9,
+            </if>
+            <if test="g10 != null">
+                g10,
+            </if>
+            <if test="batchCode != null">
+                batchCode,
+            </if>
+            <if test="aggregateLevel != null">
+                aggregateLevel,
+            </if>
+            <if test="aggregateWeight != null">
+                aggregateWeight,
+            </if>
+            <if test="isPass != null">
+                isPass,
+            </if>
+            <if test="dataId != null">
+                dataId,
+            </if>
+            <if test="excessMsg != null">
+                excessMsg,
+            </if>
+            <if test="g1State != null">
+                g1State,
+            </if>
+            <if test="g2State != null">
+                g2State,
+            </if>
+            <if test="g3State != null">
+                g3State,
+            </if>
+            <if test="g4State != null">
+                g4State,
+            </if>
+            <if test="g5State != null">
+                g5State,
+            </if>
+            <if test="g6State != null">
+                g6State,
+            </if>
+            <if test="g7State != null">
+                g7State,
+            </if>
+            <if test="g8State != null">
+                g8State,
+            </if>
+            <if test="g9State != null">
+                g9State,
+            </if>
+            <if test="g10State != null">
+                g10State,
+            </if>
+            <if test="time != null">
+                time,
+            </if>
+            <if test="sieveVersion != null">
+                sieveVersion,
+            </if>
+            <if test="g1Msg != null">
+                g1Msg,
+            </if>
+            <if test="g2Msg != null">
+                g2Msg,
+            </if>
+            <if test="g3Msg != null">
+                g3Msg,
+            </if>
+            <if test="g4Msg != null">
+                g4Msg,
+            </if>
+            <if test="g5Msg != null">
+                g5Msg,
+            </if>
+            <if test="g6Msg != null">
+                g6Msg,
+            </if>
+            <if test="g7Msg != null">
+                g7Msg,
+            </if>
+            <if test="g8Msg != null">
+                g8Msg,
+            </if>
+            <if test="g9Msg != null">
+                g9Msg,
+            </if>
+            <if test="g10Msg != null">
+                g10Msg,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="stationId != null">
+                #{stationId,jdbcType=BIGINT},
+            </if>
+            <if test="formulaId != null">
+                #{formulaId,jdbcType=BIGINT},
+            </if>
+            <if test="formulaCode != null">
+                #{formulaCode,jdbcType=VARCHAR},
+            </if>
+            <if test="cement != null">
+                #{cement,jdbcType=DECIMAL},
+            </if>
+            <if test="water != null">
+                #{water,jdbcType=DECIMAL},
+            </if>
+            <if test="weight != null">
+                #{weight,jdbcType=DECIMAL},
+            </if>
+            <if test="g1 != null">
+                #{g1,jdbcType=DECIMAL},
+            </if>
+            <if test="g2 != null">
+                #{g2,jdbcType=DECIMAL},
+            </if>
+            <if test="g3 != null">
+                #{g3,jdbcType=DECIMAL},
+            </if>
+            <if test="g4 != null">
+                #{g4,jdbcType=DECIMAL},
+            </if>
+            <if test="g5 != null">
+                #{g5,jdbcType=DECIMAL},
+            </if>
+            <if test="g6 != null">
+                #{g6,jdbcType=DECIMAL},
+            </if>
+            <if test="g7 != null">
+                #{g7,jdbcType=DECIMAL},
+            </if>
+            <if test="g8 != null">
+                #{g8,jdbcType=DECIMAL},
+            </if>
+            <if test="g9 != null">
+                #{g9,jdbcType=DECIMAL},
+            </if>
+            <if test="g10 != null">
+                #{g10,jdbcType=DECIMAL},
+            </if>
+            <if test="batchCode != null">
+                #{batchCode,jdbcType=VARCHAR},
+            </if>
+            <if test="aggregateLevel != null">
+                #{aggregateLevel,jdbcType=INTEGER},
+            </if>
+            <if test="aggregateWeight != null">
+                #{aggregateWeight,jdbcType=DECIMAL},
+            </if>
+            <if test="isPass != null">
+                #{isPass,jdbcType=INTEGER},
+            </if>
+            <if test="dataId != null">
+                #{dataId,jdbcType=BIGINT},
+            </if>
+            <if test="excessMsg != null">
+                #{excessMsg,jdbcType=VARCHAR},
+            </if>
+            <if test="g1State != null">
+                #{g1State,jdbcType=INTEGER},
+            </if>
+            <if test="g2State != null">
+                #{g2State,jdbcType=INTEGER},
+            </if>
+            <if test="g3State != null">
+                #{g3State,jdbcType=INTEGER},
+            </if>
+            <if test="g4State != null">
+                #{g4State,jdbcType=INTEGER},
+            </if>
+            <if test="g5State != null">
+                #{g5State,jdbcType=INTEGER},
+            </if>
+            <if test="g6State != null">
+                #{g6State,jdbcType=INTEGER},
+            </if>
+            <if test="g7State != null">
+                #{g7State,jdbcType=INTEGER},
+            </if>
+            <if test="g8State != null">
+                #{g8State,jdbcType=INTEGER},
+            </if>
+            <if test="g9State != null">
+                #{g9State,jdbcType=INTEGER},
+            </if>
+            <if test="g10State != null">
+                #{g10State,jdbcType=INTEGER},
+            </if>
+            <if test="time != null">
+                #{time,jdbcType=TIMESTAMP},
+            </if>
+            <if test="sieveVersion != null">
+                #{sieveVersion,jdbcType=INTEGER},
+            </if>
+            <if test="g1Msg != null">
+                #{g1Msg,jdbcType=VARCHAR},
+            </if>
+            <if test="g2Msg != null">
+                #{g2Msg,jdbcType=VARCHAR},
+            </if>
+            <if test="g3Msg != null">
+                #{g3Msg,jdbcType=VARCHAR},
+            </if>
+            <if test="g4Msg != null">
+                #{g4Msg,jdbcType=VARCHAR},
+            </if>
+            <if test="g5Msg != null">
+                #{g5Msg,jdbcType=VARCHAR},
+            </if>
+            <if test="g6Msg != null">
+                #{g6Msg,jdbcType=VARCHAR},
+            </if>
+            <if test="g7Msg != null">
+                #{g7Msg,jdbcType=VARCHAR},
+            </if>
+            <if test="g8Msg != null">
+                #{g8Msg,jdbcType=VARCHAR},
+            </if>
+            <if test="g9Msg != null">
+                #{g9Msg,jdbcType=VARCHAR},
+            </if>
+            <if test="g10Msg != null">
+                #{g10Msg,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByIdSelective" parameterType="com.linghang.model.business.water.WaterMetadataAggregateModel">
+        update imp_water_metadata_aggregate
+        <set>
+            <if test="stationId != null">
+                stationId = #{stationId,jdbcType=BIGINT},
+            </if>
+            <if test="formulaId != null">
+                formulaId = #{formulaId,jdbcType=BIGINT},
+            </if>
+            <if test="formulaCode != null">
+                formulaCode = #{formulaCode,jdbcType=VARCHAR},
+            </if>
+            <if test="cement != null">
+                cement = #{cement,jdbcType=DECIMAL},
+            </if>
+            <if test="water != null">
+                water = #{water,jdbcType=DECIMAL},
+            </if>
+            <if test="weight != null">
+                weight = #{weight,jdbcType=DECIMAL},
+            </if>
+            <if test="g1 != null">
+                g1 = #{g1,jdbcType=DECIMAL},
+            </if>
+            <if test="g2 != null">
+                g2 = #{g2,jdbcType=DECIMAL},
+            </if>
+            <if test="g3 != null">
+                g3 = #{g3,jdbcType=DECIMAL},
+            </if>
+            <if test="g4 != null">
+                g4 = #{g4,jdbcType=DECIMAL},
+            </if>
+            <if test="g5 != null">
+                g5 = #{g5,jdbcType=DECIMAL},
+            </if>
+            <if test="g6 != null">
+                g6 = #{g6,jdbcType=DECIMAL},
+            </if>
+            <if test="g7 != null">
+                g7 = #{g7,jdbcType=DECIMAL},
+            </if>
+            <if test="g8 != null">
+                g8 = #{g8,jdbcType=DECIMAL},
+            </if>
+            <if test="g9 != null">
+                g9 = #{g9,jdbcType=DECIMAL},
+            </if>
+            <if test="g10 != null">
+                g10 = #{g10,jdbcType=DECIMAL},
+            </if>
+            <if test="batchCode != null">
+                batchCode = #{batchCode,jdbcType=VARCHAR},
+            </if>
+            <if test="aggregateLevel != null">
+                aggregateLevel = #{aggregateLevel,jdbcType=INTEGER},
+            </if>
+            <if test="aggregateWeight != null">
+                aggregateWeight = #{aggregateWeight,jdbcType=DECIMAL},
+            </if>
+            <if test="isPass != null">
+                isPass = #{isPass,jdbcType=INTEGER},
+            </if>
+            <if test="dataId != null">
+                dataId = #{dataId,jdbcType=BIGINT},
+            </if>
+            <if test="excessMsg != null">
+                excessMsg = #{excessMsg,jdbcType=VARCHAR},
+            </if>
+            <if test="g1State != null">
+                g1State = #{g1State,jdbcType=INTEGER},
+            </if>
+            <if test="g2State != null">
+                g2State = #{g2State,jdbcType=INTEGER},
+            </if>
+            <if test="g3State != null">
+                g3State = #{g3State,jdbcType=INTEGER},
+            </if>
+            <if test="g4State != null">
+                g4State = #{g4State,jdbcType=INTEGER},
+            </if>
+            <if test="g5State != null">
+                g5State = #{g5State,jdbcType=INTEGER},
+            </if>
+            <if test="g6State != null">
+                g6State = #{g6State,jdbcType=INTEGER},
+            </if>
+            <if test="g7State != null">
+                g7State = #{g7State,jdbcType=INTEGER},
+            </if>
+            <if test="g8State != null">
+                g8State = #{g8State,jdbcType=INTEGER},
+            </if>
+            <if test="g9State != null">
+                g9State = #{g9State,jdbcType=INTEGER},
+            </if>
+            <if test="g10State != null">
+                g10State = #{g10State,jdbcType=INTEGER},
+            </if>
+            <if test="time != null">
+                time = #{time,jdbcType=TIMESTAMP},
+            </if>
+            <if test="sieveVersion != null">
+                sieveVersion = #{sieveVersion,jdbcType=INTEGER},
+            </if>
+            <if test="g1Msg != null">
+                g1Msg = #{g1Msg,jdbcType=VARCHAR},
+            </if>
+            <if test="g2Msg != null">
+                g2Msg = #{g2Msg,jdbcType=VARCHAR},
+            </if>
+            <if test="g3Msg != null">
+                g3Msg = #{g3Msg,jdbcType=VARCHAR},
+            </if>
+            <if test="g4Msg != null">
+                g4Msg = #{g4Msg,jdbcType=VARCHAR},
+            </if>
+            <if test="g5Msg != null">
+                g5Msg = #{g5Msg,jdbcType=VARCHAR},
+            </if>
+            <if test="g6Msg != null">
+                g6Msg = #{g6Msg,jdbcType=VARCHAR},
+            </if>
+            <if test="g7Msg != null">
+                g7Msg = #{g7Msg,jdbcType=VARCHAR},
+            </if>
+            <if test="g8Msg != null">
+                g8Msg = #{g8Msg,jdbcType=VARCHAR},
+            </if>
+            <if test="g9Msg != null">
+                g9Msg = #{g9Msg,jdbcType=VARCHAR},
+            </if>
+            <if test="g10Msg != null">
+                g10Msg = #{g10Msg,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <update id="updateById" parameterType="com.linghang.model.business.water.WaterMetadataAggregateModel">
+        update imp_water_metadata_aggregate
+        set stationId = #{stationId,jdbcType=BIGINT},
+            formulaId = #{formulaId,jdbcType=BIGINT},
+            formulaCode = #{formulaCode,jdbcType=VARCHAR},
+            cement = #{cement,jdbcType=DECIMAL},
+            water = #{water,jdbcType=DECIMAL},
+            weight = #{weight,jdbcType=DECIMAL},
+            g1 = #{g1,jdbcType=DECIMAL},
+            g2 = #{g2,jdbcType=DECIMAL},
+            g3 = #{g3,jdbcType=DECIMAL},
+            g4 = #{g4,jdbcType=DECIMAL},
+            g5 = #{g5,jdbcType=DECIMAL},
+            g6 = #{g6,jdbcType=DECIMAL},
+            g7 = #{g7,jdbcType=DECIMAL},
+            g8 = #{g8,jdbcType=DECIMAL},
+            g9 = #{g9,jdbcType=DECIMAL},
+            g10 = #{g10,jdbcType=DECIMAL},
+            batchCode = #{batchCode,jdbcType=VARCHAR},
+            aggregateLevel = #{aggregateLevel,jdbcType=INTEGER},
+            aggregateWeight = #{aggregateWeight,jdbcType=DECIMAL},
+            isPass = #{isPass,jdbcType=INTEGER},
+            dataId = #{dataId,jdbcType=BIGINT},
+            excessMsg = #{excessMsg,jdbcType=VARCHAR},
+            g1State = #{g1State,jdbcType=INTEGER},
+            g2State = #{g2State,jdbcType=INTEGER},
+            g3State = #{g3State,jdbcType=INTEGER},
+            g4State = #{g4State,jdbcType=INTEGER},
+            g5State = #{g5State,jdbcType=INTEGER},
+            g6State = #{g6State,jdbcType=INTEGER},
+            g7State = #{g7State,jdbcType=INTEGER},
+            g8State = #{g8State,jdbcType=INTEGER},
+            g9State = #{g9State,jdbcType=INTEGER},
+            g10State = #{g10State,jdbcType=INTEGER},
+            time = #{time,jdbcType=TIMESTAMP},
+            sieveVersion = #{sieveVersion,jdbcType=INTEGER},
+            g1Msg = #{g1Msg,jdbcType=VARCHAR},
+            g2Msg = #{g2Msg,jdbcType=VARCHAR},
+            g3Msg = #{g3Msg,jdbcType=VARCHAR},
+            g4Msg = #{g4Msg,jdbcType=VARCHAR},
+            g5Msg = #{g5Msg,jdbcType=VARCHAR},
+            g6Msg = #{g6Msg,jdbcType=VARCHAR},
+            g7Msg = #{g7Msg,jdbcType=VARCHAR},
+            g8Msg = #{g8Msg,jdbcType=VARCHAR},
+            g9Msg = #{g9Msg,jdbcType=VARCHAR},
+            g10Msg = #{g10Msg,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <update id="updateByDataId" parameterType="com.linghang.model.business.water.WaterMetadataAggregateModel">
+        update imp_water_metadata_aggregate
+        set stationId = #{stationId,jdbcType=BIGINT},
+            formulaId = #{formulaId,jdbcType=BIGINT},
+            formulaCode = #{formulaCode,jdbcType=VARCHAR},
+            cement = #{cement,jdbcType=DECIMAL},
+            water = #{water,jdbcType=DECIMAL},
+            weight = #{weight,jdbcType=DECIMAL},
+            g1 = #{g1,jdbcType=DECIMAL},
+            g2 = #{g2,jdbcType=DECIMAL},
+            g3 = #{g3,jdbcType=DECIMAL},
+            g4 = #{g4,jdbcType=DECIMAL},
+            g5 = #{g5,jdbcType=DECIMAL},
+            g6 = #{g6,jdbcType=DECIMAL},
+            g7 = #{g7,jdbcType=DECIMAL},
+            g8 = #{g8,jdbcType=DECIMAL},
+            g9 = #{g9,jdbcType=DECIMAL},
+            g10 = #{g10,jdbcType=DECIMAL},
+            batchCode = #{batchCode,jdbcType=VARCHAR},
+            aggregateLevel = #{aggregateLevel,jdbcType=INTEGER},
+            aggregateWeight = #{aggregateWeight,jdbcType=DECIMAL},
+            isPass = #{isPass,jdbcType=INTEGER},
+            dataId = #{dataId,jdbcType=BIGINT},
+            excessMsg = #{excessMsg,jdbcType=VARCHAR},
+            g1State = #{g1State,jdbcType=INTEGER},
+            g2State = #{g2State,jdbcType=INTEGER},
+            g3State = #{g3State,jdbcType=INTEGER},
+            g4State = #{g4State,jdbcType=INTEGER},
+            g5State = #{g5State,jdbcType=INTEGER},
+            g6State = #{g6State,jdbcType=INTEGER},
+            g7State = #{g7State,jdbcType=INTEGER},
+            g8State = #{g8State,jdbcType=INTEGER},
+            g9State = #{g9State,jdbcType=INTEGER},
+            g10State = #{g10State,jdbcType=INTEGER},
+            time = #{time,jdbcType=TIMESTAMP},
+            sieveVersion = #{sieveVersion,jdbcType=INTEGER},
+            g1Msg = #{g1Msg,jdbcType=VARCHAR},
+            g2Msg = #{g2Msg,jdbcType=VARCHAR},
+            g3Msg = #{g3Msg,jdbcType=VARCHAR},
+            g4Msg = #{g4Msg,jdbcType=VARCHAR},
+            g5Msg = #{g5Msg,jdbcType=VARCHAR},
+            g6Msg = #{g6Msg,jdbcType=VARCHAR},
+            g7Msg = #{g7Msg,jdbcType=VARCHAR},
+            g8Msg = #{g8Msg,jdbcType=VARCHAR},
+            g9Msg = #{g9Msg,jdbcType=VARCHAR},
+            g10Msg = #{g10Msg,jdbcType=VARCHAR}
+        where dataId = #{dataId,jdbcType=BIGINT}
+    </update>
+</mapper>

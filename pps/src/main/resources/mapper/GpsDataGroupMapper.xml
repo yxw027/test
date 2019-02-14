@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.linghang.mapper.GpsDataGroupMapper">
+    <resultMap id="BaseResultMap" type="com.linghang.model.GpsDataGroupModel">
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="date" jdbcType="DATE" property="date" />
+        <result column="startStake" jdbcType="VARCHAR" property="startStake" />
+        <result column="endStake" jdbcType="VARCHAR" property="endStake" />
+        <result column="layer" jdbcType="INTEGER" property="layer" />
+        <result column="material" jdbcType="DECIMAL" property="material" />
+        <result column="orgId" jdbcType="BIGINT" property="orgId" />
+        <result column="workAreaId" jdbcType="BIGINT" property="workAreaId" />
+        <result column="startTime" jdbcType="DATE" property="startTime" />
+        <result column="endTime" jdbcType="DATE" property="endTime" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        date, startStake, endStake, layer, material, orgId, workAreaId, startTime, endTime
+    </sql>
+
+    <select id="selectById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select *
+        from tbl_gps_data_group
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <delete id="deleteById" parameterType="java.lang.Long">
+        delete from tbl_gps_data_group
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+
+    <delete id="deleteByIds" parameterType="java.util.List">
+        delete from tbl_gps_data_group
+        where id in
+        <foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
+            #{item}
+        </foreach>
+    </delete>
+
+    <insert id="insert" keyProperty="id" parameterType="com.linghang.model.GpsDataGroupModel">
+        insert into tbl_gps_data_group (
+        <include refid="Base_Column_List" />
+        )
+        values (#{date,jdbcType=DATE},
+        #{startStake,jdbcType=VARCHAR},
+        #{endStake,jdbcType=VARCHAR},
+        #{layer,jdbcType=INTEGER},
+        #{material,jdbcType=DECIMAL},
+        #{orgId,jdbcType=BIGINT},
+        #{workAreaId,jdbcType=BIGINT},
+        #{startTime,jdbcType=DATE},
+        #{endTime,jdbcType=DATE}
+        )
+    </insert>
+
+    <insert id="insertList" parameterType="java.util.List">
+        <foreach collection="list" index="index" item="item" separator=";">
+            insert into tbl_gps_data_group (
+            <include refid="Base_Column_List" />
+            )
+            values (#{item.date,jdbcType=DATE},
+            #{item.startStake,jdbcType=VARCHAR},
+            #{item.endStake,jdbcType=VARCHAR},
+            #{item.layer,jdbcType=INTEGER},
+            #{item.material,jdbcType=DECIMAL},
+            #{item.orgId,jdbcType=BIGINT},
+            #{item.workAreaId,jdbcType=BIGINT},
+            #{item.startTime,jdbcType=DATE},
+            #{item.endTime,jdbcType=DATE}
+            )
+        </foreach>
+    </insert>
+
+    <select id="selectByModel" parameterType="com.linghang.model.GpsDataGroupModel" resultMap="BaseResultMap">
+        select * from tbl_gps_data_group where 1 = 1
+        <if test="date != null">
+            and date = #{date,jdbcType=DATE}
+        </if>
+        <if test="startStake != null">
+            and startStake = #{startStake,jdbcType=VARCHAR}
+        </if>
+        <if test="endStake != null">
+            and endStake = #{endStake,jdbcType=VARCHAR}
+        </if>
+        <if test="layer != null">
+            and layer = #{layer,jdbcType=INTEGER}
+        </if>
+        <if test="material != null">
+            and material = #{material,jdbcType=DECIMAL}
+        </if>
+        <if test="orgId != null">
+            and orgId = #{orgId,jdbcType=BIGINT}
+        </if>
+        <if test="workAreaId != null">
+            and workAreaId = #{workAreaId,jdbcType=BIGINT}
+        </if>
+        <if test="startTime != null">
+            and startTime = #{startTime,jdbcType=DATE}
+        </if>
+        <if test="endTime != null">
+            and endTime = #{endTime,jdbcType=DATE}
+        </if>
+    </select>
+
+    <insert id="insertSelective" keyProperty="id" parameterType="com.linghang.model.GpsDataGroupModel">
+        insert into tbl_gps_data_group
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="date != null">
+                date,
+            </if>
+            <if test="startStake != null">
+                startStake,
+            </if>
+            <if test="endStake != null">
+                endStake,
+            </if>
+            <if test="layer != null">
+                layer,
+            </if>
+            <if test="material != null">
+                material,
+            </if>
+            <if test="orgId != null">
+                orgId,
+            </if>
+            <if test="workAreaId != null">
+                workAreaId,
+            </if>
+            <if test="startTime != null">
+                startTime,
+            </if>
+            <if test="endTime != null">
+                endTime,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="date != null">
+                #{date,jdbcType=DATE},
+            </if>
+            <if test="startStake != null">
+                #{startStake,jdbcType=VARCHAR},
+            </if>
+            <if test="endStake != null">
+                #{endStake,jdbcType=VARCHAR},
+            </if>
+            <if test="layer != null">
+                #{layer,jdbcType=INTEGER},
+            </if>
+            <if test="material != null">
+                #{material,jdbcType=DECIMAL},
+            </if>
+            <if test="orgId != null">
+                #{orgId,jdbcType=BIGINT},
+            </if>
+            <if test="workAreaId != null">
+                #{workAreaId,jdbcType=BIGINT},
+            </if>
+            <if test="startTime != null">
+                #{startTime,jdbcType=DATE},
+            </if>
+            <if test="endTime != null">
+                #{endTime,jdbcType=DATE},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByIdSelective" parameterType="com.linghang.model.GpsDataGroupModel">
+        update tbl_gps_data_group
+        <set>
+            <if test="date != null">
+                date = #{date,jdbcType=DATE},
+            </if>
+            <if test="startStake != null">
+                startStake = #{startStake,jdbcType=VARCHAR},
+            </if>
+            <if test="endStake != null">
+                endStake = #{endStake,jdbcType=VARCHAR},
+            </if>
+            <if test="layer != null">
+                layer = #{layer,jdbcType=INTEGER},
+            </if>
+            <if test="material != null">
+                material = #{material,jdbcType=DECIMAL},
+            </if>
+            <if test="orgId != null">
+                orgId = #{orgId,jdbcType=BIGINT},
+            </if>
+            <if test="workAreaId != null">
+                workAreaId = #{workAreaId,jdbcType=BIGINT},
+            </if>
+            <if test="startTime != null">
+                startTime = #{startTime,jdbcType=DATE},
+            </if>
+            <if test="endTime != null">
+                endTime = #{endTime,jdbcType=DATE},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <update id="updateById" parameterType="com.linghang.model.GpsDataGroupModel">
+        update tbl_gps_data_group
+        set date = #{date,jdbcType=DATE},
+            startStake = #{startStake,jdbcType=VARCHAR},
+            endStake = #{endStake,jdbcType=VARCHAR},
+            layer = #{layer,jdbcType=INTEGER},
+            material = #{material,jdbcType=DECIMAL},
+            orgId = #{orgId,jdbcType=BIGINT},
+            workAreaId = #{workAreaId,jdbcType=BIGINT},
+            startTime = #{startTime,jdbcType=DATE},
+            endTime = #{endTime,jdbcType=DATE}
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <select id="selectCountByModel" parameterType="com.linghang.model.GpsDataGroupModel" resultMap="BaseResultMap">
+        SELECT CONVERT(VARCHAR(10),gps_time,120) AS date, layer, min(mile) AS startStake, max(mile) AS endStake
+        FROM tbl_gps_data where 1=1
+        <if test="workAreaId != null">
+            and workAreaId = #{workAreaId,jdbcType=BIGINT}
+        </if>
+        <if test="startTime != null">
+            and gps_time >= #{startTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="endTime != null">
+            and gps_time &lt; #{endTime,jdbcType=TIMESTAMP}
+        </if>
+        GROUP BY CONVERT(VARCHAR(10),gps_time,120),layer ORDER BY date
+    </select>
+</mapper>

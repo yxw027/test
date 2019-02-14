@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.linghang.mapper.base.UserOrgLinkMapper">
+    <resultMap id="BaseResultMap" type="com.linghang.model.base.UserOrgLinkModel">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="userId" jdbcType="BIGINT" property="userId"/>
+        <result column="orgId" jdbcType="BIGINT" property="orgId"/>
+        <result column="projectId" jdbcType="BIGINT" property="projectId"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+       userId, orgId, projectId
+    </sql>
+
+    <select id="selectById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select *
+        from imp_user_org_link
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <delete id="deleteById" parameterType="java.lang.Long">
+        delete from imp_user_org_link
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+
+    <delete id="deleteByIds" parameterType="java.util.List">
+        delete from imp_user_org_link
+        where id in
+        <foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
+            #{item}
+        </foreach>
+    </delete>
+
+    <insert id="insert" keyProperty="id" parameterType="com.linghang.model.base.UserOrgLinkModel">
+        insert into imp_user_org_link (
+        <include refid="Base_Column_List"/>
+        )
+        values (
+        #{userId,jdbcType=BIGINT},
+        #{orgId,jdbcType=BIGINT},
+        #{projectId,jdbcType=BIGINT}
+        )
+    </insert>
+
+    <insert id="insertList" parameterType="java.util.List">
+        <foreach collection="list" index="index" item="item" separator=";">
+            insert into imp_user_org_link (
+            <include refid="Base_Column_List"/>
+            )
+            values (
+            #{item.userId,jdbcType=BIGINT},
+            #{item.orgId,jdbcType=BIGINT},
+            #{projectId,jdbcType=BIGINT}
+            )
+        </foreach>
+    </insert>
+
+    <select id="selectByModel" parameterType="com.linghang.model.base.UserOrgLinkModel" resultMap="BaseResultMap">
+        select * from imp_user_org_link where 1 = 1
+        <if test="userId != null">
+            and userId = #{userId,jdbcType=BIGINT}
+        </if>
+        <if test="orgId != null">
+            and orgId = #{orgId,jdbcType=BIGINT}
+        </if>
+        <if test="projectId != null">
+            and projectId = #{projectId,jdbcType=BIGINT}
+        </if>
+    </select>
+
+    <insert id="insertSelective" keyProperty="id" parameterType="com.linghang.model.base.UserOrgLinkModel">
+        insert into imp_user_org_link
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">
+                userId,
+            </if>
+            <if test="orgId != null">
+                orgId,
+            </if>
+            <if test="projectId != null">
+                projectId,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">
+                #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="orgId != null">
+                #{orgId,jdbcType=BIGINT},
+            </if>
+            <if test="projectId != null">
+                #{projectId,jdbcType=BIGINT},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByIdSelective" parameterType="com.linghang.model.base.UserOrgLinkModel">
+        update imp_user_org_link
+        <set>
+            <if test="userId != null">
+                userId = #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="orgId != null">
+                orgId = #{orgId,jdbcType=BIGINT},
+            </if>
+            <if test="projectId != null">
+                projectId = #{projectId,jdbcType=BIGINT},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <update id="updateById" parameterType="com.linghang.model.base.UserOrgLinkModel">
+        update imp_user_org_link
+        set userId = #{userId,jdbcType=BIGINT},
+            orgId = #{orgId,jdbcType=BIGINT},
+            projectId = #{projectId,jdbcType=BIGINT}
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <select id="selectByUserId" parameterType="com.linghang.model.base.UserOrgLinkModel" resultMap="BaseResultMap">
+        select l.*, o.name orgName, o.keyword orgKeyword from imp_user_org_link l
+        left JOIN imp_organization o on l.orgId = o.id
+        where userId = #{userId,jdbcType=BIGINT}
+    </select>
+
+</mapper>

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.linghang.mapper.base.UserRoleLinkMapper">
+    <resultMap id="BaseResultMap" type="com.linghang.model.base.UserRoleLinkModel">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="userId" jdbcType="BIGINT" property="userId"/>
+        <result column="roleId" jdbcType="BIGINT" property="roleId"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, userId, roleId
+    </sql>
+
+    <select id="selectById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select *
+        from imp_user_role_link
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <delete id="deleteById" parameterType="java.lang.Long">
+        delete from imp_user_role_link
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+
+    <delete id="deleteByIds" parameterType="java.util.List">
+        delete from imp_user_role_link
+        where id in
+        <foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
+            #{item}
+        </foreach>
+    </delete>
+
+    <insert id="insert" keyProperty="id" parameterType="com.linghang.model.base.UserRoleLinkModel">
+        insert into imp_user_role_link (
+        <include refid="Base_Column_List"/>
+        )
+        values (
+        #{id,jdbcType=BIGINT},
+        #{userId,jdbcType=BIGINT},
+        #{roleId,jdbcType=BIGINT}
+        )
+    </insert>
+
+    <insert id="insertList" keyProperty="id" parameterType="java.util.List">
+        <foreach collection="list" index="index" item="item" separator=";">
+            insert into imp_user_role_link (
+            <include refid="Base_Column_List"/>
+            )
+            values (
+            #{item.id,jdbcType=BIGINT},
+            #{item.userId,jdbcType=BIGINT},
+            #{item.roleId,jdbcType=BIGINT}
+            )
+        </foreach>
+    </insert>
+
+    <select id="selectByModel" parameterType="com.linghang.model.base.UserRoleLinkModel" resultMap="BaseResultMap">
+        select * from imp_user_role_link where 1 = 1
+        <if test="userId != null">
+            and userId = #{userId,jdbcType=BIGINT}
+        </if>
+        <if test="roleId != null">
+            and roleId = #{roleId,jdbcType=BIGINT}
+        </if>
+    </select>
+
+    <delete id="deleteByModel" parameterType="com.linghang.model.base.UserRoleLinkModel">
+        DELETE from imp_user_role_link where 1 = 1
+        <if test="userId != null">
+            and userId = #{userId,jdbcType=BIGINT}
+        </if>
+        <if test="roleId != null">
+            and roleId = #{roleId,jdbcType=BIGINT}
+        </if>
+    </delete>
+
+    <update id="updateById" parameterType="com.linghang.model.base.UserRoleLinkModel">
+        update imp_user_role_link
+        set userId = #{userId,jdbcType=BIGINT},
+        roleId = #{roleId,jdbcType=BIGINT}
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+</mapper>

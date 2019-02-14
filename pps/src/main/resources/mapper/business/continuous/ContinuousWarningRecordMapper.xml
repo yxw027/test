@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.linghang.mapper.business.continuous.ContinuousWarningRecordMapper">
+    <resultMap id="BaseResultMap" type="com.linghang.model.business.continuous.ContinuousWarningRecordModel">
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="continuWarningId" jdbcType="BIGINT" property="continuWarningId" />
+        <result column="userId" jdbcType="BIGINT" property="userId" />
+        <result column="userName" jdbcType="VARCHAR" property="userName" />
+        <result column="updateTime" jdbcType="TIMESTAMP" property="updateTime" />
+        <result column="mixerType" jdbcType="INTEGER" property="mixerType" />
+        <result column="warningType" jdbcType="INTEGER" property="warningType" />
+        <result column="firstWarning" jdbcType="INTEGER" property="firstWarning" />
+        <result column="secondWarning" jdbcType="INTEGER" property="secondWarning" />
+        <result column="threeWarning" jdbcType="INTEGER" property="threeWarning" />
+        <result column="remark" jdbcType="VARCHAR" property="remark" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, continuWarningId, userId, userName, updateTime, mixerType, warningType, firstWarning, 
+        secondWarning, threeWarning, remark
+    </sql>
+
+    <select id="selectById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select * 
+        from imp_continuous_warning_Record
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <delete id="deleteById" parameterType="java.lang.Long">
+        delete from imp_continuous_warning_Record
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+
+    <delete id="deleteByIds" parameterType="java.util.List">
+        delete from imp_continuous_warning_Record
+        where id in 
+        <foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
+            #{item}
+        </foreach>
+    </delete>
+
+    <insert id="insert" keyProperty="id" parameterType="com.linghang.model.business.continuous.ContinuousWarningRecordModel">
+        insert into imp_continuous_warning_Record (
+        <include refid="Base_Column_List" />
+        )
+        values (#{id,jdbcType=BIGINT}, 
+            #{continuWarningId,jdbcType=BIGINT}, 
+            #{userId,jdbcType=BIGINT}, 
+            #{userName,jdbcType=VARCHAR}, 
+            #{updateTime,jdbcType=TIMESTAMP}, 
+            #{mixerType,jdbcType=INTEGER}, 
+            #{warningType,jdbcType=INTEGER}, 
+            #{firstWarning,jdbcType=INTEGER}, 
+            #{secondWarning,jdbcType=INTEGER}, 
+            #{threeWarning,jdbcType=INTEGER}, 
+            #{remark,jdbcType=VARCHAR}
+            )
+    </insert>
+
+    <insert id="insertList" keyProperty="id" parameterType="java.util.List">
+        <foreach collection="list" index="index" item="item" separator=";">
+            insert into imp_continuous_warning_Record (
+            <include refid="Base_Column_List" />
+            )
+            values (#{item.id,jdbcType=BIGINT}, 
+                #{item.continuWarningId,jdbcType=BIGINT}, 
+                #{item.userId,jdbcType=BIGINT}, 
+                #{item.userName,jdbcType=VARCHAR}, 
+                #{item.updateTime,jdbcType=TIMESTAMP}, 
+                #{item.mixerType,jdbcType=INTEGER}, 
+                #{item.warningType,jdbcType=INTEGER}, 
+                #{item.firstWarning,jdbcType=INTEGER}, 
+                #{item.secondWarning,jdbcType=INTEGER}, 
+                #{item.threeWarning,jdbcType=INTEGER}, 
+                #{item.remark,jdbcType=VARCHAR}
+                )
+        </foreach>
+    </insert>
+
+    <select id="selectByModel" parameterType="com.linghang.model.business.continuous.ContinuousWarningRecordModel" resultMap="BaseResultMap">
+        select * from imp_continuous_warning_Record where 1 = 1
+        <if test="continuWarningId != null">
+            and continuWarningId = #{continuWarningId,jdbcType=BIGINT}
+        </if>
+        <if test="userId != null">
+            and userId = #{userId,jdbcType=BIGINT}
+        </if>
+        <if test="userName != null">
+            and userName = #{userName,jdbcType=VARCHAR}
+        </if>
+        <if test="updateTime != null">
+            and updateTime = #{updateTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="mixerType != null">
+            and mixerType = #{mixerType,jdbcType=INTEGER}
+        </if>
+        <if test="warningType != null">
+            and warningType = #{warningType,jdbcType=INTEGER}
+        </if>
+        <if test="firstWarning != null">
+            and firstWarning = #{firstWarning,jdbcType=INTEGER}
+        </if>
+        <if test="secondWarning != null">
+            and secondWarning = #{secondWarning,jdbcType=INTEGER}
+        </if>
+        <if test="threeWarning != null">
+            and threeWarning = #{threeWarning,jdbcType=INTEGER}
+        </if>
+        <if test="remark != null">
+            and remark = #{remark,jdbcType=VARCHAR}
+        </if>
+        order by updateTime desc
+    </select>
+
+    <select id="selectByOptions" resultMap="BaseResultMap">
+        select * from imp_continuous_warning_Record where 1 = 1
+        <if test="options.filters != null">
+            <foreach collection="options.filters" item="item">
+                and ${item.field}
+                <if test="item.operator == 'eq'">
+                    = #{item.value}
+                </if>
+                <if test="item.operator == 'contains'">
+                    like '%'+#{item.value}+'%'
+                </if>
+            </foreach>
+        </if>
+        order by
+        <if test="options.sort != null">
+            <foreach collection="options.sort" item="item">
+                ${item.field} ${item.dir}
+            </foreach>
+        </if>
+        <if test="options.sort == null">
+            id
+        </if>
+    </select>
+
+    <insert id="insertSelective" keyProperty="id" parameterType="com.linghang.model.business.continuous.ContinuousWarningRecordModel">
+        insert into imp_continuous_warning_Record
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null and id != ''">
+                id,
+            </if>
+            <if test="continuWarningId != null and continuWarningId != ''">
+                continuWarningId,
+            </if>
+            <if test="userId != null and userId != ''">
+                userId,
+            </if>
+            <if test="userName != null and userName != ''">
+                userName,
+            </if>
+            <if test="updateTime != null and updateTime != ''">
+                updateTime,
+            </if>
+            <if test="mixerType != null and mixerType != ''">
+                mixerType,
+            </if>
+            <if test="warningType != null and warningType != ''">
+                warningType,
+            </if>
+            <if test="firstWarning != null and firstWarning != ''">
+                firstWarning,
+            </if>
+            <if test="secondWarning != null and secondWarning != ''">
+                secondWarning,
+            </if>
+            <if test="threeWarning != null and threeWarning != ''">
+                threeWarning,
+            </if>
+            <if test="remark != null and remark != ''">
+                remark,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null and id != ''">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="continuWarningId != null and continuWarningId != ''">
+                #{continuWarningId,jdbcType=BIGINT},
+            </if>
+            <if test="userId != null and userId != ''">
+                #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="userName != null and userName != ''">
+                #{userName,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null and updateTime != ''">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="mixerType != null and mixerType != ''">
+                #{mixerType,jdbcType=INTEGER},
+            </if>
+            <if test="warningType != null and warningType != ''">
+                #{warningType,jdbcType=INTEGER},
+            </if>
+            <if test="firstWarning != null and firstWarning != ''">
+                #{firstWarning,jdbcType=INTEGER},
+            </if>
+            <if test="secondWarning != null and secondWarning != ''">
+                #{secondWarning,jdbcType=INTEGER},
+            </if>
+            <if test="threeWarning != null and threeWarning != ''">
+                #{threeWarning,jdbcType=INTEGER},
+            </if>
+            <if test="remark != null and remark != ''">
+                #{remark,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByIdSelective" parameterType="com.linghang.model.business.continuous.ContinuousWarningRecordModel">
+        update imp_continuous_warning_Record
+        <set>
+            <if test="continuWarningId != null">
+                continuWarningId = #{continuWarningId,jdbcType=BIGINT},
+            </if>
+            <if test="userId != null">
+                userId = #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="userName != null">
+                userName = #{userName,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null">
+                updateTime = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="mixerType != null">
+                mixerType = #{mixerType,jdbcType=INTEGER},
+            </if>
+            <if test="warningType != null">
+                warningType = #{warningType,jdbcType=INTEGER},
+            </if>
+            <if test="firstWarning != null">
+                firstWarning = #{firstWarning,jdbcType=INTEGER},
+            </if>
+            <if test="secondWarning != null">
+                secondWarning = #{secondWarning,jdbcType=INTEGER},
+            </if>
+            <if test="threeWarning != null">
+                threeWarning = #{threeWarning,jdbcType=INTEGER},
+            </if>
+            <if test="remark != null">
+                remark = #{remark,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <update id="updateById" parameterType="com.linghang.model.business.continuous.ContinuousWarningRecordModel">
+        update imp_continuous_warning_Record
+        set continuWarningId = #{continuWarningId,jdbcType=BIGINT},
+            userId = #{userId,jdbcType=BIGINT},
+            userName = #{userName,jdbcType=VARCHAR},
+            updateTime = #{updateTime,jdbcType=TIMESTAMP},
+            mixerType = #{mixerType,jdbcType=INTEGER},
+            warningType = #{warningType,jdbcType=INTEGER},
+            firstWarning = #{firstWarning,jdbcType=INTEGER},
+            secondWarning = #{secondWarning,jdbcType=INTEGER},
+            threeWarning = #{threeWarning,jdbcType=INTEGER},
+            remark = #{remark,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <delete id="deleteContinuousId" parameterType="java.lang.Long">
+        delete from imp_continuous_warning_Record
+        where continuWarningId = #{continuousId,jdbcType=BIGINT}
+    </delete>
+
+</mapper>

@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <title>车辆定位</title>
+    <link rel="icon" type="image/x-icon" href="/img/lhLogo.png">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/app.css" rel="stylesheet" type="text/css"/>
+    <link href="../css/main.css" type="text/css" rel="stylesheet">
+    <script src="../libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="../libs/twitter-bootstrap/4.1.3/js/bootstrap.min.js"></script>
+    <link href="../libs/toastr/css/toastr.min.css" rel="stylesheet">
+    <script src="../libs/toastr/js/toastr.min.js"></script>
+    <script type="text/javascript" src="../js/baidu/baidu.js"></script>
+    <script type="text/javascript" src="../js/baidu/baiduMap_apikey.js"></script>
+    <script type="text/javascript" src="../js/business/car/baidutoWGS84.js"></script>
+    <script src="../libs/kendo/js/kendo.all.min.js"></script>
+    <script src="../libs/kendo/js/messages/kendo.messages.zh-CN.min.js"></script>
+    <script src="../libs/kendo/js/cultures/kendo.culture.zh-CN.min.js"></script>
+</head>
+<style>
+    #allmap {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+    }
+
+    .locationDiv {
+        position: fixed;
+        font-size: 28px;
+        left: 2%;
+        bottom: 1px;
+        width: 35px;
+        height: 35px;
+        background-color: #fff;
+        opacity: 0.9;
+        border-radius: 2px;
+    }
+
+    .locationDiv a {
+        color: #676d73;
+    }
+
+    .locationDiv i {
+        position: absolute;
+        left: 25%;
+        top: 9%;
+    }
+</style>
+<body>
+<div id="allmap"></div>
+<div class="locationDiv">
+    <a id="locationIcon" href="javascript:;;"><i class="fa fa-map-marker"></i></a>
+</div>
+<div class="locationDiv" style="bottom: 37px;left: 2%;">
+    <a id="fenceIcon" href="javascript:;;"><i style="left: 20%;font-size: 20px;top: 25%;"
+                                              class="fa fa-map-signs"></i></a>
+</div>
+</body>
+</html>
+<script>
+    var map = new BMap.Map("allmap", {enableMapClick: false});
+    var point = new BMap.Point(108.95309828, 34.2777999);
+    map.centerAndZoom(point, 17);
+    map.enableScrollWheelZoom();
+    map.addControl(new BMap.NavigationControl({
+        type: BMAP_NAVIGATION_CONTROL_ZOOM,
+        anchor: BMAP_ANCHOR_BOTTOM_RIGHT,
+        offset: new BMap.Size(1, 1)
+    }));
+    var carId = GetQueryString("carId");
+    var LocationPoint;
+    var FencePoint;
+    var asphaltStation;
+    var waterStation;
+    $(function () {
+        if (!carId) {
+            toastr.warning("信息错误。", "警告");
+        } else {
+            map.clearOverlays();
+            getCarPosition(carId);
+            getLinkList(carId);
+        }
+
+        /**
+         * 当前车辆位置
+         */
+        $("#locationIcon").on('click', function () {
+            if (LocationPoint) {
+                map.centerAndZoom(LocationPoint, 17);
+            }
+        })
+        /**
+         * 电子围栏 以第一个点为中心显示
+         */
+        $("#fenceIcon").on('click', function () {
+            if (FencePoint) {
+                map.centerAndZoom(FencePoint, 12);
+            }
+        })
+    })
+
+    /**
+     * 获取请求路径附带参数
+     * @param name
+     * @returns {*}
+     * @constructor
+     */
+    function GetQueryString(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return unescape(r[2]);
+        return null;
+    }
+
+    /**
+     * 查询实时位置
+     */
+    function getCarPosition(carId) {
+        $.ajax({
+            type: 'post',
+            dataType: 'json',
+            data: {carId: carId},
+            url: '/carPosition/selectNowPositionByCarId',
+            async: false,
+            success: function (response) {
+                if (response) {
+                    addPoint(response.xlabe, response.ylabe, response.direction, response);
+                } else {
+                    toastr.info("当前车辆无定位信息上传，无法定位。", "提示");
+                }
+            }
+        });
+    }
+
+    /**
+     * 查询拌合站
+     */
+    function getMixingStation(orgId) {
+        if (orgId == undefined) {
+            return;
+        }
+        $.ajax({
+            url: '/asphaltInfo/getAsphaltList',
+            type: 'post',
+            async: false,
+            data: {orgId: orgId},
+            success: function (res) {
+                if (res != null) {
+                    asphaltStation = res;
+                }
+            }
+        });
+        $.ajax({
+            url: '/waterInfo/selectByOrgId',
+            type: 'post',
+            async: false,
+            data: {orgId: orgId},
+            success: function (res) {
+                if (res != null) {
+                    waterStation = res;
+                }
+            }
+        });
+        addMixingStation();
+    }
+
+    function addMixingStation() {
+        var asphaltIcon = new BMap.Icon("../img/asphaltStation.png", new BMap.Size(60, 40));
+        var waterIcon = new BMap.Icon("../img/waterStation.png", new BMap.Size(60, 40));
+        if (asphaltStation && asphaltStation.length > 0) {
+            for (var i = 0; i < asphaltStation.length; i++) {
+                if (asphaltStation[i].coordinate != null && asphaltStation[i].coordinate.length > 0) {
+                    var locations = asphaltStation[i].coordinate.split(",");
+                    var point = new BMap.Point(locations[0], locations[1]);
+                    var marker = new BMap.Marker(point, {icon: asphaltIcon});  // 创建标注
+                    var label = new BMap.Label(asphaltStation[i].name, {offset: new BMap.Size(-15, -20)});
+                    marker.setLabel(label);
+                    map.addOverlay(marker);
+                }
+            }
+        }
+
+        if (waterStation && waterStation.length > 0) {
+            for (var i = 0; i < waterStation.length; i++) {
+                if (waterStation[i].coordinate != null && waterStation[i].coordinate.length > 0) {
+                    var locations = waterStation[i].coordinate.split(",");
+                    var point = new BMap.Point(locations[0], locations[1]);
+                    var marker = new BMap.Marker(point, {icon: waterIcon});  // 创建标注
+                    var label = new BMap.Label(waterStation[i].name, {offset: new BMap.Size(-5, -20)});
+                    marker.setLabel(label);
+                    map.addOverlay(marker);
+                }
+            }
+        }
+    }
+    /**
+     * 查询电子围栏信息及车辆定位信息
+     */
+    function getLinkList(carId) {
+        $.ajax({
+            type: 'post',
+            dataType: 'json',
+            data: {carId: carId},
+            url: '/carElectricFence/selectCarFence',
+            async: false,
+            success: function (response) {
+                if (response) {
+                    getFence(response);
+                    getMixingStation(response.orgId);
+                } else {
+                    toastr.warning("该标段暂未添加电子围栏。", "警告");
+                }
+            }
+        });
+    }
+
+    /**
+     * 根据车辆关联列表获取对应map围栏数据
+     * @param carObject
+     * @param center
+     */
+    function getFence(carObject) {
+        if (carObject != null) {
+            if (carObject.fancePosition) {
+                var arrPois = [];
+                var parseJSON = JSON.parse(carObject.fancePosition);
+                if (parseJSON != null && parseJSON.length > 0) {
+                    for (var i = 0; i < parseJSON.length; i++) {
+                        arrPois.push(new BMap.Point(parseJSON[i].xlabe, parseJSON[i].ylabe));
+                    }
+                }
+                if (carObject.pointCenter) {
+                    var centerPoint = JSON.parse(carObject.pointCenter);
+                    FencePoint = new BMap.Point(centerPoint[0].lng, centerPoint[0].lat);
+                } else {
+                    FencePoint = arrPois[0];
+                }
+                var polyLine = new BMap.Polygon(arrPois, {
+                    strokeColor: "#71735b",    //边线颜色。
+                    fillColor: "#f2f510",     //填充颜色。当参数为空时，圆形将没有填充效果。
+                    strokeWeight: 2,       //边线的宽度，以像素为单位。
+                    strokeOpacity: 0.8,	   //边线透明度，取值范围0 - 1。
+                    fillOpacity: 0.3,      //填充的透明度，取值范围0 - 1。
+                    strokeStyle: 'solid'
+                });// 展示围栏
+                map.addOverlay(polyLine);
+            }
+        }
+    }
+
+    /**
+     * 添加标记
+     * @param lat
+     * @param lon
+     * @param rotation
+     * @param item
+     */
+    function addPoint(lat, lon, rotation, item) {
+        var wgs84togcj02 = coordtransform.wgs84togcj02(lon, lat);
+        var gcj02tobd09 = coordtransform.gcj02tobd09(wgs84togcj02[0], wgs84togcj02[1]);
+        var template = kendo.template($("#infoTemplate").html());
+        var htmlString = template(item);
+        LocationPoint = new BMap.Point(gcj02tobd09[0], gcj02tobd09[1]);
+        map.centerAndZoom(LocationPoint, 17);
+        var myIcon = new BMap.Icon("../img/truck2.png", new BMap.Size(22, 40));
+        var marker = new BMap.Marker(LocationPoint, {icon: myIcon, rotation: rotation});  // 创建标注
+        var label = new BMap.Label(item.carnum, {offset: new BMap.Size(-15, -20)});
+        marker.setLabel(label);
+        map.addOverlay(marker);
+        var infoWindow = new BMap.InfoWindow(htmlString);
+        marker.addEventListener("click", function () {
+            this.openInfoWindow(infoWindow);
+        });
+    }
+
+    function getRotation(rotation) {
+        var direction = "";
+        if (rotation == 0) {
+            direction = "正北";
+        } else if (rotation > 0 && rotation < 45) {
+            direction = "东北偏北";
+        } else if (rotation == 45) {
+            direction = "东北";
+        } else if (rotation > 45 && rotation < 90) {
+            direction = "东北偏东";
+        } else if (rotation == 90) {
+            direction = "正东";
+        } else if (rotation > 90 && rotation < 135) {
+            direction = "东南偏东";
+        } else if (rotation == 135) {
+            direction = "东南";
+        } else if (rotation > 135 && rotation < 180) {
+            direction = "东南偏南";
+        } else if (rotation == 180) {
+            direction = "正南";
+        } else if (rotation > 180 && rotation < 225) {
+            direction = "西南偏南";
+        } else if (rotation == 225) {
+            direction = "西南";
+        } else if (rotation > 225 && rotation < 270) {
+            direction = "西南偏西";
+        } else if (rotation == 270) {
+            direction = "正西";
+        } else if (rotation > 270 && rotation < 315) {
+            direction = "西北偏西";
+        } else if (rotation == 315) {
+            direction = "正西";
+        } else if (rotation > 315 && rotation < 360) {
+            direction = "西北偏北";
+        }
+        return direction;
+    }
+</script>
+<script id="infoTemplate" type="text/x-kendo-template">
+    <ul class="nav nav-tabs tabs-bordered">
+        <li>
+            <dl><b>#:carnum#</b></dl>
+            <dl>车速：#:speed == null ? 0 :speed# km/h</dl>
+            <dl>
+                #var status = "无";#
+                #if(carAlarmModels[0] != null){#
+                # status = carAlarmModels[0].alarmMessage;#
+                #}#
+                状态：#:status#
+            </dl>
+            <dl>
+                时间：#:locationTime == null ? "00:00:00" : locationTime#
+            </dl>
+            #var move = "";#
+            #if(direction != null){#
+            #move = getRotation(direction);#
+            #}#
+            <dl>方向：#:move#</dl>
+        </li>
+    </ul>
+</script>

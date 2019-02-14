@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.linghang.mapper.TrimbleInfoMapper">
+    <resultMap id="BaseResultMap" type="com.linghang.model.TrimbleInfoModel">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="sn" jdbcType="VARCHAR" property="sn"/>
+        <result column="orgId" jdbcType="BIGINT" property="orgId"/>
+        <result column="brand" jdbcType="INTEGER" property="brand"/>
+        <result column="remark" jdbcType="VARCHAR" property="remark"/>
+        <result column="type" jdbcType="INTEGER" property="type"/>
+        <result column="mac" jdbcType="VARCHAR" property="mac"/>
+        <result column="mobile" jdbcType="VARCHAR" property="mobile"/>
+        <result column="status" jdbcType="INTEGER" property="status"/>
+        <result column="createTime" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="createUserId" jdbcType="BIGINT" property="createUserId"/>
+        <result column="lastOnlineTime" jdbcType="TIMESTAMP" property="lastOnlineTime"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, sn ,orgId, brand, remark, type, mac, mobile, status, createTime, createUserId,
+        lastOnlineTime
+    </sql>
+
+    <select id="selectById" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select * 
+        from tbl_trimble_info
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <delete id="deleteById" parameterType="java.lang.String">
+        delete from tbl_trimble_info
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+
+    <delete id="deleteByIds" parameterType="java.util.List">
+        delete from tbl_trimble_info
+        where id in
+        <foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
+            #{item}
+        </foreach>
+    </delete>
+
+    <insert id="insert" keyProperty="id" parameterType="com.linghang.model.TrimbleInfoModel">
+        insert into tbl_trimble_info (
+        <include refid="Base_Column_List"/>
+        )
+        values (#{id,jdbcType=BIGINT},
+        #{sn,jdbcType=VARCHAR},
+        #{orgId,jdbcType=BIGINT},
+        #{brand,jdbcType=INTEGER},
+        #{remark,jdbcType=VARCHAR},
+        #{type,jdbcType=INTEGER},
+        #{mac,jdbcType=VARCHAR},
+        #{mobile,jdbcType=VARCHAR},
+        #{status,jdbcType=INTEGER},
+        #{createTime,jdbcType=TIMESTAMP},
+        #{createUserId,jdbcType=BIGINT},
+        #{lastOnlineTime,jdbcType=TIMESTAMP}
+        )
+    </insert>
+
+    <insert id="insertList" keyProperty="id" parameterType="java.util.List">
+        <foreach collection="list" index="index" item="item" separator=";">
+            insert into tbl_trimble_info (
+            <include refid="Base_Column_List"/>
+            )
+            values (#{item.id,jdbcType=BIGINT},
+            #{item.sn,jdbcType=VARCHAR},
+            #{item.orgId,jdbcType=BIGINT},
+            #{item.brand,jdbcType=INTEGER},
+            #{item.remark,jdbcType=VARCHAR},
+            #{item.type,jdbcType=INTEGER},
+            #{item.mac,jdbcType=VARCHAR},
+            #{item.mobile,jdbcType=VARCHAR},
+            #{item.status,jdbcType=INTEGER},
+            #{item.createTime,jdbcType=TIMESTAMP},
+            #{item.createUserId,jdbcType=BIGINT},
+            #{item.lastOnlineTime,jdbcType=TIMESTAMP}
+            )
+        </foreach>
+    </insert>
+
+    <select id="selectByModel" parameterType="com.linghang.model.TrimbleInfoModel" resultMap="BaseResultMap">
+        select * from tbl_trimble_info where 1 = 1
+        <if test="sn != null">
+            and sn = #{sn,jdbcType=VARCHAR}
+        </if>
+        <if test="orgId != null">
+            and orgId = #{orgId,jdbcType=BIGINT}
+        </if>
+        <if test="brand != null">
+            and brand = #{brand,jdbcType=INTEGER}
+        </if>
+        <if test="remark != null">
+            and remark = #{remark,jdbcType=VARCHAR}
+        </if>
+        <if test="type != null">
+            and type = #{type,jdbcType=INTEGER}
+        </if>
+        <if test="mac != null">
+            and mac = #{mac,jdbcType=VARCHAR}
+        </if>
+        <if test="mobile != null">
+            and mobile = #{mobile,jdbcType=VARCHAR}
+        </if>
+        <if test="status != null">
+            and status = #{status,jdbcType=INTEGER}
+        </if>
+        <if test="createTime != null">
+            and createTime = #{createTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="createUserId != null">
+            and createUserId = #{createUserId,jdbcType=BIGINT}
+        </if>
+        <if test="lastOnlineTime != null">
+            and lastOnlineTime = #{lastOnlineTime,jdbcType=TIMESTAMP}
+        </if>
+    </select>
+
+    <select id="selectByOptions" resultMap="BaseResultMap">
+        select * from tbl_trimble_info where orgId = ${orgId}
+        <if test="options.filters != null">
+            <foreach collection="options.filters" item="item">
+                and u.${item.field}
+                <choose>
+                    <when test="item.operator == 'eq'">
+                        = #{item.value}
+                    </when>
+                    <when test="item.operator == 'neq'">
+                        != #{item.value}
+                    </when>
+                    <when test="item.operator == 'gt'">
+                        &gt; #{item.value}
+                    </when>
+                    <when test="item.operator == 'lt'">
+                        &lt; #{item.value}
+                    </when>
+                    <when test="item.operator == 'isnull'">
+                        #{item.value} is null
+                    </when>
+                    <when test="item.operator == 'isnotnull'">
+                        #{item.value} is not null
+                    </when>
+                    <when test="item.operator == 'contains'">
+                        like '%'+#{item.value}+'%'
+                    </when>
+                </choose>
+            </foreach>
+        </if>
+        order by
+        <if test="options.sort != null">
+            <foreach collection="options.sort" item="item">
+                ${item.field} ${item.dir}
+            </foreach>
+        </if>
+        <if test="options.sort == null">
+            id
+        </if>
+    </select>
+
+    <update id="updateByIdSelective" parameterType="com.linghang.model.TrimbleInfoModel">
+        update tbl_trimble_info
+        <set>
+            <if test="sn != null">
+                sn = #{sn,jdbcType=VARCHAR},
+            </if>
+            <if test="orgId != null">
+                orgId = #{orgId,jdbcType=BIGINT},
+            </if>
+            <if test="brand != null">
+                brand = #{brand,jdbcType=INTEGER},
+            </if>
+            <if test="remark != null">
+                remark = #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null">
+                type = #{type,jdbcType=INTEGER},
+            </if>
+            <if test="mac != null">
+                mac = #{mac,jdbcType=VARCHAR},
+            </if>
+            <if test="mobile != null">
+                mobile = #{mobile,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                createTime = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createUserId != null">
+                createUserId = #{createUserId,jdbcType=BIGINT},
+            </if>
+            <if test="lastOnlineTime != null">
+                lastOnlineTime = #{lastOnlineTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=VARCHAR}
+    </update>
+
+    <update id="updateById" parameterType="com.linghang.model.TrimbleInfoModel">
+        update tbl_trimble_info
+        set sn = #{sn,jdbcType=VARCHAR},
+            orgId = #{orgId,jdbcType=BIGINT},
+            brand = #{brand,jdbcType=INTEGER},
+            remark = #{remark,jdbcType=VARCHAR},
+            type = #{type,jdbcType=INTEGER},
+            mac = #{mac,jdbcType=VARCHAR},
+            mobile = #{mobile,jdbcType=VARCHAR},
+            status = #{status,jdbcType=INTEGER},
+            createTime = #{createTime,jdbcType=TIMESTAMP},
+            createUserId = #{createUserId,jdbcType=BIGINT},
+            lastOnlineTime = #{lastOnlineTime,jdbcType=TIMESTAMP}
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+</mapper>

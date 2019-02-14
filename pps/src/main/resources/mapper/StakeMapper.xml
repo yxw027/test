@@ -1,0 +1,337 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.linghang.mapper.StakeMapper">
+    <resultMap id="BaseResultMap" type="com.linghang.model.StakeModel">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="stakeGroupId" jdbcType="BIGINT" property="stakeGroupId"/>
+        <result column="stakeNo" jdbcType="VARCHAR" property="stakeNo"/>
+        <result column="x" jdbcType="DECIMAL" property="x"/>
+        <result column="y" jdbcType="DECIMAL" property="y"/>
+        <result column="lon" jdbcType="DOUBLE" property="lon"/>
+        <result column="lat" jdbcType="DOUBLE" property="lat"/>
+        <result column="mile" jdbcType="INTEGER" property="mile"/>
+        <result column="leftLayer" jdbcType="DECIMAL" property="leftLayer"/>
+        <result column="leftUpperLevel" jdbcType="DECIMAL" property="leftUpperLevel"/>
+        <result column="leftLowestLevel" jdbcType="DECIMAL" property="leftLowestLevel"/>
+        <result column="leftSubbase" jdbcType="DECIMAL" property="leftSubbase"/>
+        <result column="rightLayer" jdbcType="DECIMAL" property="rightLayer"/>
+        <result column="rightUpperLevel" jdbcType="DECIMAL" property="rightUpperLevel"/>
+        <result column="rightLowestLevel" jdbcType="DECIMAL" property="rightLowestLevel"/>
+        <result column="rightSubbase" jdbcType="DECIMAL" property="rightSubbase"/>
+        <result column="stakeType" jdbcType="VARCHAR" property="stakeType"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        stakeGroupId, stakeNo, x, y, lon, lat, mile, leftLayer, leftUpperLevel, leftLowestLevel, 
+        leftSubbase, rightLayer, rightUpperLevel, rightLowestLevel, rightSubbase, stakeType
+    </sql>
+
+    <select id="selectById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select * 
+        from tbl_stake
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <delete id="deleteById" parameterType="java.lang.Long">
+        delete from tbl_stake
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+
+    <delete id="deleteByIds" parameterType="java.util.List">
+        delete from tbl_stake
+        where id in
+        <foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
+            #{item}
+        </foreach>
+    </delete>
+
+    <insert id="insert" keyProperty="id" parameterType="com.linghang.model.StakeModel">
+        insert into tbl_stake (
+        <include refid="Base_Column_List"/>
+        )
+        values (#{stakeGroupId,jdbcType=BIGINT},
+        #{stakeNo,jdbcType=VARCHAR},
+        #{x,jdbcType=DECIMAL},
+        #{y,jdbcType=DECIMAL},
+        #{lon,jdbcType=DOUBLE},
+        #{lat,jdbcType=DOUBLE},
+        #{mile,jdbcType=INTEGER},
+        #{leftLayer,jdbcType=DECIMAL},
+        #{leftUpperLevel,jdbcType=DECIMAL},
+        #{leftLowestLevel,jdbcType=DECIMAL},
+        #{leftSubbase,jdbcType=DECIMAL},
+        #{rightLayer,jdbcType=DECIMAL},
+        #{rightUpperLevel,jdbcType=DECIMAL},
+        #{rightLowestLevel,jdbcType=DECIMAL},
+        #{rightSubbase,jdbcType=DECIMAL},
+        #{stakeType,jdbcType=VARCHAR}
+        )
+    </insert>
+
+    <insert id="insertList" parameterType="java.util.List">
+        <foreach collection="list" index="index" item="item" separator=";">
+            insert into tbl_stake (
+            <include refid="Base_Column_List"/>
+            )
+            values (#{item.stakeGroupId,jdbcType=BIGINT},
+            #{item.stakeNo,jdbcType=VARCHAR},
+            #{item.x,jdbcType=DECIMAL},
+            #{item.y,jdbcType=DECIMAL},
+            #{item.lon,jdbcType=DOUBLE},
+            #{item.lat,jdbcType=DOUBLE},
+            #{item.mile,jdbcType=INTEGER},
+            #{item.leftLayer,jdbcType=DECIMAL},
+            #{item.leftUpperLevel,jdbcType=DECIMAL},
+            #{item.leftLowestLevel,jdbcType=DECIMAL},
+            #{item.leftSubbase,jdbcType=DECIMAL},
+            #{item.rightLayer,jdbcType=DECIMAL},
+            #{item.rightUpperLevel,jdbcType=DECIMAL},
+            #{item.rightLowestLevel,jdbcType=DECIMAL},
+            #{item.rightSubbase,jdbcType=DECIMAL},
+            #{item.stakeType,jdbcType=VARCHAR}
+            )
+        </foreach>
+    </insert>
+
+    <select id="selectByGroupId" parameterType="com.linghang.model.StakeModel" resultMap="BaseResultMap">
+        select * from tbl_stake where stakeGroupId = #{stakeGroupId,jdbcType=BIGINT} order by mile
+    </select>
+
+    <select id="selectByModel" parameterType="com.linghang.model.StakeModel" resultMap="BaseResultMap">
+        select * from tbl_stake where 1 = 1
+        <if test="stakeGroupId != null">
+            and stakeGroupId = #{stakeGroupId,jdbcType=BIGINT}
+        </if>
+        <if test="stakeNo != null">
+            and stakeNo = #{stakeNo,jdbcType=VARCHAR}
+        </if>
+        <if test="x != null">
+            and x = #{x,jdbcType=DECIMAL}
+        </if>
+        <if test="y != null">
+            and y = #{y,jdbcType=DECIMAL}
+        </if>
+        <if test="lon != null">
+            and lon = #{lon,jdbcType=DOUBLE}
+        </if>
+        <if test="lat != null">
+            and lat = #{lat,jdbcType=DOUBLE}
+        </if>
+        <if test="mile != null">
+            and mile = #{mile,jdbcType=INTEGER}
+        </if>
+        <if test="leftLayer != null">
+            and leftLayer = #{leftLayer,jdbcType=DECIMAL}
+        </if>
+        <if test="leftUpperLevel != null">
+            and leftUpperLevel = #{leftUpperLevel,jdbcType=DECIMAL}
+        </if>
+        <if test="leftLowestLevel != null">
+            and leftLowestLevel = #{leftLowestLevel,jdbcType=DECIMAL}
+        </if>
+        <if test="leftSubbase != null">
+            and leftSubbase = #{leftSubbase,jdbcType=DECIMAL}
+        </if>
+        <if test="rightLayer != null">
+            and rightLayer = #{rightLayer,jdbcType=DECIMAL}
+        </if>
+        <if test="rightUpperLevel != null">
+            and rightUpperLevel = #{rightUpperLevel,jdbcType=DECIMAL}
+        </if>
+        <if test="rightLowestLevel != null">
+            and rightLowestLevel = #{rightLowestLevel,jdbcType=DECIMAL}
+        </if>
+        <if test="rightSubbase != null">
+            and rightSubbase = #{rightSubbase,jdbcType=DECIMAL}
+        </if>
+        <if test="stakeType != null">
+            and stakeType = #{stakeType,jdbcType=VARCHAR}
+        </if>
+    </select>
+
+    <insert id="insertSelective" keyProperty="id" parameterType="com.linghang.model.StakeModel">
+        insert into tbl_stake
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="stakeGroupId != null">
+                stakeGroupId,
+            </if>
+            <if test="stakeNo != null">
+                stakeNo,
+            </if>
+            <if test="x != null">
+                x,
+            </if>
+            <if test="y != null">
+                y,
+            </if>
+            <if test="lon != null">
+                lon,
+            </if>
+            <if test="lat != null">
+                lat,
+            </if>
+            <if test="mile != null">
+                mile,
+            </if>
+            <if test="leftLayer != null">
+                leftLayer,
+            </if>
+            <if test="leftUpperLevel != null">
+                leftUpperLevel,
+            </if>
+            <if test="leftLowestLevel != null">
+                leftLowestLevel,
+            </if>
+            <if test="leftSubbase != null">
+                leftSubbase,
+            </if>
+            <if test="rightLayer != null">
+                rightLayer,
+            </if>
+            <if test="rightUpperLevel != null">
+                rightUpperLevel,
+            </if>
+            <if test="rightLowestLevel != null">
+                rightLowestLevel,
+            </if>
+            <if test="rightSubbase != null">
+                rightSubbase,
+            </if>
+            <if test="stakeType != null">
+                stakeType,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="stakeGroupId != null">
+                #{stakeGroupId,jdbcType=BIGINT},
+            </if>
+            <if test="stakeNo != null">
+                #{stakeNo,jdbcType=VARCHAR},
+            </if>
+            <if test="x != null">
+                #{x,jdbcType=DECIMAL},
+            </if>
+            <if test="y != null">
+                #{y,jdbcType=DECIMAL},
+            </if>
+            <if test="lon != null">
+                #{lon,jdbcType=DOUBLE},
+            </if>
+            <if test="lat != null">
+                #{lat,jdbcType=DOUBLE},
+            </if>
+            <if test="mile != null">
+                #{mile,jdbcType=INTEGER},
+            </if>
+            <if test="leftLayer != null">
+                #{leftLayer,jdbcType=DECIMAL},
+            </if>
+            <if test="leftUpperLevel != null">
+                #{leftUpperLevel,jdbcType=DECIMAL},
+            </if>
+            <if test="leftLowestLevel != null">
+                #{leftLowestLevel,jdbcType=DECIMAL},
+            </if>
+            <if test="leftSubbase != null">
+                #{leftSubbase,jdbcType=DECIMAL},
+            </if>
+            <if test="rightLayer != null">
+                #{rightLayer,jdbcType=DECIMAL},
+            </if>
+            <if test="rightUpperLevel != null">
+                #{rightUpperLevel,jdbcType=DECIMAL},
+            </if>
+            <if test="rightLowestLevel != null">
+                #{rightLowestLevel,jdbcType=DECIMAL},
+            </if>
+            <if test="rightSubbase != null">
+                #{rightSubbase,jdbcType=DECIMAL},
+            </if>
+            <if test="stakeType != null">
+                #{stakeType,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByIdSelective" parameterType="com.linghang.model.StakeModel">
+        update tbl_stake
+        <set>
+            <if test="stakeGroupId != null">
+                stakeGroupId = #{stakeGroupId,jdbcType=BIGINT},
+            </if>
+            <if test="stakeNo != null">
+                stakeNo = #{stakeNo,jdbcType=VARCHAR},
+            </if>
+            <if test="x != null">
+                x = #{x,jdbcType=DECIMAL},
+            </if>
+            <if test="y != null">
+                y = #{y,jdbcType=DECIMAL},
+            </if>
+            <if test="lon != null">
+                lon = #{lon,jdbcType=DOUBLE},
+            </if>
+            <if test="lat != null">
+                lat = #{lat,jdbcType=DOUBLE},
+            </if>
+            <if test="mile != null">
+                mile = #{mile,jdbcType=INTEGER},
+            </if>
+            <if test="leftLayer != null">
+                leftLayer = #{leftLayer,jdbcType=DECIMAL},
+            </if>
+            <if test="leftUpperLevel != null">
+                leftUpperLevel = #{leftUpperLevel,jdbcType=DECIMAL},
+            </if>
+            <if test="leftLowestLevel != null">
+                leftLowestLevel = #{leftLowestLevel,jdbcType=DECIMAL},
+            </if>
+            <if test="leftSubbase != null">
+                leftSubbase = #{leftSubbase,jdbcType=DECIMAL},
+            </if>
+            <if test="rightLayer != null">
+                rightLayer = #{rightLayer,jdbcType=DECIMAL},
+            </if>
+            <if test="rightUpperLevel != null">
+                rightUpperLevel = #{rightUpperLevel,jdbcType=DECIMAL},
+            </if>
+            <if test="rightLowestLevel != null">
+                rightLowestLevel = #{rightLowestLevel,jdbcType=DECIMAL},
+            </if>
+            <if test="rightSubbase != null">
+                rightSubbase = #{rightSubbase,jdbcType=DECIMAL},
+            </if>
+            <if test="stakeType != null">
+                stakeType = #{stakeType,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <update id="updateById" parameterType="com.linghang.model.StakeModel">
+        update tbl_stake
+        set stakeGroupId = #{stakeGroupId,jdbcType=BIGINT},
+            stakeNo = #{stakeNo,jdbcType=VARCHAR},
+            x = #{x,jdbcType=DECIMAL},
+            y = #{y,jdbcType=DECIMAL},
+            lon = #{lon,jdbcType=DOUBLE},
+            lat = #{lat,jdbcType=DOUBLE},
+            mile = #{mile,jdbcType=INTEGER},
+            leftLayer = #{leftLayer,jdbcType=DECIMAL},
+            leftUpperLevel = #{leftUpperLevel,jdbcType=DECIMAL},
+            leftLowestLevel = #{leftLowestLevel,jdbcType=DECIMAL},
+            leftSubbase = #{leftSubbase,jdbcType=DECIMAL},
+            rightLayer = #{rightLayer,jdbcType=DECIMAL},
+            rightUpperLevel = #{rightUpperLevel,jdbcType=DECIMAL},
+            rightLowestLevel = #{rightLowestLevel,jdbcType=DECIMAL},
+            rightSubbase = #{rightSubbase,jdbcType=DECIMAL},
+            stakeType = #{stakeType,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <delete id="deleteByGroupId" parameterType="java.lang.Long">
+        delete from tbl_stake
+        where stakeGroupId = #{stakeGroupId,jdbcType=BIGINT}
+    </delete>
+
+</mapper>

@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.linghang.mapper.business.transport.RadiofrequencyDataMapper">
+    <resultMap id="BaseResultMap" type="com.linghang.model.business.transport.RadiofrequencyDataModel">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="cardMark" jdbcType="VARCHAR" property="cardMark"/>
+        <result column="time" jdbcType="BIGINT" property="time"/>
+        <result column="type" jdbcType="INTEGER" property="type"/>
+        <result column="position" jdbcType="VARCHAR" property="position"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, cardMark, time,position,type
+    </sql>
+
+    <select id="selectById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select * 
+        from imp_radiofrequency_data
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <delete id="deleteById" parameterType="java.lang.Long">
+        delete from imp_radiofrequency_data
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+
+    <delete id="deleteByIds" parameterType="java.util.List">
+        delete from imp_radiofrequency_data
+        where id in
+        <foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
+            #{item}
+        </foreach>
+    </delete>
+
+    <insert id="insert" keyProperty="id" parameterType="com.linghang.model.business.transport.RadiofrequencyDataModel">
+        insert into imp_radiofrequency_data (
+        <include refid="Base_Column_List"/>
+        )
+        values (#{id,jdbcType=BIGINT},
+        #{cardMark,jdbcType=VARCHAR},
+        #{time,jdbcType=BIGINT},
+        #{position,jdbcType=VARCHAR},
+        #{type,jdbcType=VARCHAR}
+        )
+    </insert>
+
+    <insert id="insertList" keyProperty="id" parameterType="java.util.List">
+        <foreach collection="list" index="index" item="item" separator=";">
+            insert into imp_radiofrequency_data (
+            <include refid="Base_Column_List"/>
+            )
+            values (#{item.id,jdbcType=BIGINT},
+            #{item.cardMark,jdbcType=VARCHAR},
+            #{item.time,jdbcType=BIGINT},
+            #{item.position,jdbcType=VARCHAR},
+            #{item.type,jdbcType=INTEGER}
+            )
+        </foreach>
+    </insert>
+
+    <select id="selectByModel" parameterType="com.linghang.model.business.transport.RadiofrequencyDataModel"
+            resultMap="BaseResultMap">
+        select * from imp_radiofrequency_data where 1 = 1
+        <if test="cardMark != null">
+            and cardMark = #{cardMark,jdbcType=VARCHAR}
+        </if>
+        <if test="time != null">
+            and time = #{time,jdbcType=BIGINT}
+        </if>
+        <if test="type != null">
+            and type = #{type,jdbcType=INTEGER}
+        </if>
+        <if test="position != null">
+            and position = #{position,jdbcType=VARCHAR}
+        </if>
+    </select>
+
+    <select id="selectByOptions" resultMap="BaseResultMap">
+        select * from imp_radiofrequency_data where 1 = 1
+        <if test="options.filters != null">
+            <foreach collection="options.filters" item="item">
+                and ${item.field}
+                <if test="item.operator == 'eq'">
+                    = #{item.value}
+                </if>
+                <if test="item.operator == 'contains'">
+                    like '%'+#{item.value}+'%'
+                </if>
+            </foreach>
+        </if>
+        order by
+        <if test="options.sort != null">
+            <foreach collection="options.sort" item="item">
+                ${item.field} ${item.dir}
+            </foreach>
+        </if>
+        <if test="options.sort == null">
+            id
+        </if>
+    </select>
+
+    <insert id="insertSelective" keyProperty="id"
+            parameterType="com.linghang.model.business.transport.RadiofrequencyDataModel">
+        insert into imp_radiofrequency_data
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null and id != ''">
+                id,
+            </if>
+            <if test="cardMark != null and cardMark != ''">
+                cardMark,
+            </if>
+            <if test="time != null and time != ''">
+                time,
+            </if>
+            <if test="type != null and type != ''">
+                type,
+            </if>
+            <if test="position != null and position != ''">
+                position,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null and id != ''">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="cardMark != null and cardMark != ''">
+                #{cardMark,jdbcType=VARCHAR},
+            </if>
+            <if test="time != null and time != ''">
+                #{time,jdbcType=BIGINT},
+            </if>
+            <if test="type != null and type != ''">
+                #{type,jdbcType=INTEGER},
+            </if>
+            <if test="position != null and position != ''">
+                #{position,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByIdSelective" parameterType="com.linghang.model.business.transport.RadiofrequencyDataModel">
+        update imp_radiofrequency_data
+        <set>
+            <if test="cardMark != null">
+                cardMark = #{cardMark,jdbcType=VARCHAR},
+            </if>
+            <if test="time != null">
+                time = #{time,jdbcType=BIGINT},
+            </if>
+            <if test="type != null">
+                type = #{type,jdbcType=INTEGER},
+            </if>
+            <if test="position != null">
+                position = #{position,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <update id="updateById" parameterType="com.linghang.model.business.transport.RadiofrequencyDataModel">
+        update imp_radiofrequency_data
+        set cardMark = #{cardMark,jdbcType=VARCHAR},
+            time = #{time,jdbcType=BIGINT},
+            type = #{type,jdbcType=INTEGER},
+            position = #{position,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <select id="selectByCardMarkAndTime" resultMap="BaseResultMap">
+        select top 1 * from imp_radiofrequency_data
+        where cardMark=#{cardMark,jdbcType=VARCHAR}
+        and time &gt;= #{startTime,jdbcType=BIGINT}
+        and type = #{type,jdbcType=INTEGER}
+        order by time desc
+    </select>
+
+
+    <!--注意此处的时间转换中 08:00:00代表东八区 -->
+    <select id="selectTenSecondsInsideData" resultMap="BaseResultMap">
+        select * from imp_radiofrequency_data
+        <if test="currSearchTime == 0">
+            where DATEDIFF(S,'1970-01-01 08:00:00', GETDATE())-time/1000 &lt;= 10
+
+        </if>
+        <if test="currSearchTime != 0">
+            where time &gt; #{currSearchTime,jdbcType=BIGINT}
+        </if>
+        order by time
+    </select>
+</mapper>

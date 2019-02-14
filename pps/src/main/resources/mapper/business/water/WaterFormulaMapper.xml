@@ -1,0 +1,373 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.linghang.mapper.business.water.WaterFormulaMapper">
+    <resultMap id="BaseResultMap" type="com.linghang.model.business.water.WaterFormulaModel">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="number" jdbcType="VARCHAR" property="number"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="pavingLevel" jdbcType="BIGINT" property="pavingLevel"/>
+        <result column="planOutput" jdbcType="DECIMAL" property="planOutput"/>
+        <result column="status" jdbcType="INTEGER" property="status"/>
+        <result column="stationId" jdbcType="BIGINT" property="stationId"/>
+        <result column="remarks" jdbcType="VARCHAR" property="remarks"/>
+        <result column="updateTime" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="updateUser" jdbcType="BIGINT" property="updateUser"/>
+        <result column="dataVersion" jdbcType="INTEGER" property="dataVersion"/>
+        <result column="isVisible" jdbcType="INTEGER" property="isVisible"/>
+        <result column="type" jdbcType="INTEGER" property="type"/>
+    </resultMap>
+
+    <resultMap id="BaseResultParamMap" type="com.linghang.model.business.water.WaterFormulaModel"
+               extends="BaseResultMap">
+        <result column="countWeight" jdbcType="DECIMAL" property="countWeight"/>
+        <result column="unprocessedData" jdbcType="INTEGER" property="unprocessedData"/>
+        <collection property="sieves" column="{formulaId=id}"
+                    ofType="com.linghang.model.business.water.WaterSieveSettingModel"
+                    select="com.linghang.mapper.business.water.WaterSieveSettingMapper.selectByFormulaId">
+        </collection>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        number, name, pavingLevel, planOutput,
+        status, stationId, remarks, updateTime, updateUser, dataVersion, isVisible,type
+    </sql>
+
+    <select id="selectById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select * 
+        from imp_water_formula
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <delete id="deleteById" parameterType="java.lang.Long">
+        delete from imp_water_formula
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+
+    <delete id="deleteByIds" parameterType="java.util.List">
+        delete from imp_water_formula
+        where id in
+        <foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
+            #{item}
+        </foreach>
+    </delete>
+
+    <insert id="insert" keyProperty="id" parameterType="com.linghang.model.business.water.WaterFormulaModel">
+        insert into imp_water_formula (
+        id,
+        <include refid="Base_Column_List"/>
+        )
+        values (
+        #{id,jdbcType=BIGINT},
+        #{number,jdbcType=VARCHAR},
+        #{name,jdbcType=VARCHAR},
+        #{pavingLevel,jdbcType=BIGINT},
+        #{planOutput,jdbcType=DECIMAL},
+        #{status,jdbcType=INTEGER},
+        #{stationId,jdbcType=BIGINT},
+        #{remarks,jdbcType=VARCHAR},
+        #{updateTime,jdbcType=TIMESTAMP},
+        #{updateUser,jdbcType=BIGINT},
+        #{dataVersion,jdbcType=INTEGER},
+        #{isVisible,jdbcType=INTEGER},
+        #{type,jdbcType=INTEGER}
+        )
+    </insert>
+
+    <insert id="insertList" parameterType="java.util.List">
+        <foreach collection="list" index="index" item="item" separator=";">
+            insert into imp_water_formula (
+            <include refid="Base_Column_List"/>
+            )
+            values (#{item.number,jdbcType=VARCHAR},
+            #{item.name,jdbcType=VARCHAR},
+            #{item.pavingLevel,jdbcType=BIGINT},
+            #{item.planOutput,jdbcType=DECIMAL},
+            #{item.status,jdbcType=INTEGER},
+            #{item.stationId,jdbcType=BIGINT},
+            #{item.remarks,jdbcType=VARCHAR},
+            #{item.updateTime,jdbcType=TIMESTAMP},
+            #{item.updateUser,jdbcType=BIGINT},
+            #{item.dataVersion,jdbcType=INTEGER},
+            #{item.isVisible,jdbcType=INTEGER},
+            #{item.type,jdbcType=INTEGER}
+            )
+        </foreach>
+    </insert>
+
+    <select id="selectByModel" parameterType="com.linghang.model.business.water.WaterFormulaModel"
+            resultMap="BaseResultMap">
+        select * from imp_water_formula where 1 = 1
+        <if test="number != null">
+            and number = #{number,jdbcType=VARCHAR}
+        </if>
+        <if test="name != null">
+            and name = #{name,jdbcType=VARCHAR}
+        </if>
+        <if test="pavingLevel != null">
+            and pavingLevel = #{pavingLevel,jdbcType=BIGINT}
+        </if>
+        <if test="planOutput != null">
+            and planOutput = #{planOutput,jdbcType=DECIMAL}
+        </if>
+        <if test="status != null">
+            and status = #{status,jdbcType=INTEGER}
+        </if>
+        <if test="stationId != null">
+            and stationId = #{stationId,jdbcType=BIGINT}
+        </if>
+        <if test="remarks != null">
+            and remarks = #{remarks,jdbcType=VARCHAR}
+        </if>
+        <if test="updateTime != null">
+            and updateTime = #{updateTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="updateUser != null">
+            and updateUser = #{updateUser,jdbcType=BIGINT}
+        </if>
+        <if test="dataVersion != null">
+            and dataVersion = #{dataVersion,jdbcType=INTEGER}
+        </if>
+        <if test="isVisible != null">
+            and isVisible = #{isVisible,jdbcType=INTEGER}
+        </if>
+        <if test="type != null">
+            and type = #{type,jdbcType=INTEGER}
+        </if>
+    </select>
+
+    <insert id="insertSelective" keyProperty="id" parameterType="com.linghang.model.business.water.WaterFormulaModel">
+        insert into imp_water_formula
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="number != null">
+                number,
+            </if>
+            <if test="name != null">
+                name,
+            </if>
+            <if test="pavingLevel != null">
+                pavingLevel,
+            </if>
+            <if test="planOutput != null">
+                planOutput,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="stationId != null">
+                stationId,
+            </if>
+            <if test="remarks != null">
+                remarks,
+            </if>
+            <if test="updateTime != null">
+                updateTime,
+            </if>
+            <if test="updateUser != null">
+                updateUser,
+            </if>
+            <if test="dataVersion != null">
+                dataVersion,
+            </if>
+            <if test="isVisible != null">
+                isVisible,
+            </if>
+            <if test="type != null">
+                type,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="number != null">
+                #{number,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="pavingLevel != null">
+                #{pavingLevel,jdbcType=BIGINT},
+            </if>
+            <if test="planOutput != null">
+                #{planOutput,jdbcType=DECIMAL},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=INTEGER},
+            </if>
+            <if test="stationId != null">
+                #{stationId,jdbcType=BIGINT},
+            </if>
+            <if test="remarks != null">
+                #{remarks,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateUser != null">
+                #{updateUser,jdbcType=BIGINT},
+            </if>
+            <if test="dataVersion != null">
+                #{dataVersion,jdbcType=INTEGER},
+            </if>
+            <if test="isVisible != null">
+                #{isVisible,jdbcType=INTEGER},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByIdSelective" parameterType="com.linghang.model.business.water.WaterFormulaModel">
+        update imp_water_formula
+        <set>
+            <if test="number != null">
+                number = #{number,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="pavingLevel != null">
+                pavingLevel = #{pavingLevel,jdbcType=BIGINT},
+            </if>
+            <if test="planOutput != null">
+                planOutput = #{planOutput,jdbcType=DECIMAL},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="stationId != null">
+                stationId = #{stationId,jdbcType=BIGINT},
+            </if>
+            <if test="remarks != null">
+                remarks = #{remarks,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null">
+                updateTime = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateUser != null">
+                updateUser = #{updateUser,jdbcType=BIGINT},
+            </if>
+            <if test="dataVersion != null">
+                dataVersion = #{dataVersion,jdbcType=INTEGER},
+            </if>
+            <if test="isVisible != null">
+                isVisible = #{isVisible,jdbcType=INTEGER},
+            </if>
+            <if test="type != null">
+                type = #{type,jdbcType=INTEGER},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <update id="updateById" parameterType="com.linghang.model.business.water.WaterFormulaModel">
+        update imp_water_formula
+        set number = #{number,jdbcType=VARCHAR},
+            name = #{name,jdbcType=VARCHAR},
+            pavingLevel = #{pavingLevel,jdbcType=BIGINT},
+            planOutput = #{planOutput,jdbcType=DECIMAL},
+            status = #{status,jdbcType=INTEGER},
+            stationId = #{stationId,jdbcType=BIGINT},
+            remarks = #{remarks,jdbcType=VARCHAR},
+            updateTime = #{updateTime,jdbcType=TIMESTAMP},
+            updateUser = #{updateUser,jdbcType=BIGINT},
+            dataVersion = #{dataVersion,jdbcType=INTEGER},
+            isVisible = #{isVisible,jdbcType=INTEGER},
+            type = #{type,jdbcType=INTEGER}
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <select id="selectAll" parameterType="com.linghang.model.business.water.WaterFormulaModel"
+            resultMap="BaseResultParamMap">
+        select a.* ,
+               (select case when sum(weight) is null  then 0 else sum(weight) end  from imp_water_metadata m where m.formulaId=a.id)countWeight,
+               (case when a.type = 0 then (select count(id) from imp_water_metadata where  stationId=#{stationId,jdbcType=BIGINT} and formulaId is null and (formulaCode is null or formulaCode='')) ELSE
+                   (select count(id) from imp_water_metadata where stationId=#{stationId,jdbcType=BIGINT} and formulaId is null and formulaCode = a.number ) end ) AS unprocessedData
+        from imp_water_formula a
+        where stationId=#{stationId,jdbcType=BIGINT}
+          and isVisible = 0
+    </select>
+
+    <select id="selectDefaultModel" parameterType="long"
+            resultMap="BaseResultMap">
+        select * from imp_water_formula where type = 0
+        and stationId = #{stationId, jdbcType=BIGINT}  and isVisible=0
+    </select>
+
+    <select id="selectDefaultModelAndId" parameterType="com.linghang.model.business.water.WaterFormulaModel"
+            resultMap="BaseResultMap">
+        select * from imp_water_formula where type = 0
+        and stationId = #{stationId, jdbcType=BIGINT}
+        <if test="id!=null">
+            and id!=#{id}
+        </if>
+        and isVisible=0
+    </select>
+
+
+    <select id="checkParamIsAvailable" resultType="com.linghang.model.business.water.WaterFormulaModel">
+        select * from imp_water_formula where number = #{number, jdbcType=VARCHAR}
+        and stationId = #{stationId, jdbcType=BIGINT}
+        and isVisible=0
+        <if test="id != null">
+            and id != #{id,jdbcType=BIGINT}
+        </if>
+    </select>
+
+    <select id="selectByFormulaCode" resultMap="BaseResultMap">
+        select * from imp_water_formula
+        where number=#{formulaCode,jdbcType=VARCHAR}
+          and stationId=#{stationId,jdbcType=BIGINT}
+          and isVisible=0
+    </select>
+
+    <select id="selectMoldeById" resultMap="BaseResultMap">
+          select *
+        from imp_water_formula
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <!--重量列表配方查询-->
+    <select id="searchFormulaByParam" resultType="java.util.Map">
+        SELECT f.id,(case when f.name is null then '无配方' else f.name end) as name from(
+                                                                                          SELECT formulaId from imp_water_metadata m
+                                                                                          where m.stationId = #{stationId,jdbcType=BIGINT}
+                                                                                            and CONVERT(varchar(100), time, 23) = #{searchTime,jdbcType=VARCHAR}
+                                                                                          group by m.formulaId
+                                                                                      ) as temp
+                                                                                          left join imp_water_formula f on f.id=temp.formulaId
+        order by f.id desc
+    </select>
+    <!--级配列表配方查询-->
+    <select id="searchFormulaBySieveParam" resultType="java.util.Map">
+        SELECT name from(
+                            SELECT formulaId from imp_water_metadata_result m
+                            where m.stationId = #{stationId,jdbcType=BIGINT}
+                              and CONVERT(varchar(100), time, 23) = #{searchTime,jdbcType=VARCHAR}
+                            group by m.formulaId
+                        ) as temp
+                            left join imp_water_formula f on f.id=temp.formulaId
+    </select>
+
+    <!--骨配配方查询-->
+    <select id="searchFormulaByAggregateParam" resultType="java.util.Map">
+        SELECT name from(
+                            SELECT formulaId from imp_water_metadata_aggregate m
+                            where m.stationId = #{stationId,jdbcType=BIGINT}
+                              and CONVERT(varchar(100), time, 23) = #{searchTime,jdbcType=VARCHAR}
+                            group by m.formulaId
+                        ) as temp
+                            left join imp_water_formula f on f.id=temp.formulaId
+    </select>
+
+
+    <select id="selectDetailById" resultMap="BaseResultParamMap">
+        select * from imp_water_formula where id=#{id,jdbcType=BIGINT}
+    </select>
+
+    <select id="selectStatisticByStationId" resultType="java.util.HashMap">
+        select f.id,f.number as formulaCode,f.name,f.pavingLevel,
+        (select (case when sum(m.weight) is null then 0 else sum(m.weight) end) from imp_water_metadata m where f.id =m.formulaId and m.isPass=1) noPassWeight,
+        (select (case when sum(m.weight) is null then 0 else sum(m.weight) end) from imp_water_metadata m where f.id =m.formulaId and m.isPass=0) passWeight
+        from imp_water_formula f where f.stationId=#{stationId,jdbcType=BIGINT} and isVisible=0
+         order by id
+    </select>
+</mapper>

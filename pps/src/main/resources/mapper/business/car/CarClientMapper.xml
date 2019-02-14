@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.linghang.mapper.car.CarClientMapper">
+    <resultMap id="BaseResultMap" type="com.linghang.model.car.CarClientModel">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="province" jdbcType="VARCHAR" property="province"/>
+        <result column="city" jdbcType="VARCHAR" property="city"/>
+        <result column="manufacture" jdbcType="VARCHAR" property="manufacture"/>
+        <result column="clientTypeNo" jdbcType="VARCHAR" property="clientTypeNo"/>
+        <result column="clientId" jdbcType="INTEGER" property="clientId"/>
+        <result column="licenceColor" jdbcType="VARCHAR" property="licenceColor"/>
+        <result column="licenceNo" jdbcType="VARCHAR" property="licenceNo"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,province, city, manufacture, clientTypeNo, clientId, licenceColor, licenceNo
+    </sql>
+
+    <select id="selectById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select * 
+        from imp_car_carClient
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <delete id="deleteById" parameterType="java.lang.Long">
+        delete from imp_car_carClient
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+
+    <delete id="deleteByIds" parameterType="java.util.List">
+        delete from imp_car_carClient
+        where id in
+        <foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
+            #{item}
+        </foreach>
+    </delete>
+
+    <insert id="insert" keyProperty="id" parameterType="com.linghang.model.car.CarClientModel">
+        insert into imp_car_carClient (
+        <include refid="Base_Column_List"/>
+        )
+        values (#{id,jdbcType=BIGINT}
+        #{province,jdbcType=VARCHAR},
+        #{city,jdbcType=VARCHAR},
+        #{manufacture,jdbcType=VARCHAR},
+        #{clientTypeNo,jdbcType=VARCHAR},
+        #{clientId,jdbcType=INTEGER},
+        #{licenceColor,jdbcType=VARCHAR},
+        #{licenceNo,jdbcType=VARCHAR}
+        )
+    </insert>
+
+    <insert id="insertList" parameterType="java.util.List">
+        <foreach collection="list" index="index" item="item" separator=";">
+            insert into imp_car_carClient (
+            <include refid="Base_Column_List"/>
+            )
+            values (#{item.province,jdbcType=VARCHAR},
+            #{item.city,jdbcType=VARCHAR},
+            #{item.manufacture,jdbcType=VARCHAR},
+            #{item.clientTypeNo,jdbcType=VARCHAR},
+            #{item.clientId,jdbcType=INTEGER},
+            #{item.licenceColor,jdbcType=VARCHAR},
+            #{item.licenceNo,jdbcType=VARCHAR}
+            )
+        </foreach>
+    </insert>
+
+    <select id="selectByModel" parameterType="com.linghang.model.car.CarClientModel" resultMap="BaseResultMap">
+        select * from imp_car_carClient where 1 = 1
+        <if test="province != null">
+            and province = #{province,jdbcType=VARCHAR}
+        </if>
+        <if test="city != null">
+            and city = #{city,jdbcType=VARCHAR}
+        </if>
+        <if test="manufacture != null">
+            and manufacture = #{manufacture,jdbcType=VARCHAR}
+        </if>
+        <if test="clientTypeNo != null">
+            and clientTypeNo = #{clientTypeNo,jdbcType=VARCHAR}
+        </if>
+        <if test="clientId != null">
+            and clientId = #{clientId,jdbcType=INTEGER}
+        </if>
+        <if test="licenceColor != null">
+            and licenceColor = #{licenceColor,jdbcType=VARCHAR}
+        </if>
+        <if test="licenceNo != null">
+            and licenceNo = #{licenceNo,jdbcType=VARCHAR}
+        </if>
+    </select>
+
+    <insert id="insertSelective" keyProperty="id" parameterType="com.linghang.model.car.CarClientModel">
+        insert into imp_car_carClient
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="province != null">
+                province,
+            </if>
+            <if test="city != null">
+                city,
+            </if>
+            <if test="manufacture != null">
+                manufacture,
+            </if>
+            <if test="clientTypeNo != null">
+                clientTypeNo,
+            </if>
+            <if test="clientId != null">
+                clientId,
+            </if>
+            <if test="licenceColor != null">
+                licenceColor,
+            </if>
+            <if test="licenceNo != null">
+                licenceNo,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="province != null">
+                #{province,jdbcType=VARCHAR},
+            </if>
+            <if test="city != null">
+                #{city,jdbcType=VARCHAR},
+            </if>
+            <if test="manufacture != null">
+                #{manufacture,jdbcType=VARCHAR},
+            </if>
+            <if test="clientTypeNo != null">
+                #{clientTypeNo,jdbcType=VARCHAR},
+            </if>
+            <if test="clientId != null">
+                #{clientId,jdbcType=INTEGER},
+            </if>
+            <if test="licenceColor != null">
+                #{licenceColor,jdbcType=VARCHAR},
+            </if>
+            <if test="licenceNo != null">
+                #{licenceNo,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByIdSelective" parameterType="com.linghang.model.car.CarClientModel">
+        update imp_car_carClient
+        <set>
+            <if test="province != null">
+                province = #{province,jdbcType=VARCHAR},
+            </if>
+            <if test="city != null">
+                city = #{city,jdbcType=VARCHAR},
+            </if>
+            <if test="manufacture != null">
+                manufacture = #{manufacture,jdbcType=VARCHAR},
+            </if>
+            <if test="clientTypeNo != null">
+                clientTypeNo = #{clientTypeNo,jdbcType=VARCHAR},
+            </if>
+            <if test="clientId != null">
+                clientId = #{clientId,jdbcType=INTEGER},
+            </if>
+            <if test="licenceColor != null">
+                licenceColor = #{licenceColor,jdbcType=VARCHAR},
+            </if>
+            <if test="licenceNo != null">
+                licenceNo = #{licenceNo,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <update id="updateById" parameterType="com.linghang.model.car.CarClientModel">
+        update imp_car_carClient
+        set province = #{province,jdbcType=VARCHAR},
+            city = #{city,jdbcType=VARCHAR},
+            manufacture = #{manufacture,jdbcType=VARCHAR},
+            clientTypeNo = #{clientTypeNo,jdbcType=VARCHAR},
+            clientId = #{clientId,jdbcType=INTEGER},
+            licenceColor = #{licenceColor,jdbcType=VARCHAR},
+            licenceNo = #{licenceNo,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+</mapper>

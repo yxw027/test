@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.linghang.mapper.car.CarAlarmMapper">
+    <resultMap id="BaseResultMap" type="com.linghang.model.car.CarAlarmModel">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="positionId" jdbcType="BIGINT" property="positionId"/>
+        <result column="alarmType" jdbcType="INTEGER" property="alarmType"/>
+        <result column="alarmMessage" jdbcType="VARCHAR" property="alarmMessage"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+      id,positionId, alarmType, alarmMessage
+    </sql>
+
+    <select id="selectById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select * 
+        from imp_car_alarm
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <delete id="deleteById" parameterType="java.lang.Long">
+        delete from imp_car_alarm
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+
+    <delete id="deleteByIds" parameterType="java.util.List">
+        delete from imp_car_alarm
+        where id in
+        <foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
+            #{item}
+        </foreach>
+    </delete>
+
+    <insert id="insert" keyProperty="id" parameterType="com.linghang.model.car.CarAlarmModel">
+        insert into imp_car_alarm (
+        <include refid="Base_Column_List"/>
+        )
+        values (#{id,jdbcType=BIGINT},
+        #{positionId,jdbcType=BIGINT},
+        #{alarmType,jdbcType=INTEGER},
+        #{alarmMessage,jdbcType=VARCHAR}
+        )
+    </insert>
+
+    <insert id="insertList" parameterType="java.util.List" keyProperty="id">
+        <foreach collection="list" index="index" item="item" separator=";">
+            insert into imp_car_alarm (
+            <include refid="Base_Column_List"/>
+            )
+            values ( #{item.id,jdbcType=BIGINT},
+            #{item.positionId,jdbcType=BIGINT},
+            #{item.alarmType,jdbcType=INTEGER},
+            #{item.alarmMessage,jdbcType=VARCHAR}
+            )
+        </foreach>
+    </insert>
+
+    <select id="selectByModel" parameterType="com.linghang.model.car.CarAlarmModel" resultMap="BaseResultMap">
+        select * from imp_car_alarm where 1 = 1
+        <if test="positionId != null">
+            and positionId = #{positionId,jdbcType=BIGINT}
+        </if>
+        <if test="alarmType != null">
+            and alarmType = #{alarmType,jdbcType=INTEGER}
+        </if>
+        <if test="alarmMessage != null">
+            and alarmMessage = #{alarmMessage,jdbcType=VARCHAR}
+        </if>
+    </select>
+
+    <insert id="insertSelective" keyProperty="id" parameterType="com.linghang.model.car.CarAlarmModel">
+        insert into imp_car_alarm
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="positionId != null">
+                positionId,
+            </if>
+            <if test="alarmType != null">
+                alarmType,
+            </if>
+            <if test="alarmMessage != null">
+                alarmMessage,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="positionId != null">
+                #{positionId,jdbcType=BIGINT},
+            </if>
+            <if test="alarmType != null">
+                #{alarmType,jdbcType=INTEGER},
+            </if>
+            <if test="alarmMessage != null">
+                #{alarmMessage,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByIdSelective" parameterType="com.linghang.model.car.CarAlarmModel">
+        update imp_car_alarm
+        <set>
+            <if test="positionId != null">
+                positionId = #{positionId,jdbcType=BIGINT},
+            </if>
+            <if test="alarmType != null">
+                alarmType = #{alarmType,jdbcType=INTEGER},
+            </if>
+            <if test="alarmMessage != null">
+                alarmMessage = #{alarmMessage,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <update id="updateById" parameterType="com.linghang.model.car.CarAlarmModel">
+        update imp_car_alarm
+        set positionId = #{positionId,jdbcType=BIGINT},
+            alarmType = #{alarmType,jdbcType=INTEGER},
+            alarmMessage = #{alarmMessage,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <select id="selectBypositionId" resultMap="BaseResultMap">
+        select * from imp_car_alarm where positionId=#{positionId,jdbcType=BIGINT}
+    </select>
+</mapper>

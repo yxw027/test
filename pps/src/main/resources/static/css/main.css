@@ -1,0 +1,571 @@
+/*滚动条样式*/
+/* width */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 1px rgba(0, 0, 0, 0);
+    border-radius: 0px;
+    border-right: 0px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: rgba(198, 198, 198, 0.44);
+    border-radius: 8px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(164, 159, 164, 0.66);
+}
+
+html {
+    position: relative;
+    height: 100%;
+}
+
+body {
+    height: 100%;
+    width: 100%;
+    font-size: 0.875rem;
+    overflow-x: hidden;
+    background-color: #f3f6f8;
+
+}
+
+#wrapper {
+    height: 100%;
+}
+
+.content-page {
+    height: 100%;
+}
+
+.content-page .content {
+    height: calc(100% - 70px);
+}
+
+
+/*
+kendo UI
+*/
+.k-button {
+    font-size: 0.75rem;
+}
+
+.breadcrumb > li + li:before {
+    padding: 0 3px;
+    color: #ccc;
+    content: "/\00a0";
+}
+
+.navbar-custom .navbar-toggle:hover span, .navbar-custom .navbar-toggle:focus span {
+    background-color: #f59c3b;
+}
+
+.navbar-custom .navbar-toggle span {
+    background-color: #f59c3b;
+}
+
+.k-dropdown-wrap > .k-input {
+    font-size: 0.75rem;
+}
+
+.m-t-lg {
+    margin-top: 10px;
+}
+
+.content > .container-fluid {
+    height: 100%;
+}
+
+.k-input, .k-list-scroller, .k-button, .k-icon {
+    font-size: 0.75rem;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+table.tabpopdetail {
+    background: #f9f9f9;
+    border: 1px solid #eee;
+}
+
+table.tabpopdetail td {
+    border: 1px solid #fff;
+    padding: 0.7rem 0.75rem;
+}
+
+.k-edit-field {
+    width: 70%;
+    position: relative;
+    margin: 0;
+}
+
+.k-edit-label {
+    width: 25%;
+}
+
+.k-window-title {
+    font-size: 0.875rem;
+}
+
+.k-widget {
+    font-size: 0.75rem;
+}
+
+/***********btn**********/
+.k-button {
+    padding: 0.22rem 0.7rem;
+}
+
+.k-grid-edit, .k-grid-add, .k-grid-resetPassword, .k-grid-showPassword, .k-button-icon {
+    background-color: #35b8e0;
+    border-color: #35b8e0;
+    color: #fff !important;
+}
+
+.k-grid-edit:hover, .k-grid-add:hover, .k-grid-resetPassword:hover, .k-grid-showPassword:hover, .k-button-icon:hover {
+    background-color: #0f7fe2;
+    color: #fff;
+    border-color: #107dde;
+}
+
+a.btn-outline-danger {
+    color: #f34943;
+}
+
+.my-btn-light {
+    color: #3b3e47;
+    background-color: #f3f6f8;
+    border-color: #f3f6f8;
+}
+
+.my-btn-light:focus, .my-btn-light.focus {
+    -webkit-box-shadow: 0 0 0 0.2rem rgba(208, 211, 213, 0.5);
+    box-shadow: 0 0 0 0.2rem rgba(208, 211, 213, 0.5);
+}
+
+.k-grid th {
+    /*text-align: center;*/
+    padding: 0.5rem 0.5rem;
+}
+
+.k-grid th, .k-grid td {
+    padding: 0.5rem;
+}
+
+.k-grid-header .k-grid-filter, .k-grid-header .k-header-column-menu {
+    right: 0rem;
+    text-align: center;
+    padding: 0.5rem 0.75rem;
+}
+
+.k-grid-header .k-grid-filter {
+    bottom: calc(0.5rem + 0.85em + (-1 * calc(0.375rem + 0.75em)));
+}
+
+.k-grid table {
+    border-collapse: collapse;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+/*tbody tr:last-child{*/
+/*border-bottom: 1px solid #ececec;*/
+/*}*/
+.k-textbox, .k-input.k-textbox {
+    font-size: 0.75rem;
+}
+
+/**********项目切换**************/
+#_nav_project {
+    padding: 0 40px;
+    width: 100%;
+    height: calc(100% - 36px);
+    overflow-y: auto;
+    margin-bottom: 40px;
+}
+
+.k-listbox-toolbar {
+    margin-top: 110px;
+}
+
+.k-treeview .k-in.k-state-selected {
+    background-color: #35b8e0;
+    border-color: #fde5ad;
+}
+
+.scrollIndex {
+    overflow: hidden;
+    overflow-y: auto;
+    padding-right: 15px;
+}
+
+/**************************/
+.k-tooltip-validation {
+    background: none;
+    color: #f34943;
+    border: none;
+    align-items: flex-start;
+    position: absolute;
+    top: 26px;
+    left: 0;
+}
+
+.k-invalid-msg {
+    flex-direction: row;
+}
+
+.k-tooltip-validation > .k-icon {
+    margin-top: 0.2rem;
+}
+
+/*********弹出层***************/
+.k-window-titlebar {
+    background: none;
+    font-size: 18px;
+    color: #fff;
+    font-weight: 600;
+}
+
+.k-window {
+    border: none;
+    background-color: #3b3e47;
+}
+.k-window-content{
+    border-radius: 0 0 5px 5px;
+    background-color: #fff;
+}
+
+/*******弹出层*******/
+.sweet-alert .sa-icon.sa-warning {
+    border-color: #fbcc5c;
+}
+
+.k-edit-buttons {
+    border-color: #ddd;
+}
+
+/**
+*组织架构选择 top-toolbar
+ */
+
+.top-toolbar {
+    overflow: hidden;
+    line-height: 36px;
+    padding: 7px 10px 7px 0px;
+    height: 46px;
+    line-height: 2.1rem;
+}
+
+.top-toolbar .selectOrgText {
+    color: #212529;
+    background-color: #f3f6f8;
+    border-color: #f3f6f8;
+    display: table-cell;
+    padding: 0 5px;
+    min-width: 150px;
+    border-radius: 4px;
+    margin-right: 15px;
+    line-height: 2.1rem;
+}
+
+.top-toolbar .selectOrgText:hover, .top-toolbar .selectOrgText:focus {
+    cursor: pointer;
+    background-color: #dbe4ea;
+    border-color: #d3dee5;
+}
+
+.top-toolbar label {
+    vertical-align: middle;
+    display: table-cell;
+    font-weight: 500;
+}
+
+.top-toolbar button {
+    line-height: 1.35em;
+    margin-left: 6px;
+    vertical-align: middle;
+    display: table-cell;
+}
+
+/***********左侧菜单**********/
+.left-side-menu {
+    background: rgba(0, 0, 0, 0.8);
+}
+
+#sidebar-menu > ul > li > a {
+    color: rgba(255, 255, 255, 0.65);
+}
+
+#sidebar-menu > ul > li > a:hover, #sidebar-menu > ul > li > a:focus, #sidebar-menu > ul > li > a:active {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.nav-second-level li a, .nav-thrid-level li a {
+    color: rgba(255, 255, 255, 0.65);
+}
+
+.nav-second-level li a:hover, .nav-thrid-level li a:hover {
+    background: rgba(255, 255, 255, 0.15);
+    color: rgba(255, 255, 255, 0.95);
+}
+
+.nav-second-level li.active > a, .nav-third-level li.active > a {
+    background-color: rgba(255, 255, 255, 0.9);
+}
+
+.nav-second-level li.active > a:hover, .nav-third-level li.active > a:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.enlarged #wrapper #sidebar-menu ul ul li a {
+    color: #444;
+}
+
+.enlarged #wrapper #sidebar-menu ul ul li a:hover {
+    background: #eee;
+}
+
+.navbar-custom .navbar-toggle {
+    position: fixed;
+    top: 70px;
+    left: 170px;
+}
+
+.enlarged #wrapper .navbar-custom .navbar-toggle {
+    position: fixed;
+    top: 70px;
+    left: 0;
+}
+
+#sidebar-menu > ul > li > a.active {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.navbar-custom .logo {
+    margin-left: 15px;
+}
+
+.dropdown-menu {
+    font-size: 0.75rem;
+}
+
+
+/*主要内容样式*/
+.container-fluid, .container-col, .container-box {
+    height: 100%;
+
+}
+
+.container-main {
+    height: calc(100% - 50px);
+}
+
+.container-title {
+    overflow: hidden;
+    line-height: 35px;
+    padding: 0px;
+    margin-top: -15px;
+    height: 40px;
+    /*padding: 0 20px;*/
+}
+
+.container-title .header-title {
+    line-height: 40px;
+}
+
+.container-title .button {
+    line-height: 35px;
+}
+
+/*.container-title .button .k-primary{*/
+/*background-color: #35b8e0;*/
+/*border-color: #35b8e0;*/
+/*}*/
+.container-box .grid {
+    background-color: #FFF;
+    height: calc(100% - 25px);
+    margin: 0 -19px;
+}
+
+.count_info {
+    display: block;
+    height: 25px;
+    background: #fff;
+    line-height: 25px;
+    padding-left: 15px;
+}
+
+/*.k-grid{*/
+/*font-family: consolas, "Courier New";*/
+/*}*/
+.right-bar-toggle {
+    margin: 0 8px;
+}
+
+ul.info-ul-list li {
+    float: left;
+    width: 50%;
+}
+
+ul.info-ul-list li.listnone {
+    width: 100%;
+}
+
+.btnlayer {
+    position: absolute;
+    right: 15px;
+}
+
+.ribbon-box .ribbon {
+    margin-bottom: 0;
+}
+
+.info-ul-list li {
+    color: #444 !important;
+}
+
+.info-ul-list li label {
+    margin: 0;
+    color: #aeaeae;
+}
+
+.navtab-bg li > a {
+    background-color: rgba(24, 138, 226, 0.15);
+}
+
+.k-grid-header .k-header {
+    background-color: #4d5564;
+    color: #efefef;
+    font-weight: 700;
+    text-align: center;
+    border-color: rgba(255, 255, 255, 0);
+}
+.k-grid-header {
+    background-color: #4d5564;
+    border-color: #4d5564;
+}
+
+.k-grid th.k-sorted {
+    background-color: rgba(24, 138, 226, 0.8);
+}
+
+.k-grid col.k-sorted {
+    background-color: rgba(24, 138, 226, 0.10);
+}
+
+.k-grid-header .k-i-sort-asc-sm {
+    color: #fff;
+}
+
+.k-grid-header .k-i-sort-desc-sm {
+    color: #fff;
+}
+
+.k-list .k-item, .k-list-optionlabel {
+    padding: 3px 1rem;
+    text-align: center;
+}
+
+.tab-content {
+    padding-top: 10px;
+}
+
+.input-danger {
+    border: 1px solid #f34943;
+}
+
+.k-tooltip:not(.k-tooltip-closable) {
+    font-size: 0.75rem;
+}
+
+.number_valid {
+    text-align: center;
+    border-radius: 3px;
+    border: 1px solid #ced4da;
+    height: 25px;
+    line-height: 25px;
+}
+
+.header-title-right {
+    display: table;
+}
+
+.header-title-right > span {
+    display: table-cell;
+    padding: 0 4px;
+}
+.tableLayer td{
+    border: none;
+    padding: 0.325rem;
+}
+/********报警设置处理***********/
+ul.historyList li{
+    line-height: 1.8em;
+    line-height: 25px;
+    color: #444;
+    margin: 4px 0;
+    padding-left: 15px;
+    display: table;
+    width: 100%;
+}
+
+ul.historyList li:first-child {
+    background: #f5f5f5;
+    padding: 0 15px;
+}
+ul.historyList li span{
+    margin: 0 8px;
+    display: table-cell;
+}
+ul.historyList li span:first-child{
+    color: #888;
+}
+ul.historyList li span.contspan{
+    width: 500px;
+
+}
+.k-upload .k-dropzone .k-upload-status{
+    font-size: 0.75rem;
+}
+
+.anchorBL,.BMap_cpyCtrl{
+    display: none;
+}
+/***********首页表格***********/
+table.tableIndex tr:first-child td{
+    border: none;
+}
+table.tableIndex{
+    margin-bottom: 0;
+}
+table.tableIndex td{
+    padding: 7px 10px;
+}
+table.tableIndex td p{
+    margin-bottom: 1px;
+}
+table.tableIndex td p strong{
+    font-size: 14px;
+    margin-right: 8px;
+    color: #444;
+}
+table.tableIndex td span{
+    display: inline-block;
+    float: left;
+    font-weight: 400;
+    color: #888;
+}
+table.tableIndex td b{
+    color: #444;
+    font-weight: 400;
+}

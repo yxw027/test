@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.linghang.mapper.base.ResourceMapper">
+    <resultMap id="BaseResultMap" type="com.linghang.model.base.ResourceModel">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="path" jdbcType="VARCHAR" property="path"/>
+        <result column="parentId" jdbcType="BIGINT" property="parentId"/>
+        <result column="remark" jdbcType="VARCHAR" property="remark"/>
+        <result column="status" jdbcType="INTEGER" property="status"/>
+        <result column="sourceType" jdbcType="INTEGER" property="sourceType"/>
+        <result column="icon" jdbcType="VARCHAR" property="icon"/>
+        <result column="orderNum" jdbcType="INTEGER" property="orderNum"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, name, path, parentId, remark, status,sourceType, icon, orderNum
+    </sql>
+
+    <select id="selectById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select *
+        from imp_resource
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <delete id="deleteById" parameterType="java.lang.Long">
+        WITH tree AS (
+        SELECT
+        id,
+        parentId
+        FROM
+        imp_resource
+        WHERE
+        id = #{id,jdbcType=BIGINT}
+        UNION ALL
+        SELECT
+        t.id,
+        t.parentId
+        FROM
+        tree
+        INNER JOIN imp_resource t ON t.parentId = tree.id
+        ) DELETE
+        FROM
+        imp_resource
+        WHERE
+        id IN (
+        SELECT
+        id
+        FROM
+        tree
+        )
+    </delete>
+
+    <delete id="deleteByIds" parameterType="java.util.List">
+        delete from imp_resource
+        where id in
+        <foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
+            #{item}
+        </foreach>
+    </delete>
+
+    <insert id="insert" keyProperty="id" parameterType="com.linghang.model.base.ResourceModel">
+        insert into imp_resource (
+        <include refid="Base_Column_List"/>
+        )
+        values (
+        #{id,jdbcType=BIGINT},
+        #{name,jdbcType=VARCHAR},
+        #{path,jdbcType=VARCHAR},
+        #{parentId,jdbcType=BIGINT},
+        #{remark,jdbcType=VARCHAR},
+        #{status,jdbcType=INTEGER},
+        #{sourceType,jdbcType=INTEGER},
+        #{icon,jdbcType=VARCHAR},
+        #{orderNum,jdbcType=INTEGER}
+        )
+    </insert>
+
+    <insert id="insertList" keyProperty="id" parameterType="java.util.List">
+        <foreach collection="list" index="index" item="item" separator=";">
+            insert into imp_resource (
+            <include refid="Base_Column_List"/>
+            )
+            values (#{item.name,jdbcType=VARCHAR},
+            #{item.path,jdbcType=VARCHAR},
+            #{item.parentId,jdbcType=BIGINT},
+            #{item.remark,jdbcType=VARCHAR},
+            #{item.status,jdbcType=INTEGER},
+            #{sourceType,jdbcType=INTEGER},
+            #{icon,jdbcType=VARCHAR},
+            #{orderNum,jdbcType=INTEGER}
+            )
+        </foreach>
+    </insert>
+
+    <select id="selectByModel" parameterType="com.linghang.model.base.ResourceModel" resultMap="BaseResultMap">
+        select * from imp_resource where 1 = 1
+        <if test="name != null">
+            and name = #{name,jdbcType=VARCHAR}
+        </if>
+        <if test="path != null">
+            and path = #{path,jdbcType=VARCHAR}
+        </if>
+        <if test="parentId != null">
+            and parentId = #{parentId,jdbcType=BIGINT}
+        </if>
+        <if test="remark != null">
+            and remark = #{remark,jdbcType=VARCHAR}
+        </if>
+        <if test="status != null">
+            and status = #{status,jdbcType=INTEGER}
+        </if>
+        <if test="sourceType != null">
+            and sourceType = #{sourceType,jdbcType=INTEGER}
+        </if>
+        <if test="icon != null">
+            and icon = #{icon,jdbcType=VARCHAR}
+        </if>
+        <if test="orderNum != null">
+            and orderNum = #{orderNum,jdbcType=INTEGER}
+        </if>
+        order by [orderNum] asc
+    </select>
+
+    <update id="updateById" parameterType="com.linghang.model.base.ResourceModel">
+        update imp_resource
+        set name = #{name,jdbcType=VARCHAR},
+        path = #{path,jdbcType=VARCHAR},
+        parentId = #{parentId,jdbcType=BIGINT},
+        remark = #{remark,jdbcType=VARCHAR},
+        status = #{status,jdbcType=INTEGER},
+        sourceType= #{sourceType,jdbcType=INTEGER},
+        icon= #{icon,jdbcType=VARCHAR},
+        orderNum= #{orderNum,jdbcType=INTEGER}
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <select id="selectResourceByRoleId" resultType="java.lang.String" parameterType="java.lang.Long">
+        select a.path from imp_resource a
+        left join imp_role_resource_link b on a.id=b.resourceId
+        where roleId = #{roleId,jdbcType=BIGINT}
+    </select>
+
+    <select id="selectResourceByUserId" resultType="java.lang.String" parameterType="java.lang.Long">
+        SELECT DISTINCT
+        path
+        FROM
+        imp_resource r,
+        imp_role_resource_link rr
+        WHERE
+        r.id = rr.resourceId
+        AND r.status = ${@com.linghang.enums.Status@ENABLE.getInteger()}
+        AND r.path IS NOT NULL
+        AND r.path != ''
+        AND rr.roleId IN (
+        SELECT
+        r.id
+        FROM
+        imp_role r,
+        imp_user_role_link ur
+        WHERE
+        r.id = ur.roleId
+        AND ur.userid = #{userId}
+        AND r.status = ${@com.linghang.enums.Status@ENABLE.getInteger()}
+        )
+    </select>
+
+    <update id="updateStatusByRootId" parameterType="com.linghang.model.base.ResourceModel">
+        WITH tree AS (
+        SELECT
+        id,
+        parentId
+        FROM
+        imp_resource
+        WHERE
+        id = #{id,jdbcType=BIGINT}
+        UNION ALL
+        SELECT
+        t.id,
+        t.parentId
+        FROM
+        tree
+        INNER JOIN imp_resource t ON t.parentId = tree.id
+        )update imp_resource
+        set status = #{status,jdbcType=INTEGER}
+        WHERE
+        id IN (
+        SELECT
+        id
+        FROM
+        tree
+        )
+    </update>
+
+    <select id="selectIdByRoleId" resultType="java.lang.Long" parameterType="java.lang.Long">
+        SELECT
+        r.id
+        FROM
+        imp_resource r,imp_role_resource_link l
+        WHERE r.status = ${@com.linghang.enums.Status@ENABLE.getInteger()}
+        AND l.resourceId = r.id
+        AND l.roleId = #{roleId}
+    </select>
+
+    <select id="getMenuList" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        WITH TREE AS (
+            SELECT
+            *
+            FROM
+            imp_resource
+            WHERE
+                id  in  (
+                select DISTINCT r.id from
+                imp_resource r
+                INNER JOIN
+                imp_role_resource_link rrl  on r.id = rrl.resourceId
+                INNER JOIN  imp_user_role_link  url on url.userId = #{userId} and  rrl.roleId = url.roleId
+                )
+            UNION ALL
+            SELECT
+              imp_resource.*
+            FROM
+              imp_resource,
+              TREE
+            WHERE
+              imp_resource.id = TREE.parentId
+        )
+        SELECT DISTINCT * from TREE where sourceType = ${@com.linghang.enums.SourceType@MENU.getInteger()} ORDER BY orderNum
+    </select>
+
+</mapper>

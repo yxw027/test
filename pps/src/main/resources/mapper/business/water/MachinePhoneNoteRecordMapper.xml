@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.linghang.mapper.business.water.MachinePhoneNoteRecordMapper">
+    <resultMap id="BaseResultMap" type="com.linghang.model.business.water.MachinePhoneNoteRecordModel">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="type" jdbcType="INTEGER" property="type"/>
+        <result column="userName" jdbcType="VARCHAR" property="userName"/>
+        <result column="phone" jdbcType="VARCHAR" property="phone"/>
+        <result column="mixName" jdbcType="VARCHAR" property="mixName"/>
+        <result column="content" jdbcType="VARCHAR" property="content"/>
+        <result column="sendTime" jdbcType="TIMESTAMP" property="sendTime"/>
+        <result column="projectName" jdbcType="VARCHAR" property="projectName"/>
+        <result column="success" jdbcType="VARCHAR" property="success"/>
+        <result column="sendType" jdbcType="VARCHAR" property="sendType"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, type, userName, phone, mixName, content, sendTime, projectName, success, sendType
+    </sql>
+
+    <select id="selectById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select * 
+        from imp_machine_phone_note_record
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <delete id="deleteById" parameterType="java.lang.Long">
+        delete from imp_machine_phone_note_record
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+
+    <delete id="deleteByIds" parameterType="java.util.List">
+        delete from imp_machine_phone_note_record
+        where id in
+        <foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
+            #{item}
+        </foreach>
+    </delete>
+
+    <insert id="insert" keyProperty="id" parameterType="com.linghang.model.business.water.MachinePhoneNoteRecordModel">
+        insert into imp_machine_phone_note_record (
+        <include refid="Base_Column_List"/>
+        )
+        values (#{id,jdbcType=BIGINT},
+        #{type,jdbcType=INTEGER},
+        #{userName,jdbcType=VARCHAR},
+        #{phone,jdbcType=VARCHAR},
+        #{mixName,jdbcType=VARCHAR},
+        #{content,jdbcType=VARCHAR},
+        #{sendTime,jdbcType=TIMESTAMP},
+        #{projectName,jdbcType=VARCHAR},
+        #{success,jdbcType=VARCHAR},
+        #{sendType,jdbcType=VARCHAR}
+        )
+    </insert>
+
+    <insert id="insertList" keyProperty="id" parameterType="java.util.List">
+        <foreach collection="list" index="index" item="item" separator=";">
+            insert into imp_machine_phone_note_record (
+            <include refid="Base_Column_List"/>
+            )
+            values (#{item.id,jdbcType=BIGINT},
+            #{item.type,jdbcType=INTEGER},
+            #{item.userName,jdbcType=VARCHAR},
+            #{item.phone,jdbcType=VARCHAR},
+            #{item.mixName,jdbcType=VARCHAR},
+            #{item.content,jdbcType=VARCHAR},
+            #{item.sendTime,jdbcType=TIMESTAMP},
+            #{item.projectName,jdbcType=VARCHAR},
+            #{item.success,jdbcType=VARCHAR},
+            #{item.sendType,jdbcType=VARCHAR}
+            )
+        </foreach>
+    </insert>
+
+    <select id="selectByModel" parameterType="com.linghang.model.business.water.MachinePhoneNoteRecordModel"
+            resultMap="BaseResultMap">
+        select * from imp_machine_phone_note_record where 1 = 1
+        <if test="type != null">
+            and type = #{type,jdbcType=INTEGER}
+        </if>
+        <if test="userName != null">
+            and userName = #{userName,jdbcType=VARCHAR}
+        </if>
+        <if test="phone != null">
+            and phone = #{phone,jdbcType=VARCHAR}
+        </if>
+        <if test="mixName != null">
+            and mixName = #{mixName,jdbcType=VARCHAR}
+        </if>
+        <if test="content != null">
+            and content = #{content,jdbcType=VARCHAR}
+        </if>
+        <if test="sendTime != null">
+            and sendTime = #{sendTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="projectName != null">
+            and projectName = #{projectName,jdbcType=VARCHAR}
+        </if>
+        <if test="success != null">
+            and success = #{success,jdbcType=VARCHAR}
+        </if>
+        <if test="sendType != null">
+            and sendType = #{sendType,jdbcType=VARCHAR}
+        </if>
+    </select>
+
+    <select id="selectByOptions" resultMap="BaseResultMap">
+        select * from imp_machine_phone_note_record where 1 = 1
+        <if test="options.filters != null">
+            <foreach collection="options.filters" item="item">
+                and ${item.field}
+                <if test="item.operator == 'eq'">
+                    = #{item.value}
+                </if>
+                <if test="item.operator == 'contains'">
+                    like '%'+#{item.value}+'%'
+                </if>
+            </foreach>
+        </if>
+        order by
+        <if test="options.sort != null">
+            <foreach collection="options.sort" item="item">
+                ${item.field} ${item.dir}
+            </foreach>
+        </if>
+        <if test="options.sort == null">
+            id
+        </if>
+    </select>
+
+    <insert id="insertSelective" keyProperty="id"
+            parameterType="com.linghang.model.business.water.MachinePhoneNoteRecordModel">
+        insert into imp_machine_phone_note_record
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null and id != ''">
+                id,
+            </if>
+            <if test="type != null and type != ''">
+                type,
+            </if>
+            <if test="userName != null and userName != ''">
+                userName,
+            </if>
+            <if test="phone != null and phone != ''">
+                phone,
+            </if>
+            <if test="mixName != null and mixName != ''">
+                mixName,
+            </if>
+            <if test="content != null and content != ''">
+                content,
+            </if>
+            <if test="sendTime != null and sendTime != ''">
+                sendTime,
+            </if>
+            <if test="projectName != null and projectName != ''">
+                projectName,
+            </if>
+            <if test="success != null and success != ''">
+                success,
+            </if>
+            <if test="sendType != null and sendType != ''">
+                sendType,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null and id != ''">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="type != null and type != ''">
+                #{type,jdbcType=INTEGER},
+            </if>
+            <if test="userName != null and userName != ''">
+                #{userName,jdbcType=VARCHAR},
+            </if>
+            <if test="phone != null and phone != ''">
+                #{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="mixName != null and mixName != ''">
+                #{mixName,jdbcType=VARCHAR},
+            </if>
+            <if test="content != null and content != ''">
+                #{content,jdbcType=VARCHAR},
+            </if>
+            <if test="sendTime != null and sendTime != ''">
+                #{sendTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="projectName != null and projectName != ''">
+                #{projectName,jdbcType=VARCHAR},
+            </if>
+            <if test="success != null and success != ''">
+                #{success,jdbcType=VARCHAR},
+            </if>
+            <if test="sendType != null and sendType != ''">
+                #{sendType,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByIdSelective" parameterType="com.linghang.model.business.water.MachinePhoneNoteRecordModel">
+        update imp_machine_phone_note_record
+        <set>
+            <if test="type != null">
+                type = #{type,jdbcType=INTEGER},
+            </if>
+            <if test="userName != null">
+                userName = #{userName,jdbcType=VARCHAR},
+            </if>
+            <if test="phone != null">
+                phone = #{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="mixName != null">
+                mixName = #{mixName,jdbcType=VARCHAR},
+            </if>
+            <if test="content != null">
+                content = #{content,jdbcType=VARCHAR},
+            </if>
+            <if test="sendTime != null">
+                sendTime = #{sendTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="projectName != null">
+                projectName = #{projectName,jdbcType=VARCHAR},
+            </if>
+            <if test="success != null">
+                success = #{success,jdbcType=VARCHAR},
+            </if>
+            <if test="sendType != null">
+                sendType = #{sendType,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <update id="updateById" parameterType="com.linghang.model.business.water.MachinePhoneNoteRecordModel">
+        update imp_machine_phone_note_record
+        set type = #{type,jdbcType=INTEGER},
+            userName = #{userName,jdbcType=VARCHAR},
+            phone = #{phone,jdbcType=VARCHAR},
+            mixName = #{mixName,jdbcType=VARCHAR},
+            content = #{content,jdbcType=VARCHAR},
+            sendTime = #{sendTime,jdbcType=TIMESTAMP},
+            projectName = #{projectName,jdbcType=VARCHAR},
+            success = #{success,jdbcType=VARCHAR},
+            sendType = #{sendType,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+</mapper>
