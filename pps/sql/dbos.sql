@@ -1,6 +1,6 @@
 /*
 Navicat SQL Server Data Transfer
-
+ss
 Source Server         : 117.34.105.239
 Source Server Version : 120000
 Source Host           : 117.34.105.239:1433
